@@ -1,0 +1,73 @@
+local _, PT = ...
+local en = {
+    INTRO = "Changes apply immediately. Hold Shift at a vendor to pause automation.",
+    SELL = "Automatically sell grey junk",
+    SELL_DESC = "Only sellable grey bag items; quest items are excluded.",
+    REPAIR = "Automatically repair equipment",
+    REPAIR_DESC = "At repair vendors, only when you can afford the full cost.",
+    ZOOM = "Enable extended camera zoom",
+    ZOOM_DESC = "On: factor 4. Off: client default. Scroll out manually afterwards.",
+    GHOST = "Normal world colours while a ghost",
+    GHOST_DESC = "Removes the death greyscale filter; your ghost form is unchanged.",
+    COOLDOWN = "Show cooldown numbers",
+    COOLDOWN_DESC = "Enables the built-in numeric countdown on ability icons.",
+    AUTOLOOT = "Enable auto-loot on every login",
+    AUTOLOOT_DESC = "Also applies to new characters. Off: restores their previous setting.",
+    MESSAGES = "Chat status messages",
+    MESSAGES_DESC = "Report sales and repair requests. Diagnostics: /patchtools status",
+    FASTLOOT = "Faster auto-loot",
+    FASTLOOT_DESC = "Requests available loot earlier. Respects the auto-loot modifier key.",
+    MINIMAP = "Show minimap icon",
+    MINIMAP_DESC = "Click to open settings. Drag to move. Alternative: /patchtools",
+    CATEGORY = "PatchTools — quality-of-life tools for WoW Forever",
+    OPEN = "Open PatchTools settings",
+    ICON_CLICK = "Click: open settings",
+    ICON_DRAG = "Left-drag to move around the minimap",
+    ICON_HIDE = "Hide in settings; /patchtools remains available.",
+    CVAR_UNAVAILABLE = "This client does not provide the '%s' setting.",
+    ZOOM_DEFAULT_ERROR = "Could not read the default camera value; zoom unchanged.",
+    NO_REPAIR_FUNDS = "Not enough money for repairs.",
+    COPPER = "%s copper",
+    REPAIR_REQUESTED = "Repair requested: %s",
+    SALES_REQUESTED = "Junk sale processed (%d sale requests).",
+}
+local de = {
+    INTRO = "Änderungen gelten sofort. Umschalt beim Händler pausiert die Automatik.",
+    SELL = "Grauen Schrott automatisch verkaufen",
+    SELL_DESC = "Nur graue, verkäufliche Taschengegenstände; keine Questgegenstände.",
+    REPAIR = "Ausrüstung automatisch reparieren",
+    REPAIR_DESC = "Nur beim Reparaturhändler und mit ausreichendem eigenen Geld.",
+    ZOOM = "Erweiterten Kamerazoom aktivieren",
+    ZOOM_DESC = "Ein: Faktor 4. Aus: Client-Standard. Danach selbst rausscrollen.",
+    GHOST = "Normale Weltfarben als Geist",
+    GHOST_DESC = "Entfernt den Todes-Graufilter; die Geistergestalt bleibt unverändert.",
+    COOLDOWN = "Abklingzeiten als Zahlen anzeigen",
+    COOLDOWN_DESC = "Aktiviert die eingebaute Zahlenanzeige auf den Fähigkeiten.",
+    AUTOLOOT = "Automatisches Plündern bei jedem Login aktivieren",
+    AUTOLOOT_DESC = "Auch für neue Charaktere. Aus: vorheriger Wert dieses Charakters.",
+    MESSAGES = "Statusmeldungen im Chat",
+    MESSAGES_DESC = "Verkauf und Reparatur melden. Diagnose: /patchtools status",
+    FASTLOOT = "Beschleunigtes Autoloot",
+    FASTLOOT_DESC = "Sammelt verfügbare Beute früher ein. Respektiert den Autoloot-Modifikator.",
+    MINIMAP = "Minimap-Icon anzeigen",
+    MINIMAP_DESC = "Klick öffnet das Menü. Ziehen verschiebt das Icon. Alternative: /patchtools",
+    CATEGORY = "PatchTools — Komfortwerkzeuge für WoW Forever",
+    OPEN = "PatchTools-Optionen öffnen",
+    ICON_CLICK = "Klicken: Einstellungen öffnen",
+    ICON_DRAG = "Mit linker Maustaste am Rand verschieben",
+    ICON_HIDE = "Im Menü ausblendbar; /patchtools bleibt erreichbar.",
+    CVAR_UNAVAILABLE = "Dieser Client bietet die Einstellung '%s' nicht an.",
+    ZOOM_DEFAULT_ERROR = "Kamera-Standardwert nicht lesbar; Zoom unverändert.",
+    NO_REPAIR_FUNDS = "Nicht genug Geld für die Reparatur.",
+    COPPER = "%s Kupfer",
+    REPAIR_REQUESTED = "Reparatur angefordert: %s",
+    SALES_REQUESTED = "Schrottverkauf ausgeführt (%d Verkaufsanfragen).",
+}
+PT.clientLocale = GetLocale()
+PT.locale = PT.clientLocale == "deDE" and "deDE" or "enUS"
+PT.locales = {enUS = en, deDE = de}
+function PT:T(key, ...)
+    local value = self.locales[self.locale][key] or en[key] or key
+    if select("#", ...) > 0 then return string.format(value, ...) end
+    return value
+end
