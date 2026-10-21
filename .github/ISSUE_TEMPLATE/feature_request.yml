@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a feature or improvement.
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour and options
+      description: "Include desired defaults and any alternatives."
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Game edition, client build and PatchTools version
+    validations:
+      required: true
