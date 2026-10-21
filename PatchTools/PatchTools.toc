@@ -1,0 +1,13 @@
+## Interface: 16001
+## Title: PatchTools
+## Notes: Modular quality-of-life tools for WoW Forever. Built-in English and German.
+## Notes-deDE: Modulare Komfortwerkzeuge fuer WoW Forever. Deutsch und Englisch integriert.
+## Author: Fabian & Patch
+## Version: 0.4.0
+## SavedVariables: PatchToolsDB
+Locales.lua
+Core.lua
+Vendor.lua
+Loot.lua
+Minimap.lua
+Options.lua
