@@ -73,6 +73,12 @@ Community project. Not affiliated with or endorsed by Blizzard Entertainment.
 
 ## Changelog
 
+### 0.6.0 — 2026-10-22
+
+- First regular release of PatchTools for WoW: Forever.
+- Includes the selling lists, profession bag option, item tooltips and revised settings from 0.6.0-alpha.1.
+- No feature changes compared with 0.6.0-alpha.1.
+
 ### 0.6.0-alpha.1 — 2026-10-22
 
 - Added blacklist and whitelist selling rules, with item-ID entry and drag-and-drop.

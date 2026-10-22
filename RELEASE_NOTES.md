@@ -1,3 +1,19 @@
+# PatchTools 0.6.0 — 2026-10-22
+
+First regular release for World of Warcraft: Forever. No feature changes compared with 0.6.0-alpha.1.
+
+- Automatic junk selling and repairs, with blacklist and whitelist item rules.
+- Item-ID entry and drag-and-drop for selling lists; blacklist protection always wins.
+- Support for the extra profession bag, with an option to exclude it from automatic selling.
+- Optional item IDs and vendor prices per item in tooltips.
+- Settings grouped into General, Vendor, Tooltips, World Refresh and About PatchTools.
+- World refresh warnings, camera zoom, ghost colours, cooldown numbers, auto-loot and faster looting.
+- Built-in English and German, plus credits and a link for new feature ideas.
+
+Existing settings and item lists are preserved. Whitelist selling and tooltip additions start turned off for new installations.
+
+Validation: same runtime code as 0.6.0-alpha.1. The preceding alpha passed syntax, UTF-8 and simulated tests for English, German and English fallback. In-game checks on Forever Beta confirmed selling lists, tooltips, the revised interface, profession bag sales and its on/off option.
+
 # PatchTools 0.6.0-alpha.1 — 2026-10-22
 
 - Protect items from automatic selling with a blacklist.
