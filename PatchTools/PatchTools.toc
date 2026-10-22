@@ -3,11 +3,13 @@
 ## Notes: Modular quality-of-life tools for WoW Forever. Built-in English and German.
 ## Notes-deDE: Modulare Komfortwerkzeuge fuer WoW Forever. Deutsch und Englisch integriert.
 ## Author: Fabian & Patch
-## Version: 0.4.0
+## X-License: MIT
+## Version: 0.5.0-alpha.2
 ## SavedVariables: PatchToolsDB
 Locales.lua
 Core.lua
 Vendor.lua
 Loot.lua
 Minimap.lua
+Phasing.lua
 Options.lua

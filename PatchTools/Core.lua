@@ -1,10 +1,12 @@
 local addon, PT = ...
 _G.PatchTools = PT
-PT.version = "0.4.0"
+PT.version = "0.5.0-alpha.2"
 PT.defaults = {
     autoSell = false, autoRepair = false, extendedZoom = false,
     ghostColor = false, messages = true, cooldownNumbers = false,
     autoLoot = false, fastLoot = false, minimapIcon = true, minimapAngle = 225,
+    phaseInitial = false, phaseSoon = false, phaseSound = true, phaseLead = 60,
+    phaseDuration = 10, phaseChat = true,
 }
 PT.modules = {}
 function PT:Print(message)
@@ -85,6 +87,7 @@ end
 function PT:SetOption(key, value)
     if self.defaults[key] == nil then return end
     self.db[key] = value
+    if key:match("^phase") and self.modules.Phasing then self.modules.Phasing:SettingsChanged() end
     if key == "extendedZoom" then
         self:ApplyZoom(not value)
     elseif key == "ghostColor" then
@@ -99,6 +102,8 @@ function PT:SetOption(key, value)
     end
 end
 function PT:OpenOptions()
+    local phasing = self.modules.Phasing
+    if phasing and phasing.options then phasing.options:Hide() end
     if self.options then self.options:Show() end
 end
 local events = CreateFrame("Frame")
@@ -136,7 +141,7 @@ SlashCmdList.PATCHTOOLS = function(message)
         local version, build, _, interface = GetBuildInfo()
         PT:Print("v" .. PT.version .. "; Client " .. version .. " / " .. build .. "; Interface " .. interface)
         PT:Print("Client locale: " .. PT.clientLocale .. "; UI language: " .. PT.locale)
-        for _, key in ipairs({"autoSell", "autoRepair", "extendedZoom", "ghostColor", "cooldownNumbers", "autoLoot", "fastLoot", "minimapIcon"}) do
+        for _, key in ipairs({"autoSell", "autoRepair", "extendedZoom", "ghostColor", "cooldownNumbers", "autoLoot", "fastLoot", "minimapIcon", "phaseInitial", "phaseSoon", "phaseSound", "phaseLead", "phaseDuration", "phaseChat"}) do
             PT:Print(key .. ": " .. tostring(PT.db[key]))
         end
         PT:Print("Zoom-CVar: " .. tostring(ReadCVar("cameraDistanceMaxZoomFactor")))
