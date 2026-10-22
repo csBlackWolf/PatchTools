@@ -1,3 +1,9 @@
+# PatchTools 0.5.0-alpha.3
+
+- Prepare tag-driven CurseForge packaging and version substitution.
+- Ensure the generated ZIP contains the installable PatchTools folder, licence and changelog, without tests or repository metadata.
+- No gameplay behaviour changes from alpha.2.
+
 # PatchTools 0.5.0-alpha.2
 
 - Adds a numeric screen-message duration (1–60 seconds; default 10).

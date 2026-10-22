@@ -83,3 +83,7 @@ Uses Forever's `SHARD_TRANSFER_IMMINENT`, `SHARD_TRANSFER_CANCELLED`, `SHARD_TRA
 ## License
 
 MIT License. Copyright (c) 2026 Fabian (csBlackWolf). See LICENSE.
+
+## Automated releases
+
+See [RELEASING.md](RELEASING.md) for the tag-based CurseForge publishing workflow. Source version placeholders are replaced during packaging; install a packaged ZIP rather than copying raw development templates.

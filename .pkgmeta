@@ -1,0 +1,14 @@
+package-as: PatchTools
+enable-nolib-creation: no
+
+ignore:
+  - .github
+  - README.md
+  - LICENSE
+  - PatchTools/tests
+  - RELEASING.md
+
+move-folders:
+  PatchTools/PatchTools: PatchTools
+
+manual-changelog: RELEASE_NOTES.md
