@@ -32,6 +32,8 @@ end
 function Vendor:Start(generation)
     local attempts, sold, passes = {}, 0, 0
     local containers = C_Container
+    -- Forever uses the extra reagent slot for profession bags as well.
+    local reagentBag = Enum and Enum.BagIndex and Enum.BagIndex.ReagentBag or 5
     local function Active()
         return self.open and self.generation == generation and not IsShiftKeyDown()
     end
@@ -45,13 +47,15 @@ function Vendor:Start(generation)
     local function Step()
         if not Active() then return end
         passes = passes + 1
-        if not self.owner.db.autoSell or passes > 200 or not containers then Finish(); return end
-        -- Nur normale Taschen, niemals Bank oder ausgerüstete Gegenstände.
-        for bag = 0, 4 do
+        if not (self.owner.db.autoSell or self.owner.db.sellWhitelist) or passes > 200 or not containers then Finish(); return end
+        -- Only carried containers, including the profession bag; never bank/equipment.
+        local bags = {0, 1, 2, 3, 4}
+        if self.owner.db.sellProfessionBag then bags[#bags + 1] = reagentBag end
+        for _, bag in ipairs(bags) do
             for slot = 1, containers.GetContainerNumSlots(bag) do
                 local info = containers.GetContainerItemInfo(bag, slot)
                 local key = bag .. ":" .. slot
-                if info and info.quality == 0 and not info.isLocked
+                if info and self.owner:ShouldSellItem(info) and not info.isLocked
                     and (attempts[key] or 0) < 3 then
                     local isQuest = containers.GetContainerItemQuestInfo
                         and containers.GetContainerItemQuestInfo(bag, slot)

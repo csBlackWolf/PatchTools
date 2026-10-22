@@ -9,7 +9,9 @@
 ## SavedVariables: PatchToolsDB
 Locales.lua
 Core.lua
+ItemRules.lua
 Vendor.lua
+Tooltips.lua
 Loot.lua
 Minimap.lua
 Phasing.lua

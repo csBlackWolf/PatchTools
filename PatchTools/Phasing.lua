@@ -114,76 +114,7 @@ function module:Initialize()
 end
 
 function module:OpenOptions()
-    if self.options then self.options:Show(); return end
-    local frame = CreateFrame("Frame", "PatchToolsPhasingOptions", UIParent, "BasicFrameTemplateWithInset")
-    frame:Hide()
-    self.options = frame
-    frame:SetSize(560, 510)
-    frame:SetPoint("CENTER")
-    frame:SetFrameStrata("DIALOG")
-    frame:SetClampedToScreen(true)
-    frame.TitleText:SetText(PT:T("PHASE_OPTIONS"))
-    tinsert(UISpecialFrames, "PatchToolsPhasingOptions")
-    local function Text(text, y)
-        local label = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-        label:SetPoint("TOPLEFT", 24, y)
-        label:SetWidth(510)
-        label:SetJustifyH("LEFT")
-        label:SetText(text)
-        return label
-    end
-    Text(PT:T("PHASE_DESC"), -40)
-    local checks = {}
-    for index, entry in ipairs({{"phaseInitial", "PHASE_INITIAL"}, {"phaseSoon", "PHASE_SOON"}, {"phaseSound", "PHASE_SOUND"}, {"phaseChat", "PHASE_CHAT"}}) do
-        local key = entry[1]
-        local box = CreateFrame("CheckButton", nil, frame, "UICheckButtonTemplate")
-        box:SetPoint("TOPLEFT", 20, -75 - (index - 1) * 37)
-        local label = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        label:SetPoint("LEFT", box, "RIGHT", 4, 0)
-        label:SetText(PT:T(entry[2]))
-        box:SetScript("OnClick", function(button) PT:SetOption(key, button:GetChecked() == true) end)
-        checks[key] = box
-    end
-    local fields = {}
-    local function NumberField(key, title, hint, name, y, read)
-        Text(PT:T(title), y)
-        local input = CreateFrame("EditBox", name, frame, "InputBoxTemplate")
-        input:SetPoint("TOPLEFT", 32, y - 22)
-        input:SetSize(100, 28)
-        input:SetAutoFocus(false)
-        input:SetNumeric(true)
-        input:SetMaxLetters(6)
-        local function Restore()
-            input:SetText(tostring(read(self)))
-        end
-        local function Save()
-            local text = input:GetText() or ""
-            if text:match("^%d+$") then PT:SetOption(key, tonumber(text)) end
-            Restore()
-        end
-        input:SetScript("OnEnterPressed", function() Save(); input:ClearFocus() end)
-        input:SetScript("OnEditFocusLost", Save)
-        input:SetScript("OnEscapePressed", function() Restore(); input:ClearFocus() end)
-        Text(PT:T(hint), y - 57)
-        Restore()
-        fields[#fields + 1] = {input = input, restore = Restore, save = Save}
-    end
-    NumberField("phaseLead", "PHASE_LEAD", "PHASE_INPUT_HINT", "PatchToolsPhaseLeadInput", -233, self.Lead)
-    NumberField("phaseDuration", "PHASE_DURATION", "PHASE_DURATION_HINT", "PatchToolsPhaseDurationInput", -323, self.Duration)
-    local button = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
-    button:SetSize(230, 28)
-    button:SetPoint("TOPLEFT", 24, -414)
-    button:SetText(PT:T("PHASE_TEST"))
-    button:SetScript("OnClick", function() self:Alert(self:Lead(), true, true) end)
-    Text(PT:T(self.supported and "PHASE_READY" or "PHASE_UNAVAILABLE"), -463)
-    frame:SetScript("OnShow", function()
-        if PT.options then PT.options:Hide() end
-        for key, box in pairs(checks) do box:SetChecked(PT.db[key]) end
-        for _, field in ipairs(fields) do field.restore() end
-    end)
-    frame:SetScript("OnHide", function()
-        for _, field in ipairs(fields) do field.save(); field.input:ClearFocus() end
-        if PT.options then PT.options:Show() end
-    end)
-    frame:Show()
+    PT:OpenOptions()
+    PT:SelectOptionsPage("phase")
+    self.options = PT.optionPages.phase
 end

@@ -7,6 +7,7 @@ PT.defaults = {
     autoLoot = false, fastLoot = false, minimapIcon = true, minimapAngle = 225,
     phaseInitial = false, phaseSoon = false, phaseSound = true, phaseLead = 60,
     phaseDuration = 10, phaseChat = true,
+    sellWhitelist = false, sellProfessionBag = true, tooltipIDs = false, tooltipPrices = false,
 }
 PT.modules = {}
 function PT:Print(message)
@@ -103,7 +104,7 @@ function PT:SetOption(key, value)
 end
 function PT:OpenOptions()
     local phasing = self.modules.Phasing
-    if phasing and phasing.options then phasing.options:Hide() end
+    if phasing and phasing.options and not self.optionPages then phasing.options:Hide() end
     if self.options then self.options:Show() end
 end
 local events = CreateFrame("Frame")
@@ -120,7 +121,13 @@ events:SetScript("OnEvent", function(_, event, name)
         end
         -- v1-Schalter bleiben erhalten; der fehlerhafte 2,6-Regler entfällt.
         PT.db.zoomFactor = nil
-        PT.db.schemaVersion = 3
+        PT.db.schemaVersion = 4
+        for _, key in ipairs({"sellBlocklist", "sellAllowlist"}) do
+            if type(PT.db[key]) ~= "table" then PT.db[key] = {} end
+            for id, enabled in pairs(PT.db[key]) do
+                if type(id) ~= "number" or id < 1 or id % 1 ~= 0 or enabled ~= true then PT.db[key][id] = nil end
+            end
+        end
         PT.db.minimapAngle = PT.db.minimapAngle % 360
         if type(PT.db.cvarBackup) ~= "table" then PT.db.cvarBackup = {} end
         if type(PT.db.cvarApplied) ~= "table" then PT.db.cvarApplied = {} end

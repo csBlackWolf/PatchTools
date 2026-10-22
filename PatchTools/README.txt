@@ -7,6 +7,9 @@ Made by **Patch & Zen**.
 ## Features
 
 - **Automatic junk selling:** sell grey items when you visit a vendor. Quest items are protected.
+- **Custom selling lists:** protect items with a blacklist or add items to a selling whitelist. Enter an item ID or drag an item from your bags. The blacklist always wins.
+- **Profession bag control:** choose whether automatic selling includes the extra profession bag.
+- **Item tooltips:** optionally show item IDs and vendor prices per item.
 - **Automatic repairs:** repair your equipment using your own money when you can afford it.
 - **More camera distance:** zoom out further for a wider view.
 - **Normal colours as a ghost:** keep the world in colour while you are dead.
@@ -16,7 +19,11 @@ Made by **Patch & Zen**.
 - **World refresh warnings:** get a warning when a phase change is announced, and another before it may happen. Choose the warning time, sound, message duration and chat output.
 - **Minimap button:** open your settings with a click, move the button or hide it.
 
-Choose the features you want in the settings. Automatic selling, repairs and world refresh warnings start turned off. Your settings are kept when you update.
+Settings are grouped into General, Vendor, Tooltips, World Refresh and About PatchTools.
+
+Choose the features you want in the settings. Automatic selling, whitelist selling, repairs, tooltip additions and world refresh warnings start turned off. Your settings are kept when you update.
+
+The profession bag is included when selling is enabled, unless you turn it off. Selling rules apply to every bag item with the same item ID. Quest items stay protected.
 
 World refresh warnings work only when the game announces a change.
 
@@ -65,6 +72,15 @@ A screenshot or an error message is helpful, if available. You can also copy the
 Community project. Not affiliated with or endorsed by Blizzard Entertainment.
 
 ## Changelog
+
+### 0.6.0-alpha.1 — 2026-10-22
+
+- Added blacklist and whitelist selling rules, with item-ID entry and drag-and-drop.
+- Added support for the extra profession bag and an option to exclude it.
+- Added optional item IDs and vendor prices in tooltips.
+- Reorganized settings into five sections.
+- Added credits, a GitHub link and an invitation to suggest new features.
+- Fixed special characters in the new texts.
 
 ### 0.5.0-alpha.4 — 2026-10-22
 
