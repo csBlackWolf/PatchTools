@@ -8,6 +8,7 @@ ignore:
   - tests
   - PatchTools/tests
   - RELEASING.md
+  - EXTENSIONS.md
 
 move-folders:
   PatchTools/PatchTools: PatchTools

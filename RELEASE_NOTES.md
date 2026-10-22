@@ -1,3 +1,10 @@
+# PatchTools 0.7.0-local.1 — local preparation, not published
+
+- Display world-refresh countdowns in minutes and seconds in screen messages, chat and previews.
+- Add versioned optional-addon settings page registration.
+- Prepare the base interface for the separate PatchToolsMaps preview.
+- No installed files are replaced by this preparation. Map UI and complete reveal coverage still need client work; see the companion addon README.
+
 # PatchTools 0.6.0 — 2026-10-22
 
 First regular release for World of Warcraft: Forever. No feature changes compared with 0.6.0-alpha.1.

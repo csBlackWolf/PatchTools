@@ -12,8 +12,8 @@ local en = {
     PHASE_INPUT_HINT = "1–600 seconds. Enter or leave the field to save; Escape discards edits.",
     PHASE_TEST = "Test warning and sound",
     PHASE_TEST_PREFIX = "[TEST] ",
-    PHASE_ALERT_INITIAL = "World refresh announced: in %d seconds!",
-    PHASE_ALERT_SOON = "World refresh approaching: in %d seconds!",
+    PHASE_ALERT_INITIAL = "World refresh announced: in %s!",
+    PHASE_ALERT_SOON = "World refresh approaching: in %s!",
     PHASE_ALERT_PENDING = "World refresh pending — may happen at any moment!",
     PHASE_READY = "Ready. Warnings default to off. Only announced transfers can be detected.",
     PHASE_UNAVAILABLE = "This client does not provide the required transfer API/events.",
@@ -62,8 +62,8 @@ local de = {
     PHASE_INPUT_HINT = "1–600 Sekunden. Enter oder Feld verlassen speichert; Escape verwirft.",
     PHASE_TEST = "Warnung und Ton testen",
     PHASE_TEST_PREFIX = "[TEST] ",
-    PHASE_ALERT_INITIAL = "Weltaktualisierung angekündigt: in %d Sekunden!",
-    PHASE_ALERT_SOON = "Weltaktualisierung steht bevor: in %d Sekunden!",
+    PHASE_ALERT_INITIAL = "Weltaktualisierung angekündigt: in %s!",
+    PHASE_ALERT_SOON = "Weltaktualisierung steht bevor: in %s!",
     PHASE_ALERT_PENDING = "Weltaktualisierung ausstehend — jetzt jederzeit möglich!",
     PHASE_READY = "Bereit. Warnungen anfangs aus. Nur angekündigte Wechsel sind erkennbar.",
     PHASE_UNAVAILABLE = "Dieser Client bietet die benötigte Wechsel-Schnittstelle nicht an.",
@@ -159,6 +159,14 @@ en.SELL_PROFESSION = "Include profession bag"
 de.SELL_PROFESSION = "Berufsbeutel einbeziehen"
 en.IDEAS_INVITE = "Have an idea for a new feature? Suggest it on GitHub Issues using the Feature idea form. English and German are welcome!"
 de.IDEAS_INVITE = "Eine Idee für eine neue Funktion? Schlage sie auf GitHub Issues mit der Vorlage Feature idea vor. Deutsch und Englisch sind willkommen!"
+en.TIME_SECONDS = "%d sec."
+en.TIME_MINUTES = "%d min."
+en.TIME_MINUTES_SECONDS = "%d min. %d sec."
+de.TIME_SECONDS = "%d Sek."
+de.TIME_MINUTES = "%d Min."
+de.TIME_MINUTES_SECONDS = "%d Min. %d Sek."
+en.EXTENSION_ERROR = "Could not load settings for %s."
+de.EXTENSION_ERROR = "Einstellungen für %s konnten nicht geladen werden."
 PT.clientLocale = GetLocale()
 PT.locale = PT.clientLocale == "deDE" and "deDE" or "enUS"
 PT.locales = {enUS = en, deDE = de}
@@ -166,4 +174,14 @@ function PT:T(key, ...)
     local value = self.locales[self.locale][key] or en[key] or key
     if select("#", ...) > 0 then return string.format(value, ...) end
     return value
+end
+
+function PT:FormatTime(seconds)
+    seconds = tonumber(seconds)
+    if not seconds or seconds ~= seconds or math.abs(seconds) == math.huge then return nil end
+    seconds = math.max(0, math.ceil(seconds))
+    local minutes, remainder = math.floor(seconds / 60), seconds % 60
+    if minutes == 0 then return self:T("TIME_SECONDS", remainder) end
+    if remainder == 0 then return self:T("TIME_MINUTES", minutes) end
+    return self:T("TIME_MINUTES_SECONDS", minutes, remainder)
 end

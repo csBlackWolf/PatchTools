@@ -195,6 +195,7 @@ function PT:CreateOptions()
     Label(about,self.version,0,-470,560)
     local navigation={}
     function self:SelectOptionsPage(key)
+        if not pages[key] then return false end
         for name,page in pairs(pages) do page:SetShown(name==key) end
         for name,button in pairs(navigation) do
             if name==key then button:Disable() else button:Enable() end
@@ -207,6 +208,23 @@ function PT:CreateOptions()
         local key=entry[1]
         navigation[key]=Button(frame,self:T(entry[2]),20,-135-(i-1)*45,150,function() self:SelectOptionsPage(key) end)
     end
+    local nextNavigationIndex = 5
+    self.mountOptionsPage = function(entry)
+        if pages[entry.id] then return true end
+        local page = Page(entry.id)
+        local ok, err = pcall(entry.build, page, self)
+        if not ok then
+            page:Hide(); pages[entry.id] = nil
+            self:Print(self:T("EXTENSION_ERROR", entry.title))
+            if geterrorhandler then geterrorhandler()(err) end
+            return false
+        end
+        nextNavigationIndex = nextNavigationIndex + 1
+        navigation[entry.id] = Button(frame,entry.title,20,-135-(nextNavigationIndex-1)*45,150,
+            function() self:SelectOptionsPage(entry.id) end)
+        return true
+    end
+    for _, entry in ipairs(self.extraOptionsPages or {}) do self.mountOptionsPage(entry) end
     frame:SetScript("OnShow",function()
         for name,box in pairs(checks) do box:SetChecked(self.db[name]) end
         for _,fn in ipairs(refresh) do fn() end

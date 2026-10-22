@@ -1,5 +1,7 @@
 # PatchTools
 
+**Local preparation: 0.7.0-local.1. Not published.** Adds minute/second world-refresh messages and the optional-addon settings interface for PatchToolsMaps. See [EXTENSIONS.md](EXTENSIONS.md). The published release remains 0.6.0.
+
 Quality-of-life tools for **World of Warcraft: Forever**, with built-in **English and German** language support. No external libraries required.
 
 Made by **Patch & Zen**.

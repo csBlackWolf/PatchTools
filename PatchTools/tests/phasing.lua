@@ -15,7 +15,8 @@ function CreateFrame() return Widget() end
 UIParent = Widget()
 local pt = {db = {phaseInitial = true, phaseSoon = true, phaseSound = true, phaseLead = 10}, messages = {}}
 function pt:RegisterModule(_, module) self.module = module end
-function pt:T(key, value) return key .. (value and tostring(value) or "") end
+function GetLocale() return os.getenv("PATCHTOOLS_TEST_LOCALE") or "enUS" end
+assert(loadfile("Locales.lua"))("PatchTools", pt)
 function pt:Print(message) table.insert(self.messages, message) end
 assert(loadfile("Phasing.lua"))("PatchTools", pt)
 local m = pt.module
@@ -32,7 +33,7 @@ Tick(0); Tick(-1); assert(#pt.messages == 2 and m.active)
 Event("SHARD_TRANSFER_CANCELLED"); assert(not m.active and not m.display.shown)
 Tick(5); assert(#pt.messages == 2)
 seconds = 5; Event("SHARD_TRANSFER_IMMINENT")
-assert(#pt.messages == 3 and pt.messages[3] == "PHASE_ALERT_SOON5")
+assert(#pt.messages == 3 and pt.messages[3] == pt:T("PHASE_ALERT_SOON", pt:FormatTime(5)))
 Event("SHARD_TRANSFER"); assert(not m.active)
 seconds = 30; Event("SHARD_TRANSFER_IMMINENT"); Tick(50); Tick(11)
 assert(#pt.messages == 4); Tick(8); assert(#pt.messages == 5)
@@ -66,3 +67,16 @@ assert(#pt.messages == beforeMessages + 1)
 pt.db.phaseDuration = 999; m:SettingsChanged(); assert(pt.db.phaseDuration == 60)
 pt.db.phaseDuration = 0/0; m:SettingsChanged(); assert(pt.db.phaseDuration == 10)
 print("PASS: phasing deadlines, deduplication, cancellation, completion, rescheduling, late announcements, toggles, reload recovery, unavailable time, bounds and preview expiry.")
+
+assert(pt:FormatTime(150)==pt:T("TIME_MINUTES_SECONDS",2,30))
+assert(pt:FormatTime(60)==pt:T("TIME_MINUTES",1))
+assert(pt:FormatTime(30)==pt:T("TIME_SECONDS",30))
+assert(pt:FormatTime(59.1)==pt:T("TIME_MINUTES",1))
+assert(pt:FormatTime(600)==pt:T("TIME_MINUTES",10))
+assert(pt:FormatTime(0/0)==nil and pt:FormatTime(math.huge)==nil)
+pt.db.phaseChat=true
+m:Alert(150,false,true)
+assert(pt.messages[#pt.messages]==pt:T("PHASE_TEST_PREFIX")..pt:T("PHASE_ALERT_INITIAL",pt:FormatTime(150)))
+m:Alert(0,false)
+assert(pt.messages[#pt.messages]==pt:T("PHASE_ALERT_PENDING"))
+print("PASS: localized minute/second formatting, rounding boundaries, chat/preview output and pending transfers.")

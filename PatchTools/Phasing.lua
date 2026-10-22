@@ -24,7 +24,7 @@ end
 function module:Alert(seconds, soon, test)
     local message
     if seconds and seconds > 0 then
-        message = PT:T(soon and "PHASE_ALERT_SOON" or "PHASE_ALERT_INITIAL", math.ceil(seconds))
+        message = PT:T(soon and "PHASE_ALERT_SOON" or "PHASE_ALERT_INITIAL", PT:FormatTime(seconds))
     else
         message = PT:T("PHASE_ALERT_PENDING")
     end

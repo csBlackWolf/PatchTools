@@ -4,11 +4,12 @@
 ## Notes-deDE: Modulare Komfortwerkzeuge fuer WoW Forever. Deutsch und Englisch integriert.
 ## Author: Fabian & Patch
 ## X-License: MIT
-## Version: @project-version@
+## Version: 0.7.0-local.1
 ## X-Curse-Project-ID: 1758728
 ## SavedVariables: PatchToolsDB
 Locales.lua
 Core.lua
+Extensions.lua
 ItemRules.lua
 Vendor.lua
 Tooltips.lua
