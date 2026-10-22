@@ -2,7 +2,7 @@
 
 ## Supported client and layout
 
-The published 0.5.0 alpha targets WoW: Forever 1.60.1, Interface 16001. Other WoW editions are not currently declared supported. Forever Beta may still use the `_classic_beta_` installation directory.
+The published 0.6.0 alpha targets WoW: Forever 1.60.1, Interface 16001. Other WoW editions are not currently declared supported. Forever Beta may still use the `_classic_beta_` installation directory.
 
 The runtime addon is in `PatchTools/`. `Locales.lua` loads first, then `Core.lua`, followed by the feature modules in `PatchTools.toc`. Modules register through `PT:RegisterModule(name, module)`. Account-wide settings are stored in `PatchToolsDB`.
 
@@ -10,7 +10,7 @@ Use UTF-8 for source and localization files. Check the actual bytes when editing
 
 ## Behaviour and safeguards
 
-- Vendor automation processes regular carried bags, never bank storage or equipped items. It skips quest items, locked items and items without a positive vendor value. Holding Shift or closing the merchant cancels processing. Requests are bounded and delayed to allow updates from the game.
+- Vendor automation processes carried bags, including the extra profession/reagent bag when enabled, never bank storage or equipped items. It skips quest items, locked items and items without a positive vendor value. Holding Shift or closing the merchant cancels processing. Requests are bounded and delayed to allow updates from the game.
 - Repair uses personal money only and requires enough for the entire repair cost.
 - Previous auto-loot and cooldown-number values are backed up per character. Restoration avoids replacing a setting changed by another addon. Disabling extended zoom restores the client default; scroll out manually after enabling it.
 - Faster loot respects the client's loot mode and modifier key. It does not confirm binding, distribute group loot, bypass ownership or server restrictions, or force-close the loot window.
@@ -61,3 +61,9 @@ Do not reuse tags for different commits. For a local-only build, do not create o
 Follow the [official CurseForge Automatic Packaging guide](https://support.curseforge.com/support/solutions/articles/9000197281-automatic-packaging). Use the project package endpoint with a dedicated token, GitHub push events, JSON content type and SSL verification. The project setting limits packaging to tags.
 
 Never commit tokens or put them in screenshots, logs, issue reports or release notes. Revoke the token when retiring the integration.
+
+## Selling lists and tooltips (0.6.0)
+
+`ItemRules.lua` handles ID validation and rule precedence. `sellBlocklist` always wins over `sellAllowlist`. Whitelist selling requires `sellWhitelist`; the additional bag requires `sellProfessionBag` (default true). Settings are checked on each sale pass. Quest items, locks and non-positive prices are still checked by Vendor. Rules use base item IDs, not individual copies or variants.
+
+`Tooltips.lua` uses the item tooltip processor when available, with an older tooltip-script fallback. Vendor prices are per item; uncached item data may require another hover. The source/test runner validates UTF-8. Automated tests cover extra-bag selling and toggling; visual checks remain in-game.

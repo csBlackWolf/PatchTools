@@ -1,3 +1,17 @@
+# PatchTools 0.6.0-alpha.1 — 2026-10-22
+
+- Protect items from automatic selling with a blacklist.
+- Add items of any quality to an optional selling whitelist. Enter an item ID or drag an item from your bags. Blacklist protection always wins.
+- Sell from the extra profession bag, or exclude it with the new vendor option.
+- Optionally show item IDs and vendor prices per item in tooltips.
+- Find settings in five sections: General, Vendor, Tooltips, World Refresh and About PatchTools.
+- Credits now include a GitHub link and an invitation to share ideas, with a simple English/German feature form.
+- Correct UTF-8 encoding for umlauts and special characters.
+
+Whitelist selling and tooltip additions start turned off. Existing settings and lists are preserved.
+
+Validation: syntax, UTF-8 and simulated API tests for enUS, deDE and English fallback. In-game checks on Forever Beta confirmed the revised UI, selling lists, tooltip additions, profession bag sales and its on/off setting. The new credits invitation still needs a visual in-game check.
+
 # 0.5.0-alpha.4
 
 - Exclude test files from the native CurseForge package after directory flattening.
