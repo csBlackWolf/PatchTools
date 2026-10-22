@@ -5,6 +5,7 @@ ignore:
   - .github
   - README.md
   - LICENSE
+  - tests
   - PatchTools/tests
   - RELEASING.md
 

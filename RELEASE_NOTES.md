@@ -1,3 +1,8 @@
+# 0.5.0-alpha.4
+
+- Exclude test files from the native CurseForge package after directory flattening.
+- No gameplay changes compared with 0.5.0-alpha.2.
+
 # PatchTools 0.5.0-alpha.3
 
 - Prepare tag-driven CurseForge packaging and version substitution.
