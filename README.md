@@ -1,89 +1,95 @@
 # PatchTools
 
-Modular quality-of-life tools for **World of Warcraft: Forever**, with built-in **English and German**. No external libraries required.
+Quality-of-life tools for **World of Warcraft: Forever**, with built-in **English and German** language support. No external libraries required.
 
-**Version 0.5.0-alpha.2 — alpha test build.** Target: Forever 1.60.1, Interface 16001; originally developed against build 70124. The settings UI has also been exercised on German Forever build 70532. In-game testing confirmed announced world-refresh warnings on build 70532; full feature compatibility still needs further verification.
+Made by **Patch & Zen**.
 
 ## Features
 
-| Feature | Behaviour |
-| --- | --- |
-| Auto junk selling | Sells sellable grey regular-bag items; skips quest items and equipped gear. |
-| Auto repair | Repairs at suitable vendors using your own money, if you can afford the full cost. Never uses guild funds. |
-| Extended zoom | Sets factor 4. Turning it off restores the client default. Scroll out manually. |
-| Ghost colours | Removes the death greyscale filter, without changing your ghost form. |
-| Cooldown numbers | Enables Blizzard's native countdown on ability icons. |
-| Login auto-loot | Enables native auto-loot on login/world entry, including new characters. |
-| Faster auto-loot | Requests available loot earlier; respects manual looting, locked slots and confirmations. |
-| Minimap icon | Click to open settings, drag to reposition, or hide it in settings. |
-| Chat messages | Optional feedback for sale and repair requests. |
+- **Automatic junk selling:** sell grey items when you visit a vendor. Quest items are protected.
+- **Automatic repairs:** repair your equipment using your own money when you can afford it.
+- **More camera distance:** zoom out further for a wider view.
+- **Normal colours as a ghost:** keep the world in colour while you are dead.
+- **Cooldown numbers:** see how long your abilities need to recharge.
+- **Auto-loot on login:** keep automatic looting enabled for your characters.
+- **Faster looting:** collect available loot sooner when auto-loot is active.
+- **World refresh warnings:** get a warning when a phase change is announced, and another before it may happen. Choose the warning time, sound, message duration and chat output.
+- **Minimap button:** open your settings with a click, move the button or hide it.
 
-Automation and visual options default to **off**; minimap icon and chat messages default to **on**. Settings are account-wide and preserved on updates. Previous auto-loot/cooldown values are backed up per character. Disabling those options restores the previous value unless another change was detected; zoom specifically restores the client default.
+Choose the features you want in the settings. Automatic selling, repairs and world refresh warnings start turned off. Your settings are kept when you update.
+
+World refresh warnings work only when the game announces a change.
 
 ## Installation
 
-1. Fully exit WoW.
-2. Download the installable `PatchTools-0.5.0-alpha.2.zip` from the project files.
-3. Extract its `PatchTools` folder into `World of Warcraft\_forever_\Interface\AddOns\` (current Forever installation, also retained after the stress test was renamed in Battle.net). Beta alternative: `World of Warcraft\_classic_beta_\Interface\AddOns\`. Use Battle.net > Show in Explorer to locate your selected installation.
-4. On updates, replace addon files but keep SavedVariables.
-5. Start WoW, enable PatchTools and enter `/patchtools`.
+1. Close World of Warcraft.
+2. Download the PatchTools ZIP from [CurseForge](https://www.curseforge.com/wow/addons/patchtools/files).
+3. Extract the **PatchTools** folder into your game's **Interface\AddOns** folder.
+4. Start the game and enable PatchTools in the AddOns menu.
 
-The final path must end in `AddOns\PatchTools\PatchTools.toc`, without an extra nested folder. If using GitHub's source archive, install only its inner `PatchTools` folder.
+Example: `World of Warcraft\_forever_\Interface\AddOns\PatchTools`
+
+Current Forever installation folders:
+
+| Game version | AddOns folder |
+| --- | --- |
+| WoW: Forever | `World of Warcraft\_forever_\Interface\AddOns\` |
+| WoW: Forever Beta | `World of Warcraft\_classic_beta_\Interface\AddOns\` |
+
+If you are unsure which folder to use, open the game's options in Battle.net and choose **Show in Explorer**. Folder names may differ between installations.
 
 ## Controls and languages
 
-- `/patchtools` or `/ptools`: open settings, even when the minimap button is hidden.
-- `/patchtools status`: diagnostics including addon version, client build/interface, locales, feature flags and CVar values.
-- Hold **Shift when opening a vendor** to bypass vendor automation.
-- Faster loot follows the client's auto-loot mode and configured **AUTOLOOTTOGGLE** modifier; it does not force automatic looting when manual looting was selected.
-- German (`deDE`) clients automatically use German. All other locales use English. Missing translation keys fall back to English. No translation addon is needed.
-
-## Compatibility and limitations
-
-The minimap icon is a normal named button (`PatchToolsMinimapButton`). It allows collectors to reparent it and does not restore its minimap position while inside another container. Ctrl-right-click stays available to collectors such as MBB. Specific collector versions still need in-game testing.
-
-Fast loot does not confirm binding, distribute group loot, force-close loot windows or bypass ownership/network/server limits. Full bags and confirmations remain under normal client control. Avoid running another vendor or fast-loot automation at the same time. Beta API and SavedVariables changes may affect functionality and persistence.
-
-## Validation status
-
-Initial in-game checks confirmed loading, options, junk selling and ghost colours. The native cooldown setting was separately confirmed. Automatic repair and the new localization, minimap and fast-loot features still need full in-game validation.
-
-Lua syntax and simulated API tests pass for migration, safe sales, repair affordability, CVar restoration, minimap interaction/reparenting, loot modes/cancellation, English/German translation parity and English fallback. Mocks do not replace client tests.
+- **Minimap button:** click to open settings; drag to move it.
+- **`/patchtools`** or **`/ptools`:** open settings.
+- **`/patchtools status`:** show information that can help with a bug report.
+- **Hold Shift when opening a vendor:** pause automatic selling and repairs for that visit.
+- **Language:** German game clients use German automatically. Other game languages use English.
 
 ## Reporting issues
 
-Use the structured **Bug report**, **Feature request** or **Translation issue** forms. Bug reports request `/patchtools status`, game edition, OS, client build/locale, affected feature, reproduction steps, expected/actual results, full Lua error (or 'none'), and relevant other addons/isolation results.
+Found a problem or have an idea? [Open a GitHub issue](https://github.com/csBlackWolf/PatchTools/issues/new/choose). **English and German are both welcome.**
 
-Redact private chat and account information. Never attach credentials or an entire WTF/SavedVariables folder.
+Please tell us:
 
-## Development
+- Which WoW version and PatchTools version you use.
+- What you did and what happened.
+- What you expected instead.
 
-`Locales.lua` loads before `Core.lua`; feature modules are registered with `PT:RegisterModule(name, module)`. Tests require Python 3 on Linux and the system library `liblua5.4.so.0`:
-
-```sh
-python3 PatchTools/tests/run_tests.py
-PATCHTOOLS_TEST_LOCALE=deDE python3 PatchTools/tests/run_tests.py
-PATCHTOOLS_TEST_LOCALE=frFR python3 PatchTools/tests/run_tests.py
-```
-
-Package from the repository root:
-
-```sh
-zip -r PatchTools-0.5.0-alpha.2.zip PatchTools
-```
-
-Community project; not affiliated with or endorsed by Blizzard Entertainment.
-
-## Phasing / world refresh warnings (0.5.0 alpha)
-
-Open `/patchtools`, then **Phasing / world refresh alerts**. Enable the announcement warning and/or the second warning (1–600 seconds beforehand, default 60). Both default to off; optional sound uses the Master channel. Screen messages last 1–60 seconds (default 10). The independent phasing chat switch defaults to on and writes warnings to the normal chat history; it does not create a log file. The test button previews the warning without scheduling a transfer.
-
-Uses Forever's `SHARD_TRANSFER_IMMINENT`, `SHARD_TRANSFER_CANCELLED`, `SHARD_TRANSFER` and `GetEvictionTimeRemaining()`, as used by Blizzard's SocialToast UI. Cancellation/completion clears pending alerts; the countdown is queried again while active to follow changes. Zero means the transfer may happen at any moment, not that it has completed. A late announcement produces one urgent warning rather than two overlapping alerts. Reload/world entry recovers a pending positive countdown. Unannounced transfers cannot be predicted. Announced world-refresh warnings were confirmed in-game on German Forever build 70532. The configurable display duration and chat toggle are new in alpha.2 and have mock coverage; their new UI still needs an in-game check.
+A screenshot or an error message is helpful, if available. You can also copy the output of `/patchtools status`. Please hide private chat or account details in screenshots.
 
 ## License
 
-MIT License. Copyright (c) 2026 Fabian (csBlackWolf). See LICENSE.
+[MIT License](https://github.com/csBlackWolf/PatchTools/blob/main/LICENSE). You may use, change and share PatchTools. Keep the original copyright and license notice with your copy.
 
-## Automated releases
+Community project. Not affiliated with or endorsed by Blizzard Entertainment.
 
-See [RELEASING.md](RELEASING.md) for the tag-based CurseForge publishing workflow. Source version placeholders are replaced during packaging; install a packaged ZIP rather than copying raw development templates.
+## Changelog
+
+### 0.5.0-alpha.4 — 2026-10-22
+
+- Removed development test files from the download. Features are unchanged.
+
+### 0.5.0-alpha.3 — 2026-10-22
+
+- Set up automatic CurseForge downloads for future version tags. Features are unchanged.
+
+### 0.5.0-alpha.2 — 2026-10-22
+
+- Added a choice of how long world refresh warnings stay on screen.
+- Added an option to show world refresh warnings in chat.
+- Added the MIT license.
+
+### 0.5.0-alpha.1 — 2026-10-22
+
+- Added world refresh warnings with a choice of warning time and sound.
+- Added a button to try the warning.
+
+### 0.4.0 — 2026-10-21
+
+- Added built-in English and German support.
+- Includes junk selling, repairs, camera zoom, ghost colours, cooldown numbers, auto-loot, faster looting and a minimap button.
+
+---
+
+For contributors: [developer information and release instructions](https://github.com/csBlackWolf/PatchTools/blob/main/RELEASING.md).
