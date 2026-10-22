@@ -1,23 +1,33 @@
-name: Feature request
-description: Suggest a feature or improvement.
-title: "[Feature]: "
+name: Feature idea / Funktionswunsch
+description: Share an idea for PatchTools. Deutsch und Englisch sind willkommen.
+title: "[Idea]: "
 body:
-  - type: textarea
-    id: problem
+  - type: markdown
     attributes:
-      label: What problem should this solve?
+      value: |
+        Have an idea to make PatchTools more useful? Tell us about it below.
+        No technical knowledge needed. English and German are both welcome.
+
+        Eine Idee für PatchTools? Beschreibe sie einfach unten.
+        Technisches Wissen ist nicht nötig. Deutsch und Englisch sind willkommen.
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea / Deine Idee
+      description: What would you like PatchTools to do? / Was soll PatchTools können?
     validations:
       required: true
   - type: textarea
-    id: proposal
+    id: benefit
     attributes:
-      label: Proposed behaviour and options
-      description: "Include desired defaults and any alternatives."
+      label: How would it help? / Wobei würde es helfen?
+      description: Optional. A short example is enough. / Optional. Ein kurzes Beispiel genügt.
     validations:
-      required: true
+      required: false
   - type: input
-    id: environment
+    id: game
     attributes:
-      label: Game edition, client build and PatchTools version
+      label: WoW version / WoW-Version
+      description: Optional, for example Forever. / Optional, zum Beispiel Forever.
     validations:
-      required: true
+      required: false
