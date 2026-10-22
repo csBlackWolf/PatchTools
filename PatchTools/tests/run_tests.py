@@ -1,4 +1,11 @@
 """Run Lua syntax and mock-API tests using the system Lua 5.4 shared library."""
+# WoW reads source text as UTF-8. Validate bytes before executing any Lua.
+from pathlib import Path
+for source in Path(__file__).resolve().parents[1].glob('*'):
+    if source.suffix in ('.lua', '.toc', '.txt'):
+        source.read_bytes().decode('utf-8', errors='strict')
+print('PASS: source text is valid UTF-8.')
+
 import ctypes
 from pathlib import Path
 import os

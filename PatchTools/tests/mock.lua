@@ -70,7 +70,7 @@ function RepairAllItems(guild) assert(guild==false); repaired=repaired+1; wallet
 function GetTime() return 100 end
 function GetEvictionTimeRemaining() return nil end
 local pt={}
-for _,file in ipairs({"Locales.lua","Core.lua","Vendor.lua","Loot.lua","Minimap.lua","Phasing.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
+for _,file in ipairs({"Locales.lua","Core.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","Minimap.lua","Phasing.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
 assert(pt.locale==(GetLocale()=="deDE" and "deDE" or "enUS"))
 for key, text in pairs(pt.locales.enUS) do
     assert(type(pt.locales.deDE[key])=="string", "Missing German translation: "..key)
@@ -180,7 +180,7 @@ saved.cvarApplied.cameraDistanceMaxZoomFactor="2.6"
 saved.cvarBackup.cameraDistanceMaxZoomFactor="1.9"
 Event("ADDON_LOADED","PatchTools"); Event("PLAYER_LOGIN")
 assert(pt.db==saved and pt.db.autoSell and pt.db.zoomFactor==nil)
-assert(pt.db.schemaVersion==3 and pt.db.minimapAngle==90)
+assert(pt.db.schemaVersion==4 and pt.db.minimapAngle==90)
 assert(cvars.cameraDistanceMaxZoomFactor=="4")
 pt:SetOption("extendedZoom",false); assert(cvars.cameraDistanceMaxZoomFactor=="1.9")
 print("PASS: defaults, options, CVar restoration, conflict preservation, junk safety,")
@@ -193,3 +193,118 @@ pt.modules.Phasing:OpenOptions()
 assert(pt.modules.Phasing.options.shown)
 assert(not pt.db.phaseInitial and not pt.db.phaseSoon and pt.db.phaseLead == 60)
 print("PASS: integrated phasing initialization, settings panel and safe defaults.")
+
+-- Sale rules: blacklist wins; whitelist is explicit opt-in and independent of grey sale.
+pt.db.autoSell=true; pt.db.sellWhitelist=false
+assert(not pt:ItemID("0") and not pt:ItemID("-1") and not pt:ItemID("1.5"))
+assert(not pt:ItemID("nan") and not pt:ItemID("2147483648"))
+assert(pt:ItemID("|cff00ff00|Hitem:123:0|h[Test]|h|r")==123)
+assert(pt:SetItemRule("sellBlocklist",1,true))
+assert(not pt:ShouldSellItem({itemID=1,quality=0}))
+assert(pt:SetItemRule("sellAllowlist",1,true))
+pt.db.sellWhitelist=true
+assert(not pt:ShouldSellItem({itemID=1,quality=0}))
+pt:SetItemRule("sellBlocklist",1,false)
+pt.db.autoSell=false
+assert(pt:ShouldSellItem({itemID=1,quality=4}))
+pt.db.sellWhitelist=false
+assert(not pt:ShouldSellItem({itemID=1,quality=4}))
+assert(not pt:ShouldSellItem({quality=0}))
+assert(not pt:SetItemRule("other",1,true))
+-- Exercise a real sale pass with listed rare items, a conflict, quest/locked/zero-value items.
+pt.db.sellWhitelist=true
+pt.db.sellBlocklist={ [2]=true }
+pt.db.sellAllowlist={ [1]=true,[2]=true,[3]=true,[4]=true,[5]=true }
+bag={{itemID=1,quality=4},{itemID=2,quality=0},{itemID=3,quality=4,quest=true},{itemID=4,quality=4,isLocked=true},{itemID=5,quality=4}}
+C_Container.GetContainerNumSlots=function(b) return b==0 and #bag or 0 end
+local sales={}
+C_Container.UseContainerItem=function(_,slot) sales[#sales+1]=bag[slot].itemID; bag[slot]={} end
+C_Item.GetItemInfo=function(id) return "Test",nil,nil,nil,nil,nil,nil,nil,nil,nil,id==5 and 0 or 10 end
+Event("MERCHANT_CLOSED"); Event("MERCHANT_SHOW"); Flush()
+assert(#sales==1 and sales[1]==1)
+Event("MERCHANT_CLOSED")
+-- Shift and closed merchant also protect whitelist sales.
+bag[1]={itemID=1,quality=4}; shift=true
+Event("MERCHANT_SHOW"); Flush(); assert(#sales==1)
+shift=false; Event("MERCHANT_CLOSED")
+Event("MERCHANT_SHOW"); Event("MERCHANT_CLOSED"); Flush(); assert(#sales==1)
+-- List UI accepts IDs, de-duplicates, removes, and accepts item cursors only.
+local list=pt.itemListUI.sellBlocklist
+assert(list.add("42")); assert(pt.db.sellBlocklist[42])
+assert(list.add("42")); assert(not list.add("invalid"))
+GetCursorInfo=function() return "spell",99 end
+local cleared=false; ClearCursor=function() cleared=true end
+list.drop(); assert(not cleared and not pt.db.sellBlocklist[99])
+GetCursorInfo=function() return "item",99 end
+list.drop(); assert(cleared and pt.db.sellBlocklist[99])
+pt:SetItemRule("sellBlocklist",99,false); assert(not pt.db.sellBlocklist[99])
+-- Tooltips handle uncached prices, repeated callbacks and reset without duplicate lines.
+local tip={lines={},GetItem=function() return "Test","item:42" end}
+function tip:AddDoubleLine(a,b) self.lines[#self.lines+1]={a,b} end
+pt.db.tooltipIDs=true; pt.db.tooltipPrices=true
+local price=nil
+C_Item.GetItemInfo=function() return "Test",nil,nil,nil,nil,nil,nil,nil,nil,nil,price end
+pt.modules.Tooltips:Decorate(tip); assert(#tip.lines==1 and tip.lines[1][2]=="42")
+pt.modules.Tooltips:Decorate(tip); assert(#tip.lines==1)
+price=20; pt.modules.Tooltips:Decorate(tip); assert(#tip.lines==2)
+pt.modules.Tooltips:Decorate(tip); assert(#tip.lines==2)
+tip.patchToolsLines=nil; tip.lines={}; price=0
+pt.modules.Tooltips:Decorate(tip); assert(#tip.lines==2 and tip.lines[2][2]==pt:T("TIP_NO_VALUE"))
+pt.db.tooltipIDs=false; pt.db.tooltipPrices=false
+tip.patchToolsLines=nil; tip.lines={}; pt.modules.Tooltips:Decorate(tip); assert(#tip.lines==0)
+print("PASS: list precedence, explicit whitelist opt-in, rare-item sale, quest/locked/zero-price protection, Shift/close cancellation, drag validation and tooltip cache/deduplication.")
+
+-- Saved rules survive reinitialization and keep protection precedence.
+pt.db.sellBlocklist[123]=true; pt.db.sellAllowlist[123]=true
+Event("ADDON_LOADED","PatchTools")
+assert(pt.db.sellBlocklist[123] and pt.db.sellAllowlist[123])
+assert(not pt:ShouldSellItem({itemID=123,quality=0}))
+print("PASS: saved item lists survive initialization.")
+
+-- Forever's extra profession/reagent bag is container 5, not a bank bag.
+local containersByBag = {
+    [0]={{itemID=2934,quality=1}},
+    [5]={{itemID=2934,quality=1},{itemID=2934,quality=1},
+        {itemID=2672,quality=1},{itemID=2934,quality=1,quest=true},
+        {itemID=2934,quality=1,isLocked=true},{itemID=1372,quality=0}},
+    [6]={{itemID=2934,quality=1}},
+    [-1]={{itemID=2934,quality=1}},
+}
+pt.db.autoSell=true; pt.db.sellWhitelist=true; pt.db.autoRepair=false
+pt.db.sellAllowlist={[2934]=true,[2672]=true}
+pt.db.sellBlocklist={[2672]=true}
+local visited, professionSales = {}, {}
+C_Container.GetContainerNumSlots=function(b)
+    visited[b]=true
+    return containersByBag[b] and #containersByBag[b] or 0
+end
+C_Container.GetContainerItemInfo=function(b,s) return containersByBag[b][s] end
+C_Container.GetContainerItemQuestInfo=function(b,s) return {isQuestItem=containersByBag[b][s].quest} end
+C_Container.UseContainerItem=function(b,s)
+    professionSales[#professionSales+1]={bag=b,slot=s,id=containersByBag[b][s].itemID}
+    containersByBag[b][s]={}
+end
+C_Item.GetItemInfo=function() return "Test",nil,nil,nil,nil,nil,nil,nil,nil,nil,7 end
+Event("MERCHANT_CLOSED"); Event("MERCHANT_SHOW"); Flush()
+assert(#professionSales==4, "Profession bag: expected main-bag item, two listed stacks and grey junk")
+assert(professionSales[1].bag==0 and professionSales[2].bag==5)
+assert(containersByBag[5][3].itemID==2672 and containersByBag[5][4].quest and containersByBag[5][5].isLocked)
+assert(visited[5] and not visited[6] and not visited[-1], "Only carried bags may be visited")
+Event("MERCHANT_CLOSED")
+containersByBag[5]={}
+Event("MERCHANT_SHOW"); Flush(); Event("MERCHANT_CLOSED")
+assert(#professionSales==4, "Empty profession bag must be harmless")
+print("PASS: profession bag whitelist stacks and grey sale; blacklist/quest/locked protection; bank exclusion; empty profession bag.")
+
+-- Turning the extra bag off affects both grey and whitelist sales, even mid-session.
+containersByBag[0]={{itemID=2934,quality=1}}
+containersByBag[5]={{itemID=2934,quality=1},{itemID=1372,quality=0}}
+pt:SetOption("sellProfessionBag", false)
+visited={}; professionSales={}
+Event("MERCHANT_SHOW"); Flush(); Event("MERCHANT_CLOSED")
+assert(#professionSales==1 and professionSales[1].bag==0)
+assert(not visited[5] and containersByBag[5][1].itemID==2934 and containersByBag[5][2].itemID==1372)
+pt:SetOption("sellProfessionBag", true)
+Event("MERCHANT_SHOW"); Flush(); Event("MERCHANT_CLOSED")
+assert(#professionSales==3 and professionSales[2].bag==5 and professionSales[3].bag==5)
+print("PASS: profession bag toggle skips whitelist and grey items while regular bags still sell; re-enable restores extra-bag sales.")
