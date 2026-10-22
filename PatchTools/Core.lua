@@ -1,6 +1,6 @@
 local addon, PT = ...
 _G.PatchTools = PT
-PT.version = "0.5.0-alpha.2"
+PT.version = "@project-version@"
 PT.defaults = {
     autoSell = false, autoRepair = false, extendedZoom = false,
     ghostColor = false, messages = true, cooldownNumbers = false,
