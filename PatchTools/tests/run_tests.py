@@ -1,6 +1,24 @@
 """Run Lua syntax and mock-API tests using the system Lua 5.4 shared library."""
 import ctypes
 from pathlib import Path
+import os
+import sys
+
+# Optional portable runner for Windows; retain the system-library path on Linux.
+try:
+    from lupa.lua54 import LuaRuntime
+except ImportError:
+    LuaRuntime = None
+if LuaRuntime:
+    root = Path(__file__).resolve().parents[1]
+    os.chdir(root)
+    lua = LuaRuntime()
+    for path in root.glob('*.lua'):
+        lua.execute('assert(loadfile(...))', path.as_posix())
+        print('Syntax OK:', path.name)
+    lua.execute('dofile("tests/mock.lua")')
+    LuaRuntime().execute('dofile("tests/phasing.lua")')
+    sys.exit(0)
 
 lib = ctypes.CDLL('liblua5.4.so.0')
 lib.luaL_newstate.restype = ctypes.c_void_p
@@ -23,6 +41,14 @@ for path in root.glob('*.lua'):
 import os
 os.chdir(root)
 result = lib.luaL_loadfilex(state, str(root / 'tests/mock.lua').encode(), None)
+if not result:
+    result = lib.lua_pcallk(state, 0, 0, 0, 0, None)
+if result:
+    raise RuntimeError(lib.lua_tolstring(state, -1, None).decode())
+lib.lua_close(state)
+state = lib.luaL_newstate()
+lib.luaL_openlibs(state)
+result = lib.luaL_loadfilex(state, str(root / 'tests/phasing.lua').encode(), None)
 if not result:
     result = lib.lua_pcallk(state, 0, 0, 0, 0, None)
 if result:

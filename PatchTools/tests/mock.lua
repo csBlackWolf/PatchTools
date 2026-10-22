@@ -10,6 +10,7 @@ local function Widget()
     function methods:RegisterEvent(event) self.events[event]=true end
     function methods:CreateFontString() return Widget() end
     function methods:SetText(text) self.text=text end
+    function methods:GetText() return self.text end
     function methods:SetChecked(value) self.checked=value end
     function methods:GetChecked() return self.checked end
     function methods:GetParent() return self.parent end
@@ -66,8 +67,10 @@ function CanMerchantRepair() return true end
 function GetRepairAllCost() return repairCost,repairCost>0 end
 function GetMoney() return wallet end
 function RepairAllItems(guild) assert(guild==false); repaired=repaired+1; wallet=wallet-repairCost; repairCost=0 end
+function GetTime() return 100 end
+function GetEvictionTimeRemaining() return nil end
 local pt={}
-for _,file in ipairs({"Locales.lua","Core.lua","Vendor.lua","Loot.lua","Minimap.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
+for _,file in ipairs({"Locales.lua","Core.lua","Vendor.lua","Loot.lua","Minimap.lua","Phasing.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
 assert(pt.locale==(GetLocale()=="deDE" and "deDE" or "enUS"))
 for key, text in pairs(pt.locales.enUS) do
     assert(type(pt.locales.deDE[key])=="string", "Missing German translation: "..key)
@@ -185,3 +188,8 @@ print("sale-before-repair, insufficient funds, Shift bypass, merchant-close canc
 print("bounded retries, v1 migration, cooldown numbers, login autoloot and per-character restore.")
 print("PASS: minimap toggle/click/drag, fast-loot defaults, manual-loot bypass, modifier XOR,")
 print("locked slots, reverse order, no duplicate calls, pending cancellation and confirmation preservation.")
+
+pt.modules.Phasing:OpenOptions()
+assert(pt.modules.Phasing.options.shown)
+assert(not pt.db.phaseInitial and not pt.db.phaseSoon and pt.db.phaseLead == 60)
+print("PASS: integrated phasing initialization, settings panel and safe defaults.")
