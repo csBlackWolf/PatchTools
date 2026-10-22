@@ -1,3 +1,24 @@
+# PatchTools 0.5.0-alpha.2
+
+- Adds a numeric screen-message duration (1–60 seconds; default 10).
+- Adds an independent phasing chat-output toggle (default on).
+- Records confirmed announced-transfer warnings on German Forever build 70532.
+- Documents the continued use of _forever_ after Battle.net renamed the installation.
+- MIT licensed. New duration/chat controls pass mock tests; new layout needs client verification.
+
+# PatchTools 0.5.0-alpha.2 — phasing alerts
+
+First CurseForge alpha submission; awaiting project/file moderation. Released under the MIT License.
+
+- Separate announcement and near-transfer warnings, off by default.
+- Numeric input for a configurable 1–600 second lead (new default: 60 seconds; existing settings preserved), optional Master-channel sound, test button.
+- English/German messages; cancellation/completion handling and pending countdown recovery.
+- Native Forever shard-transfer events and countdown query; no localized text scraping.
+- Installation instructions now include `_forever_` and the beta alternative.
+
+Simulated tests cover countdown changes, late notices, duplicate events, cancellation,
+completion, settings, recovery and both languages. Actual transfers still need in-game testing.
+
 # PatchTools 0.4.0 — English and German support
 
 First public pre-release for WoW Forever 1.60.1, Interface 16001.

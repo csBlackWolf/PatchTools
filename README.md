@@ -2,7 +2,7 @@
 
 Modular quality-of-life tools for **World of Warcraft: Forever**, with built-in **English and German**. No external libraries required.
 
-**Version 0.4.0 — beta pre-release.** Target: Forever 1.60.1, Interface 16001; originally developed against build 70124. Later builds and other editions need separate verification.
+**Version 0.5.0-alpha.2 — alpha test build.** Target: Forever 1.60.1, Interface 16001; originally developed against build 70124. The settings UI has also been exercised on German Forever build 70532. In-game testing confirmed announced world-refresh warnings on build 70532; full feature compatibility still needs further verification.
 
 ## Features
 
@@ -23,8 +23,8 @@ Automation and visual options default to **off**; minimap icon and chat messages
 ## Installation
 
 1. Fully exit WoW.
-2. Download the installable `PatchTools-0.4.0.zip` from the release.
-3. Extract its `PatchTools` folder into `World of Warcraft\_classic_beta_\Interface\AddOns\`.
+2. Download the installable `PatchTools-0.5.0-alpha.2.zip` from the project files.
+3. Extract its `PatchTools` folder into `World of Warcraft\_forever_\Interface\AddOns\` (current Forever installation, also retained after the stress test was renamed in Battle.net). Beta alternative: `World of Warcraft\_classic_beta_\Interface\AddOns\`. Use Battle.net > Show in Explorer to locate your selected installation.
 4. On updates, replace addon files but keep SavedVariables.
 5. Start WoW, enable PatchTools and enter `/patchtools`.
 
@@ -69,7 +69,17 @@ PATCHTOOLS_TEST_LOCALE=frFR python3 PatchTools/tests/run_tests.py
 Package from the repository root:
 
 ```sh
-zip -r PatchTools-0.4.0.zip PatchTools
+zip -r PatchTools-0.5.0-alpha.2.zip PatchTools
 ```
 
 Community project; not affiliated with or endorsed by Blizzard Entertainment.
+
+## Phasing / world refresh warnings (0.5.0 alpha)
+
+Open `/patchtools`, then **Phasing / world refresh alerts**. Enable the announcement warning and/or the second warning (1–600 seconds beforehand, default 60). Both default to off; optional sound uses the Master channel. Screen messages last 1–60 seconds (default 10). The independent phasing chat switch defaults to on and writes warnings to the normal chat history; it does not create a log file. The test button previews the warning without scheduling a transfer.
+
+Uses Forever's `SHARD_TRANSFER_IMMINENT`, `SHARD_TRANSFER_CANCELLED`, `SHARD_TRANSFER` and `GetEvictionTimeRemaining()`, as used by Blizzard's SocialToast UI. Cancellation/completion clears pending alerts; the countdown is queried again while active to follow changes. Zero means the transfer may happen at any moment, not that it has completed. A late announcement produces one urgent warning rather than two overlapping alerts. Reload/world entry recovers a pending positive countdown. Unannounced transfers cannot be predicted. Announced world-refresh warnings were confirmed in-game on German Forever build 70532. The configurable display duration and chat toggle are new in alpha.2 and have mock coverage; their new UI still needs an in-game check.
+
+## License
+
+MIT License. Copyright (c) 2026 Fabian (csBlackWolf). See LICENSE.
