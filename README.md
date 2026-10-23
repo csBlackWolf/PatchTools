@@ -77,7 +77,7 @@ Please tell us:
 
 A screenshot or an error message is helpful, if available. You can also copy the output of `/patchtools status`. Please hide private chat or account details in screenshots.
 
-Track progress through the issue labels: new, reviewed, planned, in progress and next release. [What each status means](.github/ISSUE_STATUS.md).
+Track progress through the issue labels: new, reviewed, planned, in progress, next release and deferred. [What each status means](.github/ISSUE_STATUS.md).
 
 ## License
 

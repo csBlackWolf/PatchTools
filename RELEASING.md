@@ -72,3 +72,7 @@ Never commit tokens or put them in screenshots, logs, issue reports or release n
 `ItemRules.lua` handles ID validation and rule precedence. `sellBlocklist` always wins over `sellAllowlist`. Whitelist selling requires `sellWhitelist`; the additional bag requires `sellProfessionBag` (default true). Settings are checked on each sale pass. Quest items, locks and non-positive prices are still checked by Vendor. Rules use base item IDs, not individual copies or variants.
 
 `Tooltips.lua` uses the item tooltip processor when available, with an older tooltip-script fallback. Vendor prices are per item; uncached item data may require another hover. The source/test runner validates UTF-8. Automated tests cover extra-bag selling and toggling; visual checks remain in-game.
+
+## Required idea review before a build push
+
+Follow [the build planning rules](AGENTS.md). Review current GitHub ideas and the [shared board](https://github.com/users/csBlackWolf/projects/9), report accepted/planned items with counts, titles and links, and highlight the next-release items. List deferred ideas separately. Wait for confirmation before pushing a build or release, so another idea can still be included. This is a planning checkpoint, not automatic implementation of feature requests.

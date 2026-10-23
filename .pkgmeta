@@ -2,6 +2,7 @@ package-as: PatchTools
 enable-nolib-creation: no
 
 ignore:
+  - AGENTS.md
   - .github
   - README.md
   - LICENSE
