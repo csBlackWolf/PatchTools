@@ -4,6 +4,12 @@ Quality-of-life tools for **World of Warcraft: Forever**, with built-in **Englis
 
 Made by **Patch & Zen**.
 
+## Featured: warnings before possible phase changes
+
+Avoid being surprised by an announced world refresh. PatchTools can warn you when a possible phase change is announced and again before its countdown ends. Choose the advance warning time, sound, on-screen duration and chat output. Countdowns use minutes and seconds.
+
+**Observed during the Forever Beta and stress test.** Availability in the final game is not yet confirmed. If the release client keeps the same announcements, PatchTools can use them without a separate feature update. Unannounced changes cannot be predicted.
+
 ## Features
 
 - **Automatic junk selling:** sell grey items when you visit a vendor. Quest items are protected.
@@ -17,7 +23,7 @@ Made by **Patch & Zen**.
 - **Auto-loot on login:** keep automatic looting enabled for your characters.
 - **Faster looting:** collect available loot sooner when auto-loot is active.
 - **World refresh warnings:** get a warning when a phase change is announced, and another before it may happen. Choose the warning time, sound, message duration and chat output.
-- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing, zoom and reveal options.
+- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing and reveal options. Normal map zoom remains available; the additional zoom step is temporarily disabled.
 - **Minimap button:** open your settings with a click, move the button or hide it.
 
 Settings are grouped into General, Vendor, Tooltips, World Refresh, Map and About PatchTools. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
@@ -48,7 +54,7 @@ If you are unsure which folder to use, open the game's options in Battle.net and
 
 ## Controls and languages
 
-- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing, zoom and reveal options.
+- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing and reveal options. Normal map zoom remains available; the additional zoom step is temporarily disabled.
 - **Minimap button:** click to open settings; drag to move it.
 - **`/patchtools`** or **`/ptools`:** open settings.
 - **`/patchtools status`:** show information that can help with a bug report.

@@ -1,6 +1,7 @@
 # PatchTools 0.7.0 — 2026-10-23
 
 - Show world-refresh countdowns in minutes and seconds in screen messages, chat and previews.
+- Highlight advance warnings for possible announced phase changes: observed in Beta and the stress test; final-game availability is not yet confirmed. If the same announcements remain, the feature is ready to use.
 - Add support for the separate PatchToolsMaps addon.
 - Place Map above About PatchTools. Without the module, show its features and a link to install it.
 - Preserve existing settings and selling lists.
