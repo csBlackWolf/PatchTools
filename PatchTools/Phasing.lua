@@ -56,6 +56,7 @@ function module:Evaluate(seconds)
     end
 end
 function module:SettingsChanged()
+    if PT.supportsPhasing == false then return end
     PT.db.phaseLead = self:Lead()
     PT.db.phaseDuration = self:Duration()
     if not PT.db.phaseInitial and not PT.db.phaseSoon then
@@ -65,6 +66,7 @@ function module:SettingsChanged()
     -- Do not replay an already delivered alert when changing its settings.
 end
 function module:Initialize()
+    if PT.supportsPhasing == false then self.supported = false; return end
     PT.db.phaseLead = self:Lead()
     PT.db.phaseDuration = self:Duration()
     self.display = CreateFrame("Frame", "PatchToolsPhaseAlert", UIParent)
@@ -114,6 +116,7 @@ function module:Initialize()
 end
 
 function module:OpenOptions()
+    if PT.supportsPhasing == false then return end
     PT:OpenOptions()
     PT:SelectOptionsPage("phase")
     self.options = PT.optionPages.phase

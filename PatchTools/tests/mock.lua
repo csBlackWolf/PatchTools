@@ -7,7 +7,10 @@ local function Widget()
     local w = {scripts={}, events={}, value=1}
     local methods = {}
     function methods:SetScript(event, fn) self.scripts[event]=fn end
-    function methods:RegisterEvent(event) self.events[event]=true end
+    function methods:RegisterEvent(event)
+        assert(not (os.getenv("PATCHTOOLS_TEST_CLIENT") == "era" and event:match("^SHARD_TRANSFER")))
+        self.events[event]=true
+    end
     function methods:CreateFontString() return Widget() end
     function methods:SetText(text) self.text=text end
     function methods:GetText() return self.text end
@@ -47,7 +50,11 @@ C_CVar={GetCVar=function(k) return cvars[k] end, SetCVar=function(k,v) cvars[k]=
 C_Timer={After=function(_,fn) timers[#timers+1]=fn end}
 local shift=false
 function IsShiftKeyDown() return shift end
-function GetBuildInfo() return "1.60.1","70124","Sep 29 2026",16001 end
+local era = os.getenv("PATCHTOOLS_TEST_CLIENT") == "era"
+function GetBuildInfo()
+    if era then return "1.15.9","70003","",11509 end
+    return "1.60.1","70124","Sep 29 2026",16001
+end
 local function Event(event, arg)
     for _,f in ipairs(frames) do if f.events[event] then f.scripts.OnEvent(f,event,arg) end end
 end
@@ -70,7 +77,7 @@ function RepairAllItems(guild) assert(guild==false); repaired=repaired+1; wallet
 function GetTime() return 100 end
 function GetEvictionTimeRemaining() return nil end
 local pt={}
-for _,file in ipairs({"Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
+for _,file in ipairs({"Client.lua","Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
 assert(pt.locale==(GetLocale()=="deDE" and "deDE" or "enUS"))
 for key, text in pairs(pt.locales.enUS) do
     assert(type(pt.locales.deDE[key])=="string", "Missing German translation: "..key)
@@ -84,8 +91,9 @@ end
 assert(pt:T("SALES_REQUESTED",2):find("2"))
 assert(pt:T("UNKNOWN_KEY")=="UNKNOWN_KEY")
 Event("ADDON_LOADED","PatchTools"); Event("PLAYER_LOGIN")
-assert(not pt.db.autoSell and not pt.db.autoRepair)
-assert(cvars.ffxDeath=="1" and cvars.cameraDistanceMaxZoomFactor=="1.9")
+assert(pt.db.autoSell and pt.db.autoRepair and pt.db.extendedZoom and pt.db.sellWhitelist)
+assert(next(pt.db.sellAllowlist) == nil)
+assert(cvars.ffxDeath=="1" and cvars.cameraDistanceMaxZoomFactor=="4")
 SlashCmdList.PATCHTOOLS("")
 pt:SetOption("ghostColor",true); assert(cvars.ffxDeath=="0")
 pt:SetOption("ghostColor",false); assert(cvars.ffxDeath=="1")
@@ -189,10 +197,23 @@ print("bounded retries, v1 migration, cooldown numbers, login autoloot and per-c
 print("PASS: minimap toggle/click/drag, fast-loot defaults, manual-loot bypass, modifier XOR,")
 print("locked slots, reverse order, no duplicate calls, pending cancellation and confirmation preservation.")
 
-pt.modules.Phasing:OpenOptions()
-assert(pt.modules.Phasing.options.shown)
+if era then
+    assert(pt.isClassicEra and not pt.isForever and not pt.hasProfessionBag)
+    assert(not pt.optionPages.phase and not pt.optionNavigation.phase)
+    assert(not pt.modules.Phasing.frame and not pt.modules.Phasing.display)
+    assert(pt.modules.Phasing.supported == false)
+    assert(pt.options.TitleText.text:find("Classic Era",1,true))
+    pt:SetOption("phaseSoon",true); pt:SetOption("phaseSoon",false)
+    assert(pt:SelectOptionsPage("phase") == false)
+    assert(pt.optionNavigation.maps and pt.optionNavigation.about)
+    print("PASS: Era client identity, hidden phasing page/navigation and no phasing events or alert frame.")
+else
+    assert(pt.isForever and pt.hasProfessionBag and pt.supportsPhasing)
+    pt.modules.Phasing:OpenOptions()
+    assert(pt.modules.Phasing.options.shown)
+end
 assert(not pt.db.phaseInitial and not pt.db.phaseSoon and pt.db.phaseLead == 60)
-print("PASS: integrated phasing initialization, settings panel and safe defaults.")
+if not era then print("PASS: integrated phasing initialization, settings panel and safe defaults.") end
 
 -- Sale rules: blacklist wins; whitelist is explicit opt-in and independent of grey sale.
 pt.db.autoSell=true; pt.db.sellWhitelist=false
@@ -286,6 +307,17 @@ C_Container.UseContainerItem=function(b,s)
 end
 C_Item.GetItemInfo=function() return "Test",nil,nil,nil,nil,nil,nil,nil,nil,nil,7 end
 Event("MERCHANT_CLOSED"); Event("MERCHANT_SHOW"); Flush()
+if era then
+    assert(#professionSales == 1 and professionSales[1].bag == 0)
+    assert(not visited[5] and not visited[6] and not visited[-1])
+    assert(containersByBag[5][1].itemID == 2934 and containersByBag[5][6].quality == 0)
+    Event("MERCHANT_CLOSED")
+    -- Even enabling the saved Forever switch cannot expose Era bank slots.
+    pt:SetOption("sellProfessionBag", true)
+    visited = {}; Event("MERCHANT_SHOW"); Flush(); Event("MERCHANT_CLOSED")
+    assert(not visited[5] and #professionSales == 1)
+    print("PASS: Era bank slots stay untouched for both whitelist and grey sales, regardless of the profession-bag setting.")
+else
 assert(#professionSales==4, "Profession bag: expected main-bag item, two listed stacks and grey junk")
 assert(professionSales[1].bag==0 and professionSales[2].bag==5)
 assert(containersByBag[5][3].itemID==2672 and containersByBag[5][4].quest and containersByBag[5][5].isLocked)
@@ -308,4 +340,15 @@ pt:SetOption("sellProfessionBag", true)
 Event("MERCHANT_SHOW"); Flush(); Event("MERCHANT_CLOSED")
 assert(#professionSales==3 and professionSales[2].bag==5 and professionSales[3].bag==5)
 print("PASS: profession bag toggle skips whitelist and grey items while regular bags still sell; re-enable restores extra-bag sales.")
+end
+-- New defaults must never override explicit saved choices. Missing keys inherit them.
+for _,key in ipairs({"autoSell","autoRepair","extendedZoom","sellWhitelist"}) do pt.db[key] = false end
+Event("ADDON_LOADED","PatchTools")
+for _,key in ipairs({"autoSell","autoRepair","extendedZoom","sellWhitelist"}) do assert(pt.db[key] == false) end
+pt.db.autoRepair = nil
+Event("ADDON_LOADED","PatchTools")
+assert(pt.db.autoRepair and not pt.db.autoSell and not pt.db.extendedZoom and not pt.db.sellWhitelist)
+print("PASS: new vendor/zoom defaults preserve saved false values and populate only missing settings.")
+
 dofile("tests/delete_confirmation.lua")
+dofile("tests/client.lua")

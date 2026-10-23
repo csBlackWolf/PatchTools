@@ -1,3 +1,12 @@
+# PatchTools 0.8.0 — 2026-10-23
+
+- Support Classic Era 1.15.9 alongside Forever in one addon package.
+- Hide Forever world-refresh options and disable that module on Era. Hide the extra profession-bag option there and exclude Era bank bags from automatic selling.
+- Enable grey-junk selling, automatic repairs, extended camera zoom and whitelist selling by default for new settings. The whitelist starts empty; existing saved choices remain unchanged.
+- Keep the Map section ready for the companion addon on both game versions.
+
+Validation: automated Era/Forever checks in English, German and English fallback cover settings, selling protections, bank exclusion, tooltips, loot and client detection. Classic Era local gameplay testing confirmed vendor behaviour and companion integration. Earlier Forever behaviour was tested on Beta/stress-test clients; the latest changes cannot currently be retested in game because the Beta is closed. Forever release announcements remain unconfirmed.
+
 # PatchTools 0.7.1 — 2026-10-23
 
 - Add an optional Yes/No confirmation for destroying items that normally require typing DELETE. Enable it in General settings; it starts turned off.

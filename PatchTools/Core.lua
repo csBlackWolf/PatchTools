@@ -2,12 +2,12 @@ local addon, PT = ...
 _G.PatchTools = PT
 PT.version = "@project-version@"
 PT.defaults = {
-    autoSell = false, autoRepair = false, extendedZoom = false,
+    autoSell = true, autoRepair = true, extendedZoom = true,
     ghostColor = false, messages = true, cooldownNumbers = false,
     autoLoot = false, fastLoot = false, minimapIcon = true, minimapAngle = 225,
     phaseInitial = false, phaseSoon = false, phaseSound = true, phaseLead = 60,
     phaseDuration = 10, phaseChat = true,
-    simpleDelete = false, sellWhitelist = false, sellProfessionBag = true, tooltipIDs = false, tooltipPrices = false,
+    simpleDelete = false, sellWhitelist = true, sellProfessionBag = true, tooltipIDs = false, tooltipPrices = false,
 }
 PT.modules = {}
 function PT:Print(message)

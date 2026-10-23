@@ -1,12 +1,13 @@
-## Interface: 16001
+## Interface: 11509, 16001
 ## Title: PatchTools
-## Notes: Modular quality-of-life tools for WoW Forever. Built-in English and German.
-## Notes-deDE: Modulare Komfortwerkzeuge fuer WoW Forever. Deutsch und Englisch integriert.
+## Notes: Modular quality-of-life tools for WoW Forever and Classic Era. Built-in English and German.
+## Notes-deDE: Modulare Komfortwerkzeuge fuer WoW Forever und Classic Era. Deutsch und Englisch integriert.
 ## Author: Fabian & Patch
 ## X-License: MIT
 ## Version: @project-version@
 ## X-Curse-Project-ID: 1758728
 ## SavedVariables: PatchToolsDB
+Client.lua
 Locales.lua
 Core.lua
 Extensions.lua

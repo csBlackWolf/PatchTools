@@ -50,7 +50,7 @@ function Vendor:Start(generation)
         if not (self.owner.db.autoSell or self.owner.db.sellWhitelist) or passes > 200 or not containers then Finish(); return end
         -- Only carried containers, including the profession bag; never bank/equipment.
         local bags = {0, 1, 2, 3, 4}
-        if self.owner.db.sellProfessionBag then bags[#bags + 1] = reagentBag end
+        if self.owner.hasProfessionBag ~= false and self.owner.db.sellProfessionBag then bags[#bags + 1] = reagentBag end
         for _, bag in ipairs(bags) do
             for slot = 1, containers.GetContainerNumSlots(bag) do
                 local info = containers.GetContainerItemInfo(bag, slot)

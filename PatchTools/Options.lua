@@ -26,7 +26,7 @@ function PT:CreateOptions()
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
-    frame.TitleText:SetText("PatchTools " .. self.version .. " — WoW Forever")
+    frame.TitleText:SetText("PatchTools " .. self.version .. " — " .. (self.gameLabel or "WoW Forever"))
     frame:Hide()
     self.options = frame
     tinsert(UISpecialFrames, "PatchToolsOptions")
@@ -68,7 +68,9 @@ function PT:CreateOptions()
     Label(vendor, self:T("VENDOR_INTRO"), 0, 0, 580)
     Check(vendor, "autoSell", "SELL", nil, -28)
     Check(vendor, "autoRepair", "REPAIR", nil, -62)
-    Check(vendor, "sellProfessionBag", "SELL_PROFESSION", nil, -62, 300)
+    if self.hasProfessionBag ~= false then
+        Check(vendor, "sellProfessionBag", "SELL_PROFESSION", nil, -62, 300)
+    end
     Check(vendor, "sellWhitelist", "ALLOW_ENABLE", "ALLOW_DESC", -96)
     Label(vendor, self:T("RULE_HINT"), 0, -160, 580)
     Label(vendor, self:T("RULE_PRIORITY"), 0, -198, 580)
@@ -143,37 +145,39 @@ function PT:CreateOptions()
     local tips = Page("tooltips")
     Check(tips, "tooltipIDs", "TIP_IDS", "TIP_IDS_DESC", -20)
     Check(tips, "tooltipPrices", "TIP_PRICES", "TIP_PRICES_DESC", -108)
-    local phase = Page("phase")
-    Label(phase, self:T("PHASE_DESC"), 0, 0, 580)
-    for i, entry in ipairs({{"phaseInitial","PHASE_INITIAL"},{"phaseSoon","PHASE_SOON"},
-        {"phaseSound","PHASE_SOUND"},{"phaseChat","PHASE_CHAT"}}) do
-        Check(phase, entry[1], entry[2], nil, -35-(i-1)*38)
-    end
     local fields = {}
-    local function Number(key, title, hint, y)
-        Label(phase, self:T(title), 0, y, 580, "GameFontNormal")
-        local input = CreateFrame("EditBox", nil, phase, "InputBoxTemplate")
-        input:SetPoint("TOPLEFT", 8, y-26); input:SetSize(100,28)
-        input:SetAutoFocus(false); input:SetNumeric(true); input:SetMaxLetters(6)
-        local function Restore() input:SetText(tostring(self.db[key])) end
-        local function Save()
-            local value=input:GetText() or ""
-            if value:match("^%d+$") then self:SetOption(key,tonumber(value)) end
-            Restore()
+    if self.supportsPhasing ~= false then
+        local phase = Page("phase")
+        Label(phase, self:T("PHASE_DESC"), 0, 0, 580)
+        for i, entry in ipairs({{"phaseInitial","PHASE_INITIAL"},{"phaseSoon","PHASE_SOON"},
+            {"phaseSound","PHASE_SOUND"},{"phaseChat","PHASE_CHAT"}}) do
+            Check(phase, entry[1], entry[2], nil, -35-(i-1)*38)
         end
-        input:SetScript("OnEnterPressed",function() Save(); input:ClearFocus() end)
-        input:SetScript("OnEditFocusLost",Save)
-        input:SetScript("OnEscapePressed",function() Restore(); input:ClearFocus() end)
-        Label(phase,self:T(hint),0,y-65,580)
-        fields[#fields+1] = {input=input,save=Save,restore=Restore}
-        refresh[#refresh+1] = Restore
+        local function Number(key, title, hint, y)
+            Label(phase, self:T(title), 0, y, 580, "GameFontNormal")
+            local input = CreateFrame("EditBox", nil, phase, "InputBoxTemplate")
+            input:SetPoint("TOPLEFT", 8, y-26); input:SetSize(100,28)
+            input:SetAutoFocus(false); input:SetNumeric(true); input:SetMaxLetters(6)
+            local function Restore() input:SetText(tostring(self.db[key])) end
+            local function Save()
+                local value=input:GetText() or ""
+                if value:match("^%d+$") then self:SetOption(key,tonumber(value)) end
+                Restore()
+            end
+            input:SetScript("OnEnterPressed",function() Save(); input:ClearFocus() end)
+            input:SetScript("OnEditFocusLost",Save)
+            input:SetScript("OnEscapePressed",function() Restore(); input:ClearFocus() end)
+            Label(phase,self:T(hint),0,y-65,580)
+            fields[#fields+1] = {input=input,save=Save,restore=Restore}
+            refresh[#refresh+1] = Restore
+        end
+        Number("phaseLead","PHASE_LEAD","PHASE_INPUT_HINT",-215)
+        Number("phaseDuration","PHASE_DURATION","PHASE_DURATION_HINT",-315)
+        Button(phase,self:T("PHASE_TEST"),0,-422,270,function()
+            local module=self.modules.Phasing; module:Alert(module:Lead(),true,true)
+        end)
+        Label(phase,self:T("PHASE_READY"),0,-472,580)
     end
-    Number("phaseLead","PHASE_LEAD","PHASE_INPUT_HINT",-215)
-    Number("phaseDuration","PHASE_DURATION","PHASE_DURATION_HINT",-315)
-    Button(phase,self:T("PHASE_TEST"),0,-422,270,function()
-        local module=self.modules.Phasing; module:Alert(module:Lead(),true,true)
-    end)
-    Label(phase,self:T("PHASE_READY"),0,-472,580)
     local maps = Page("maps")
     self.mapsPlaceholder=maps
     Label(maps,"PatchToolsMaps",0,-8,560,"GameFontNormalHuge")
@@ -210,9 +214,13 @@ function PT:CreateOptions()
     self.optionNavigation=navigation
     local navigationOrder={"general","vendor","tooltips","phase","maps","about"}
     local function ArrangeNavigation()
-        for i,key in ipairs(navigationOrder) do
-            navigation[key]:ClearAllPoints()
-            navigation[key]:SetPoint("TOPLEFT",20,-135-(i-1)*45)
+        local index = 0
+        for _,key in ipairs(navigationOrder) do
+            if navigation[key] then
+                navigation[key]:ClearAllPoints()
+                navigation[key]:SetPoint("TOPLEFT",20,-135-index*45)
+                index = index + 1
+            end
         end
     end
     function self:SelectOptionsPage(key)
@@ -227,7 +235,9 @@ function PT:CreateOptions()
     for i,entry in ipairs({{"general","NAV_GENERAL"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
         {"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
         local key=entry[1]
-        navigation[key]=Button(frame,self:T(entry[2]),20,-135-(i-1)*45,150,function() self:SelectOptionsPage(key) end)
+        if pages[key] then
+            navigation[key]=Button(frame,self:T(entry[2]),20,-135-(i-1)*45,150,function() self:SelectOptionsPage(key) end)
+        end
     end
     ArrangeNavigation()
     self.mountOptionsPage = function(entry)

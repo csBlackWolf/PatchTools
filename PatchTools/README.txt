@@ -1,8 +1,10 @@
 # PatchTools
 
-Quality-of-life tools for **World of Warcraft: Forever**, with built-in **English and German** language support. No external libraries required.
+Quality-of-life tools for **World of Warcraft: Forever and Classic Era**, with built-in **English and German** language support. No external libraries required.
 
 Made by **Patch & Zen**.
+
+Supports Classic Era and Forever in one package. World refresh warnings are Forever-only and are hidden in Era. The extra profession bag option is also Forever-only; Era bank bags are never included in automatic sales. The separate PatchToolsMaps addon supports both versions.
 
 ## Featured: warnings before possible phase changes
 
@@ -24,14 +26,14 @@ Avoid being surprised by an announced world refresh. PatchTools can warn you whe
 - **Simpler item deletion:** optionally replace typing DELETE with a Yes/No confirmation outside combat. The item name and quest warning remain visible. Disabled by default.
 - **Faster looting:** collect available loot sooner when auto-loot is active.
 - **World refresh warnings:** get a warning when a phase change is announced, and another before it may happen. Choose the warning time, sound, message duration and chat output.
-- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing and reveal options. Normal map zoom remains available; the additional zoom step is temporarily disabled.
+- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing and reveal options. Map zoom, movement and resizing are available outside combat.
 - **Minimap button:** open your settings with a click, move the button or hide it.
 
-Settings are grouped into General, Vendor, Tooltips, World Refresh, Map and About PatchTools. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
+Settings are grouped into General, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
 
-Choose the features you want in the settings. Automatic selling, whitelist selling, repairs, tooltip additions and world refresh warnings start turned off. Your settings are kept when you update.
+Choose the features you want in the settings. Junk selling, whitelist selling, automatic repairs and extended camera zoom start turned on for new settings. The whitelist starts empty. Tooltip additions and world refresh warnings start turned off. Your settings are kept when you update.
 
-The profession bag is included when selling is enabled, unless you turn it off. Selling rules apply to every bag item with the same item ID. Quest items stay protected.
+On Forever, the extra profession bag is included when selling is enabled, unless you turn it off. Selling rules apply to every bag item with the same item ID. Quest items stay protected.
 
 World refresh warnings work only when the game announces a change.
 
@@ -44,11 +46,12 @@ World refresh warnings work only when the game announces a change.
 
 Example: `World of Warcraft\_forever_\Interface\AddOns\PatchTools`
 
-Current Forever installation folders:
+Supported installation folders:
 
 | Game version | AddOns folder |
 | --- | --- |
 | WoW: Forever | `World of Warcraft\_forever_\Interface\AddOns\` |
+| WoW Classic Era | `World of Warcraft\_classic_era_\Interface\AddOns\` |
 | WoW: Forever Beta | `World of Warcraft\_classic_beta_\Interface\AddOns\` |
 
 If you are unsure which folder to use, open the game's options in Battle.net and choose **Show in Explorer**. Folder names may differ between installations.
@@ -81,6 +84,11 @@ A screenshot or an error message is helpful, if available. You can also copy the
 Community project. Not affiliated with or endorsed by Blizzard Entertainment.
 
 ## Changelog
+
+### 0.8.0 — 2026-10-23
+
+- Add Classic Era compatibility, version-specific options and bank protection.
+- Enable junk selling, repairs, camera zoom and whitelist selling for new settings; preserve existing choices.
 
 ### 0.7.1 — 2026-10-23
 
