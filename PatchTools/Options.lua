@@ -61,8 +61,8 @@ function PT:CreateOptions()
     for i, entry in ipairs({{"extendedZoom","ZOOM","ZOOM_DESC"},{"ghostColor","GHOST","GHOST_DESC"},
         {"cooldownNumbers","COOLDOWN","COOLDOWN_DESC"},{"autoLoot","AUTOLOOT","AUTOLOOT_DESC"},
         {"fastLoot","FASTLOOT","FASTLOOT_DESC"},{"minimapIcon","MINIMAP","MINIMAP_DESC"},
-        {"messages","MESSAGES","MESSAGES_DESC"}}) do
-        Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*72)
+        {"messages","MESSAGES","MESSAGES_DESC"},{"simpleDelete","SIMPLE_DELETE","SIMPLE_DELETE_DESC"}}) do
+        Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*64)
     end
     local vendor = Page("vendor")
     Label(vendor, self:T("VENDOR_INTRO"), 0, 0, 580)

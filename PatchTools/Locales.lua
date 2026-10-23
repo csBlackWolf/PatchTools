@@ -1,5 +1,7 @@
 local _, PT = ...
 local en = {
+    SIMPLE_DELETE = "Destroy items with a Yes/No confirmation",
+    SIMPLE_DELETE_DESC = "Outside combat: no DELETE text required. The item and quest warning remain visible.",
     PHASE_OPTIONS = "Phasing / world refresh alerts",
     PHASE_DESC = "Warnings for world refreshes announced by Blizzard. Each warning appears once.",
     PHASE_INITIAL = "Warn as soon as a transfer is announced",
@@ -50,6 +52,8 @@ local en = {
     SALES_REQUESTED = "Junk sale processed (%d sale requests).",
 }
 local de = {
+    SIMPLE_DELETE = "Items mit Ja/Nein-Bestätigung zerstören",
+    SIMPLE_DELETE_DESC = "Außerhalb des Kampfes: kein LÖSCHEN eintippen. Item und Questwarnung bleiben sichtbar.",
     PHASE_OPTIONS = "Phasing / Weltaktualisierung: Warnungen",
     PHASE_DESC = "Warnt vor von Blizzard angekündigten Weltaktualisierungen. Jede Warnung erscheint einmal.",
     PHASE_INITIAL = "Bei Ankündigung eines Wechsels warnen",

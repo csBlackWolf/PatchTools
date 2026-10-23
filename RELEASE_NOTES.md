@@ -1,3 +1,12 @@
+# PatchTools 0.7.1 — 2026-10-23
+
+- Add an optional Yes/No confirmation for destroying items that normally require typing DELETE. Enable it in General settings; it starts turned off.
+- Keep the game's localized item name, destruction prompt and quest warning, along with Blizzard's original accept and cancel actions.
+- During combat, keep Blizzard's original confirmation. Gamepad confirmations are unchanged.
+- Preserve existing settings and item selling lists.
+
+Validation: automated syntax, UTF-8 and regression checks passed. In-game testing on Forever Beta confirmed the simplified confirmation works. The original Blizzard popup layout is retained.
+
 # PatchTools 0.7.0 — 2026-10-23
 
 - Show world-refresh countdowns in minutes and seconds in screen messages, chat and previews.

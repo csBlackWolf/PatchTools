@@ -70,7 +70,7 @@ function RepairAllItems(guild) assert(guild==false); repaired=repaired+1; wallet
 function GetTime() return 100 end
 function GetEvictionTimeRemaining() return nil end
 local pt={}
-for _,file in ipairs({"Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","Minimap.lua","Phasing.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
+for _,file in ipairs({"Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
 assert(pt.locale==(GetLocale()=="deDE" and "deDE" or "enUS"))
 for key, text in pairs(pt.locales.enUS) do
     assert(type(pt.locales.deDE[key])=="string", "Missing German translation: "..key)
@@ -308,3 +308,4 @@ pt:SetOption("sellProfessionBag", true)
 Event("MERCHANT_SHOW"); Flush(); Event("MERCHANT_CLOSED")
 assert(#professionSales==3 and professionSales[2].bag==5 and professionSales[3].bag==5)
 print("PASS: profession bag toggle skips whitelist and grey items while regular bags still sell; re-enable restores extra-bag sales.")
+dofile("tests/delete_confirmation.lua")

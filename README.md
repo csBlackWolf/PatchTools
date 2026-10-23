@@ -21,6 +21,7 @@ Avoid being surprised by an announced world refresh. PatchTools can warn you whe
 - **Normal colours as a ghost:** keep the world in colour while you are dead.
 - **Cooldown numbers:** see how long your abilities need to recharge.
 - **Auto-loot on login:** keep automatic looting enabled for your characters.
+- **Simpler item deletion:** optionally replace typing DELETE with a Yes/No confirmation outside combat. The item name and quest warning remain visible. Disabled by default.
 - **Faster looting:** collect available loot sooner when auto-loot is active.
 - **World refresh warnings:** get a warning when a phase change is announced, and another before it may happen. Choose the warning time, sound, message duration and chat output.
 - **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing and reveal options. Normal map zoom remains available; the additional zoom step is temporarily disabled.
@@ -80,6 +81,10 @@ A screenshot or an error message is helpful, if available. You can also copy the
 Community project. Not affiliated with or endorsed by Blizzard Entertainment.
 
 ## Changelog
+
+### 0.7.1 — 2026-10-23
+
+- Optional Yes/No item destruction confirmation, using the game's translated text. Enable it under General; typing DELETE remains required during combat.
 
 ### 0.7.0 — 2026-10-23
 
