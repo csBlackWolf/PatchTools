@@ -168,6 +168,14 @@ de.TIME_MINUTES_SECONDS = "%d Min. %d Sek."
 en.EXTENSION_ERROR = "Could not load settings for %s."
 de.EXTENSION_ERROR = "Einstellungen für %s konnten nicht geladen werden."
 PT.clientLocale = GetLocale()
+en.NAV_MAPS = "Map"
+de.NAV_MAPS = "Karte"
+en.MAPS_INSTALL = "Want map tools? Install the separate PatchToolsMaps addon alongside PatchTools. Its settings will appear here when it is enabled."
+de.MAPS_INSTALL = "Du möchtest Kartenfunktionen? Installiere das separate Addon PatchToolsMaps zusätzlich zu PatchTools. Wenn es aktiviert ist, erscheinen hier seine Einstellungen."
+en.MAPS_FEATURES = "PatchToolsMaps includes:\n\n- Move and resize the world map\n- Save position and size\n- Extended map zoom\n- Classic, semi-transparent or revealed unexplored areas\n- Reset position, size and zoom"
+de.MAPS_FEATURES = "PatchToolsMaps bietet:\n\n- Weltkarte verschieben und vergrößern\n- Position und Größe speichern\n- Erweiterten Kartenzoom\n- Unentdeckte Bereiche klassisch, halbtransparent oder aufgedeckt\n- Position, Größe und Zoom zurücksetzen"
+en.MAPS_VISUAL = "Map reveal changes only the display. Exploration, XP and achievements are unchanged. Copy the link below to find the addon."
+de.MAPS_VISUAL = "Die Aufdeckung ändert nur die Anzeige. Erkundung, EP und Erfolge bleiben unverändert. Über den Link unten findest du das Addon."
 PT.locale = PT.clientLocale == "deDE" and "deDE" or "enUS"
 PT.locales = {enUS = en, deDE = de}
 function PT:T(key, ...)

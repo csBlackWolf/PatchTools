@@ -1,9 +1,11 @@
-# PatchTools 0.7.0-local.1 — local preparation, not published
+# PatchTools 0.7.0 — 2026-10-23
 
-- Display world-refresh countdowns in minutes and seconds in screen messages, chat and previews.
-- Add versioned optional-addon settings page registration.
-- Prepare the base interface for the separate PatchToolsMaps preview.
-- No installed files are replaced by this preparation. Map UI and complete reveal coverage still need client work; see the companion addon README.
+- Show world-refresh countdowns in minutes and seconds in screen messages, chat and previews.
+- Add support for the separate PatchToolsMaps addon.
+- Place Map above About PatchTools. Without the module, show its features and a link to install it.
+- Preserve existing settings and selling lists.
+
+Validation: syntax, UTF-8 and automated checks for vendor rules, tooltips, phasing, optional-addon loading and the Map placeholder. In-game checks on Forever Beta 1.60.1 build 70532 confirmed minute/second warnings and map movement, resizing and zoom with the companion module.
 
 # PatchTools 0.6.0 — 2026-10-22
 

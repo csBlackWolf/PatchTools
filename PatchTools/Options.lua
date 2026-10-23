@@ -174,6 +174,19 @@ function PT:CreateOptions()
         local module=self.modules.Phasing; module:Alert(module:Lead(),true,true)
     end)
     Label(phase,self:T("PHASE_READY"),0,-472,580)
+    local maps = Page("maps")
+    self.mapsPlaceholder=maps
+    Label(maps,"PatchToolsMaps",0,-8,560,"GameFontNormalHuge")
+    Label(maps,self:T("MAPS_INSTALL"),0,-66,560)
+    Label(maps,self:T("MAPS_FEATURES"),0,-150,560)
+    Label(maps,self:T("MAPS_VISUAL"),0,-302,560)
+    local mapsLink=CreateFrame("EditBox",nil,maps,"InputBoxTemplate")
+    mapsLink:SetPoint("TOPLEFT",8,-372); mapsLink:SetSize(540,28); mapsLink:SetAutoFocus(false)
+    local mapsURL="https://www.curseforge.com/wow/addons/patchtoolsmaps"
+    mapsLink:SetText(mapsURL)
+    mapsLink:SetScript("OnEditFocusGained",function(b) b:HighlightText() end)
+    mapsLink:SetScript("OnTextChanged",function(b) if b:GetText()~=mapsURL then b:SetText(mapsURL) end end)
+    mapsLink:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local about = Page("about")
     Label(about,"PatchTools",0,-8,560,"GameFontNormalHuge")
     Label(about,self:T("ABOUT_TEXT"),0,-62,560)
@@ -194,6 +207,14 @@ function PT:CreateOptions()
     ideas:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     Label(about,self.version,0,-470,560)
     local navigation={}
+    self.optionNavigation=navigation
+    local navigationOrder={"general","vendor","tooltips","phase","maps","about"}
+    local function ArrangeNavigation()
+        for i,key in ipairs(navigationOrder) do
+            navigation[key]:ClearAllPoints()
+            navigation[key]:SetPoint("TOPLEFT",20,-135-(i-1)*45)
+        end
+    end
     function self:SelectOptionsPage(key)
         if not pages[key] then return false end
         for name,page in pairs(pages) do page:SetShown(name==key) end
@@ -204,24 +225,32 @@ function PT:CreateOptions()
         for name,box in pairs(checks) do box:SetChecked(self.db[name]) end
     end
     for i,entry in ipairs({{"general","NAV_GENERAL"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
-        {"phase","NAV_PHASE"},{"about","NAV_ABOUT"}}) do
+        {"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
         local key=entry[1]
         navigation[key]=Button(frame,self:T(entry[2]),20,-135-(i-1)*45,150,function() self:SelectOptionsPage(key) end)
     end
-    local nextNavigationIndex = 5
+    ArrangeNavigation()
     self.mountOptionsPage = function(entry)
-        if pages[entry.id] then return true end
+        local previous=pages[entry.id]
+        if previous and previous~=self.mapsPlaceholder then return true end
+        local selected=previous and previous:IsShown()
         local page = Page(entry.id)
         local ok, err = pcall(entry.build, page, self)
         if not ok then
-            page:Hide(); pages[entry.id] = nil
+            page:Hide(); pages[entry.id] = previous
             self:Print(self:T("EXTENSION_ERROR", entry.title))
             if geterrorhandler then geterrorhandler()(err) end
             return false
         end
-        nextNavigationIndex = nextNavigationIndex + 1
-        navigation[entry.id] = Button(frame,entry.title,20,-135-(nextNavigationIndex-1)*45,150,
-            function() self:SelectOptionsPage(entry.id) end)
+        if previous then previous:Hide(); self.mapsPlaceholder=nil end
+        if navigation[entry.id] then navigation[entry.id]:SetText(entry.title)
+        else
+            navigation[entry.id] = Button(frame,entry.title,20,0,150,
+                function() self:SelectOptionsPage(entry.id) end)
+            table.insert(navigationOrder,#navigationOrder,entry.id)
+        end
+        ArrangeNavigation()
+        if selected then self:SelectOptionsPage(entry.id) end
         return true
     end
     for _, entry in ipairs(self.extraOptionsPages or {}) do self.mountOptionsPage(entry) end

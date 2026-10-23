@@ -1,7 +1,5 @@
 # PatchTools
 
-**Local preparation: 0.7.0-local.1. Not published.** Adds minute/second world-refresh messages and the optional-addon settings interface for PatchToolsMaps. See [EXTENSIONS.md](EXTENSIONS.md). The published release remains 0.6.0.
-
 Quality-of-life tools for **World of Warcraft: Forever**, with built-in **English and German** language support. No external libraries required.
 
 Made by **Patch & Zen**.
@@ -19,9 +17,10 @@ Made by **Patch & Zen**.
 - **Auto-loot on login:** keep automatic looting enabled for your characters.
 - **Faster looting:** collect available loot sooner when auto-loot is active.
 - **World refresh warnings:** get a warning when a phase change is announced, and another before it may happen. Choose the warning time, sound, message duration and chat output.
+- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing, zoom and reveal options.
 - **Minimap button:** open your settings with a click, move the button or hide it.
 
-Settings are grouped into General, Vendor, Tooltips, World Refresh and About PatchTools.
+Settings are grouped into General, Vendor, Tooltips, World Refresh, Map and About PatchTools. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
 
 Choose the features you want in the settings. Automatic selling, whitelist selling, repairs, tooltip additions and world refresh warnings start turned off. Your settings are kept when you update.
 
@@ -49,6 +48,7 @@ If you are unsure which folder to use, open the game's options in Battle.net and
 
 ## Controls and languages
 
+- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing, zoom and reveal options.
 - **Minimap button:** click to open settings; drag to move it.
 - **`/patchtools`** or **`/ptools`:** open settings.
 - **`/patchtools status`:** show information that can help with a bug report.
@@ -74,6 +74,12 @@ A screenshot or an error message is helpful, if available. You can also copy the
 Community project. Not affiliated with or endorsed by Blizzard Entertainment.
 
 ## Changelog
+
+### 0.7.0 — 2026-10-23
+
+- World refresh countdowns now use minutes and seconds.
+- Added support for the optional PatchToolsMaps addon.
+- The Map section appears above About PatchTools and offers installation information when the module is absent.
 
 ### 0.6.0 — 2026-10-22
 
