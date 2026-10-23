@@ -77,6 +77,8 @@ Please tell us:
 
 A screenshot or an error message is helpful, if available. You can also copy the output of `/patchtools status`. Please hide private chat or account details in screenshots.
 
+Track progress through the issue labels: new, reviewed, planned, in progress and next release. [What each status means](.github/ISSUE_STATUS.md).
+
 ## License
 
 [MIT License](https://github.com/csBlackWolf/PatchTools/blob/main/LICENSE). You may use, change and share PatchTools. Keep the original copyright and license notice with your copy.

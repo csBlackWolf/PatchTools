@@ -54,6 +54,11 @@ CurseForge project: 1758728. The packager processes version tags only. An ordina
 
 The native packager replaces `@project-version@` in `Core.lua` and `PatchTools.toc`. Install the packaged ZIP rather than raw development templates. `.pkgmeta` flattens the inner addon directory and excludes development files.
 
+The next build must include `PatchTools/Media/Icon.tga` (128x128, 32-bit TGA),
+referenced by `IconTexture` in both addons' TOCs. PatchToolsMaps uses the icon
+from its required PatchTools dependency. Preserve the `Media/` directory in
+manual ZIP builds too; do not limit packaging to root-level Lua and TOC files.
+
 Do not reuse tags for different commits. For a local-only build, do not create or push a release tag.
 
 ## Webhook

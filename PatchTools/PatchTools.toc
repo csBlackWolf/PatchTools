@@ -1,5 +1,6 @@
 ## Interface: 11509, 16001
 ## Title: PatchTools
+## IconTexture: Interface\AddOns\PatchTools\Media\Icon
 ## Notes: Modular quality-of-life tools for WoW Forever and Classic Era. Built-in English and German.
 ## Notes-deDE: Modulare Komfortwerkzeuge fuer WoW Forever und Classic Era. Deutsch und Englisch integriert.
 ## Author: Fabian & Patch
