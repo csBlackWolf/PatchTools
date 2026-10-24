@@ -1,3 +1,11 @@
+# PatchTools 0.9.0-alpha.3 — 2026-10-25
+
+- Scale the complete settings window and its contents by dragging the bottom-right corner. Save the chosen scale, keep the top-left corner stable and limit the range to readable sizes that fit the screen.
+- Recover the settings window with `/patchtools reset`: restore default scale, center and open the window. No separate reset button or right-click action.
+- Stop scaling on mouse release or when the window closes; preserve existing page save handlers.
+
+Validation: automated drag geometry at non-default UI scale, saved scale, screen bounds, invalid values, mouse/hide cleanup and chat reset checks, plus the existing Era/Forever regression suite. In-game appearance confirmation pending.
+
 # PatchTools 0.9.0-alpha.2 — 2026-10-25
 
 - Fix the empty Pawn scale list: Pawn keeps its initialization flag private, so it cannot be read as a global by another addon. Use public character identity and the exported scale API instead.

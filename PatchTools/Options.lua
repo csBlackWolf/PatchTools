@@ -328,6 +328,7 @@ function PT:CreateOptions()
         end
     end)
     self:SelectOptionsPage("general")
+    if self.InstallOptionsScaling then self:InstallOptionsScaling(frame) end
     if Settings and Settings.RegisterCanvasLayoutCategory and Settings.RegisterAddOnCategory then
         local panel=CreateFrame("Frame"); panel.name="PatchTools"
         Label(panel,self:T("CATEGORY"),16,-16,600,"GameFontNormalLarge")

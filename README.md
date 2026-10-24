@@ -30,6 +30,8 @@ Avoid being surprised by an announced world refresh. PatchTools can warn you whe
 - **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing and reveal options. Map zoom, movement and resizing are available outside combat.
 - **Minimap button:** open your settings with a click, move the button or hide it.
 
+Drag the bottom-right corner to scale the settings window and its contents. The size is saved. Use `/patchtools reset` to restore the default size and center the window.
+
 Settings are grouped into General, Quests, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
 
 Choose the features you want in the settings. Junk selling, whitelist selling, automatic repairs and extended camera zoom start turned on for new settings. The whitelist starts empty. Tooltip additions and world refresh warnings start turned off. Your settings are kept when you update.

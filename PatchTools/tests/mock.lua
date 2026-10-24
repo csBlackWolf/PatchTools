@@ -87,7 +87,7 @@ function RepairAllItems(guild) assert(guild==false); repaired=repaired+1; wallet
 function GetTime() return 100 end
 function GetEvictionTimeRemaining() return nil end
 local pt={}
-for _,file in ipairs({"Client.lua","Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Quests.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
+for _,file in ipairs({"Client.lua","Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Quests.lua","OptionsWindow.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
 assert(pt.locale==(GetLocale()=="deDE" and "deDE" or "enUS"))
 for key, text in pairs(pt.locales.enUS) do
     assert(type(pt.locales.deDE[key])=="string", "Missing German translation: "..key)
@@ -384,3 +384,8 @@ menu=OpenDropdown(pt.questOptionsUI.scale); assert(menu[2].checked and not menu[
 menu[3].func(); assert(pt.modules.Quests:ResolveScale()=="MM")
 menu[1].func(); assert(pt.modules.Quests:ResolveScale()==nil,'multiple scales keep automatic mode undecided')
 print("PASS: real dropdown selects a single Pawn reward scale with multiple tooltip scales, supports late availability and marks the current choice.")
+local resets, resetWindow=0, pt.ResetOptionsWindow
+pt.ResetOptionsWindow=function(self) resets=resets+1; resetWindow(self) end
+SlashCmdList.PATCHTOOLS("reset")
+assert(resets==1 and pt.options:IsShown(),'chat reset must recover and open the settings window')
+pt.ResetOptionsWindow=resetWindow

@@ -2,6 +2,7 @@ local addon, PT = ...
 _G.PatchTools = PT
 PT.version = "@project-version@"
 PT.defaults = {
+    optionsScale = 1,
     autoQuestAccept = false, autoQuestTurnIn = false, pawnQuestRewards = false,
     autoSell = true, autoRepair = true, extendedZoom = true,
     ghostColor = false, messages = true, cooldownNumbers = false,
@@ -145,7 +146,10 @@ SLASH_PATCHTOOLS1 = "/patchtools"
 SLASH_PATCHTOOLS2 = "/ptools"
 SlashCmdList.PATCHTOOLS = function(message)
     if not PT.db then return end
-    if message == "status" then
+    if message == "reset" then
+        PT:ResetOptionsWindow()
+        PT:OpenOptions()
+    elseif message == "status" then
         local version, build, _, interface = GetBuildInfo()
         PT:Print("v" .. PT.version .. "; Client " .. version .. " / " .. build .. "; Interface " .. interface)
         PT:Print("Client locale: " .. PT.clientLocale .. "; UI language: " .. PT.locale)

@@ -20,4 +20,5 @@ DeleteConfirmation.lua
 Minimap.lua
 Phasing.lua
 Quests.lua
+OptionsWindow.lua
 Options.lua
