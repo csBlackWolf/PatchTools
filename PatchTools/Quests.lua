@@ -9,7 +9,10 @@ end
 
 function Quests:GetScales()
     local result = {}
-    if not PawnIsInitialized or not PawnGetAllScalesEx or not PawnCommon then return result end
+    -- PawnIsInitialized is private to Pawn.lua, not an exported global.
+    -- Its public character identity and scale API become available on login.
+    if not PawnPlayerFullName or not PawnGetAllScalesEx or not PawnCommon
+        or (IsLoggedIn and not IsLoggedIn()) then return result end
     local _, _, classID = UnitClass("player")
     local ok, scales = pcall(PawnGetAllScalesEx)
     if not ok or type(scales) ~= "table" then return result end

@@ -1,3 +1,13 @@
+
+local dropdownItems={}
+function UIDropDownMenu_SetWidth(frame,width) frame.dropdownWidth=width end
+function UIDropDownMenu_Initialize(frame,fn) frame.dropdownInitialize=fn end
+function UIDropDownMenu_CreateInfo() return {} end
+function UIDropDownMenu_AddButton(info) dropdownItems[#dropdownItems+1]=info end
+function UIDropDownMenu_SetText(frame,text) frame.dropdownText=text end
+local function OpenDropdown(frame)
+    dropdownItems={}; frame.dropdownInitialize(frame,1); return dropdownItems
+end
 local frames, timers, cvars = {}, {}, {cameraDistanceMaxZoomFactor="1.9", ffxDeath="1", countdownForCooldowns="0", autoLootDefault="0"}
 local player="Azaad"
 function GetLocale() return os.getenv("PATCHTOOLS_TEST_LOCALE") or "enUS" end
@@ -354,3 +364,23 @@ print("PASS: new vendor/zoom defaults preserve saved false values and populate o
 
 dofile("tests/delete_confirmation.lua")
 dofile("tests/client.lua")
+
+-- Open-time population must work when Pawn loads after the settings panel.
+local menu=OpenDropdown(pt.questOptionsUI.scale)
+assert(#menu==2 and menu[2].disabled and menu[1].checked)
+PawnPlayerFullName="Hunter-Test"
+PawnCommon={Scales={BM={ClassID=3},MM={ClassID=3}}}
+function UnitClass() return "Hunter","HUNTER",3 end
+local pawnScales={{Name="BM",LocalizedName="Beast Mastery",IsVisible=true},
+    {Name="MM",LocalizedName="Marksmanship",IsVisible=true}}
+function PawnGetAllScalesEx() return pawnScales end
+assert(PawnIsInitialized==nil)
+menu=OpenDropdown(pt.questOptionsUI.scale)
+assert(#menu==3 and menu[2].text=="Beast Mastery" and menu[3].text=="Marksmanship")
+menu[2].func()
+assert(pt.modules.Quests:ResolveScale()=="BM" and pt.questOptionsUI.scale.dropdownText=="Beast Mastery")
+assert(pawnScales[1].IsVisible and pawnScales[2].IsVisible,'reward selection must not change Pawn tooltip scales')
+menu=OpenDropdown(pt.questOptionsUI.scale); assert(menu[2].checked and not menu[3].checked)
+menu[3].func(); assert(pt.modules.Quests:ResolveScale()=="MM")
+menu[1].func(); assert(pt.modules.Quests:ResolveScale()==nil,'multiple scales keep automatic mode undecided')
+print("PASS: real dropdown selects a single Pawn reward scale with multiple tooltip scales, supports late availability and marks the current choice.")

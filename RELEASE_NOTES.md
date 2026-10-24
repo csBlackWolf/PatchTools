@@ -1,3 +1,11 @@
+# PatchTools 0.9.0-alpha.2 — 2026-10-25
+
+- Fix the empty Pawn scale list: Pawn keeps its initialization flag private, so it cannot be read as a global by another addon. Use public character identity and the exported scale API instead.
+- Replace the scale cycling arrows with a native dropdown labelled "Use for quest rewards". Active Pawn scales for the current class can be selected independently of the other displayed scales. Show a disabled explanation when none are available.
+- Keep automatic mode, saved per-character choices and conservative reward selection unchanged.
+
+Validation: tests reproduce the absence of Pawn's private flag and cover selecting between multiple active scales, menu checked states, late Pawn availability and existing quest/reward safeguards. Era/Forever regression checks pass in English, German and English fallback. In-game confirmation pending.
+
 # PatchTools 0.9.0-alpha.1 — 2026-10-24
 
 - Add optional automatic quest acceptance and turn-in, disabled by default. Hold Shift for manual dialogue; other gossip options are untouched. Quest automation pauses in combat.

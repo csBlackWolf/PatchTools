@@ -41,7 +41,8 @@ function SelectActiveQuest(index) selected="legacy"..index end
 Q:Handle("QUEST_GREETING"); assert(selected=="legacy1")
 print("PASS: quest events, defaults off, duplicate guard, legacy greeting, Shift and combat bypass.")
 
-PT.db.pawnQuestRewards=true; PawnIsInitialized=true
+PT.db.pawnQuestRewards=true; PawnPlayerFullName="Hunter-Test"
+assert(PawnIsInitialized==nil,"Pawn readiness is private, not a global API")
 PawnCommon={Scales={BM={ClassID=3},MM={ClassID=3},Warrior={ClassID=1}}}
 local scales={{Name="BM",LocalizedName="Beast Mastery",IsVisible=true},{Name="Warrior",IsVisible=true}}
 function PawnGetAllScalesEx() return scales end
@@ -77,7 +78,7 @@ for _,case in ipairs({"level","stats","enhancements","pawn-error","not-ready"}) 
     Reset()
     tooHigh=case=="level" and "two" or nil
     missingStats=case=="stats"; enhancements=case=="enhancements"; fail=case=="pawn-error"
-    PawnIsInitialized=case~="not-ready"
+    PawnPlayerFullName=case~="not-ready" and "Hunter-Test" or nil
     Q:Handle("QUEST_COMPLETE"); assert(#actions==0,case.." must remain manual")
 end
 print("PASS: per-character Pawn scale, unique upgrade only, complete item data, API failure and pending-item recovery.")

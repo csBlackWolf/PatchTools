@@ -15,6 +15,23 @@ local function Button(parent, text, x, y, width, callback)
     button:SetScript("OnClick", callback)
     return button
 end
+local function Dropdown(parent, name, x, y, width, entries, selected, choose)
+    local dropdown = CreateFrame("Frame", name, parent, "UIDropDownMenuTemplate")
+    dropdown:SetPoint("TOPLEFT", x - 16, y)
+    UIDropDownMenu_SetWidth(dropdown, width)
+    UIDropDownMenu_Initialize(dropdown, function(_, level)
+        for _, entry in ipairs(entries()) do
+            local value = entry.value
+            local info = UIDropDownMenu_CreateInfo()
+            info.text, info.value = entry.label, value
+            info.checked = selected() == value
+            info.disabled = entry.disabled
+            info.func = function() choose(value) end
+            UIDropDownMenu_AddButton(info, level)
+        end
+    end)
+    return dropdown
+end
 function PT:CreateOptions()
     local frame = CreateFrame("Frame", "PatchToolsOptions", UIParent, "BasicFrameTemplateWithInset")
     frame:SetSize(820, 650)
@@ -72,7 +89,7 @@ function PT:CreateOptions()
         Check(quests,"autoQuestTurnIn","QUEST_TURNIN","QUEST_TURNIN_DESC",-145)
         Check(quests,"pawnQuestRewards","QUEST_PAWN","QUEST_PAWN_DESC",-230)
         Label(quests,self:T("QUEST_SCALE"),0,-337,580,"GameFontNormal")
-        local selection = Label(quests,"",0,-372,580)
+        local selection
         local function RefreshScale()
             local selected = questsModule:GetSelectedScale()
             local text = self:T("QUEST_SCALE_AUTO")
@@ -82,20 +99,22 @@ function PT:CreateOptions()
                     if scale.name == selected then text = scale.label; break end
                 end
             end
-            selection:SetText(text)
+            UIDropDownMenu_SetText(selection,text)
         end
-        local function CycleScale(direction)
-            local scales, selected, index = questsModule:GetScales(), questsModule:GetSelectedScale(), 0
-            for i,scale in ipairs(scales) do if scale.name==selected then index=i; break end end
-            index = (index + direction) % (#scales + 1)
-            questsModule:SetSelectedScale(index > 0 and scales[index].name or nil)
+        selection = Dropdown(quests,"PatchToolsQuestScaleDropdown",0,-368,500,function()
+            local entries={{value="",label=self:T("QUEST_SCALE_AUTO")}}
+            for _,scale in ipairs(questsModule:GetScales()) do
+                entries[#entries+1]={value=scale.name,label=scale.label}
+            end
+            if #entries==1 then entries[#entries+1]={label=self:T("QUEST_SCALE_EMPTY"),disabled=true} end
+            return entries
+        end,function() return questsModule:GetSelectedScale() or "" end,function(value)
+            questsModule:SetSelectedScale(value~="" and value or nil)
             RefreshScale()
-        end
-        Button(quests,"<",0,-408,46,function() CycleScale(-1) end)
-        Button(quests,">",56,-408,46,function() CycleScale(1) end)
-        Label(quests,self:T("QUEST_SCALE_DESC"),0,-460,580)
+        end)
+        Label(quests,self:T("QUEST_SCALE_DESC"),0,-420,580)
         refresh[#refresh+1] = RefreshScale
-        self.questOptionsUI={checks=checks,refresh=RefreshScale}
+        self.questOptionsUI={checks=checks,refresh=RefreshScale,scale=selection}
     end
     local vendor = Page("vendor")
     Label(vendor, self:T("VENDOR_INTRO"), 0, 0, 580)
