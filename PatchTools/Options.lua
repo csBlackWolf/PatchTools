@@ -97,14 +97,12 @@ function PT:CreateOptions()
         {"cooldownNumbers","COOLDOWN","COOLDOWN_DESC"},{"autoLoot","AUTOLOOT","AUTOLOOT_DESC"},
         {"fastLoot","FASTLOOT","FASTLOOT_DESC"},{"minimapIcon","MINIMAP","MINIMAP_DESC"},
         {"messages","MESSAGES","MESSAGES_DESC"},{"simpleDelete","SIMPLE_DELETE","SIMPLE_DELETE_DESC"}}) do
-        Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*64)
+        Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*56)
     end
     if self.ApplyOptionsAppearance then
-        local display=Page("display")
-        Label(display,self:T("DISPLAY_INTRO"),0,0,580)
-        local opacityText=Label(display,"",0,-64,580,"GameFontNormal")
-        local slider=CreateFrame("Slider","PatchToolsOptionsOpacitySlider",display,"OptionsSliderTemplate")
-        slider:SetPoint("TOPLEFT",4,-100); slider:SetWidth(350)
+        local opacityText=Label(general,"",0,-504,580,"GameFontNormal")
+        local slider=CreateFrame("Slider","PatchToolsOptionsOpacitySlider",general,"OptionsSliderTemplate")
+        slider:SetPoint("TOPLEFT",4,-533); slider:SetWidth(350)
         slider:SetMinMaxValues(0,80); slider:SetValueStep(1); slider:SetObeyStepOnDrag(true)
         PatchToolsOptionsOpacitySliderLow:SetText("0%"); PatchToolsOptionsOpacitySliderHigh:SetText("80%")
         local updating=false
@@ -119,8 +117,11 @@ function PT:CreateOptions()
             if updating then return end
             self:SetOption("optionsTransparency",math.floor(value+.5)/100); RefreshOpacity()
         end)
-        Label(display,self:T("OPTIONS_TRANSPARENCY_HINT"),0,-152,580)
-        Label(display,self:T("OPTIONS_SCALE_HINT"),0,-222,580)
+        slider:SetScript("OnEnter",function()
+            GameTooltip:SetOwner(slider,"ANCHOR_TOP")
+            GameTooltip:SetText(self:T("OPTIONS_TRANSPARENCY_HINT"),1,1,1,1,true); GameTooltip:Show()
+        end)
+        slider:SetScript("OnLeave",function() GameTooltip:Hide() end)
         refresh[#refresh+1]=RefreshOpacity
         self.appearanceUI={slider=slider,refresh=RefreshOpacity}
     end
@@ -315,7 +316,7 @@ function PT:CreateOptions()
     twitch:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local navigation={}
     self.optionNavigation=navigation
-    local navigationOrder={"general","display","quests","vendor","tooltips","phase","maps","about"}
+    local navigationOrder={"general","quests","vendor","tooltips","phase","maps","about"}
     local function ArrangeNavigation()
         local index = 0
         for _,key in ipairs(navigationOrder) do
@@ -335,7 +336,7 @@ function PT:CreateOptions()
         for _, fn in ipairs(refresh) do fn() end
         for name,box in pairs(checks) do box:SetChecked(self.db[name]) end
     end
-    for i,entry in ipairs({{"general","NAV_GENERAL"},{"display","NAV_DISPLAY"},{"quests","NAV_QUESTS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
+    for i,entry in ipairs({{"general","NAV_GENERAL"},{"quests","NAV_QUESTS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
         {"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
         local key=entry[1]
         if pages[key] then

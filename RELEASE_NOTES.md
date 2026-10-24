@@ -1,3 +1,10 @@
+# PatchTools 0.9.0-alpha.6 — 2026-10-25
+
+- Move the settings-background transparency slider into General, removing the otherwise sparse Appearance category. Keep its explanation in the slider tooltip.
+- Preserve saved transparency, scale and quest settings.
+
+Validation: existing Era/Forever syntax, locale, UI and regression checks; in-game layout confirmation pending.
+
 # PatchTools 0.9.0-alpha.5 — 2026-10-25
 
 - Match the companion map's dark bronze frame style in the settings window, including the navigation buttons.
