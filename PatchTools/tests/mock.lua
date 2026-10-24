@@ -77,7 +77,7 @@ function RepairAllItems(guild) assert(guild==false); repaired=repaired+1; wallet
 function GetTime() return 100 end
 function GetEvictionTimeRemaining() return nil end
 local pt={}
-for _,file in ipairs({"Client.lua","Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
+for _,file in ipairs({"Client.lua","Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Quests.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
 assert(pt.locale==(GetLocale()=="deDE" and "deDE" or "enUS"))
 for key, text in pairs(pt.locales.enUS) do
     assert(type(pt.locales.deDE[key])=="string", "Missing German translation: "..key)
@@ -92,6 +92,8 @@ assert(pt:T("SALES_REQUESTED",2):find("2"))
 assert(pt:T("UNKNOWN_KEY")=="UNKNOWN_KEY")
 Event("ADDON_LOADED","PatchTools"); Event("PLAYER_LOGIN")
 assert(pt.db.autoSell and pt.db.autoRepair and pt.db.extendedZoom and pt.db.sellWhitelist)
+assert(pt.db.autoQuestAccept==false and pt.db.autoQuestTurnIn==false and pt.db.pawnQuestRewards==false)
+assert(pt.optionPages.quests and pt.optionNavigation.quests)
 assert(next(pt.db.sellAllowlist) == nil)
 assert(cvars.ffxDeath=="1" and cvars.cameraDistanceMaxZoomFactor=="4")
 SlashCmdList.PATCHTOOLS("")

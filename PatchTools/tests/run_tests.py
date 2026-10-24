@@ -25,6 +25,7 @@ if LuaRuntime:
         print('Syntax OK:', path.name)
     lua.execute('dofile("tests/mock.lua")')
     LuaRuntime().execute('dofile("tests/phasing.lua")')
+    LuaRuntime().execute('dofile("tests/quests.lua")')
     sys.exit(0)
 
 lib = ctypes.CDLL('liblua5.4.so.0')
@@ -48,6 +49,14 @@ for path in root.glob('*.lua'):
 import os
 os.chdir(root)
 result = lib.luaL_loadfilex(state, str(root / 'tests/mock.lua').encode(), None)
+if not result:
+    result = lib.lua_pcallk(state, 0, 0, 0, 0, None)
+if result:
+    raise RuntimeError(lib.lua_tolstring(state, -1, None).decode())
+lib.lua_close(state)
+state = lib.luaL_newstate()
+lib.luaL_openlibs(state)
+result = lib.luaL_loadfilex(state, str(root / 'tests/quests.lua').encode(), None)
 if not result:
     result = lib.lua_pcallk(state, 0, 0, 0, 0, None)
 if result:

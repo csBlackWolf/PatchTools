@@ -24,12 +24,13 @@ Avoid being surprised by an announced world refresh. PatchTools can warn you whe
 - **Cooldown numbers:** see how long your abilities need to recharge.
 - **Auto-loot on login:** keep automatic looting enabled for your characters.
 - **Simpler item deletion:** optionally replace typing DELETE with a Yes/No confirmation outside combat. The item name and quest warning remain visible. Disabled by default.
+- **Optional quest automation (alpha):** accept and turn in quests, with Shift for manual dialogue. Multiple rewards remain manual unless Pawn finds exactly one upgrade for your selected active class scale. All quest options start disabled.
 - **Faster looting:** collect available loot sooner when auto-loot is active.
 - **World refresh warnings:** get a warning when a phase change is announced, and another before it may happen. Choose the warning time, sound, message duration and chat output.
 - **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing and reveal options. Map zoom, movement and resizing are available outside combat.
 - **Minimap button:** open your settings with a click, move the button or hide it.
 
-Settings are grouped into General, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
+Settings are grouped into General, Quests, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
 
 Choose the features you want in the settings. Junk selling, whitelist selling, automatic repairs and extended camera zoom start turned on for new settings. The whitelist starts empty. Tooltip additions and world refresh warnings start turned off. Your settings are kept when you update.
 

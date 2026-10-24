@@ -64,6 +64,39 @@ function PT:CreateOptions()
         {"messages","MESSAGES","MESSAGES_DESC"},{"simpleDelete","SIMPLE_DELETE","SIMPLE_DELETE_DESC"}}) do
         Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*64)
     end
+    local questsModule = self.modules.Quests
+    if questsModule then
+        local quests = Page("quests")
+        Label(quests,self:T("QUEST_INTRO"),0,0,580)
+        Check(quests,"autoQuestAccept","QUEST_ACCEPT","QUEST_ACCEPT_DESC",-60)
+        Check(quests,"autoQuestTurnIn","QUEST_TURNIN","QUEST_TURNIN_DESC",-145)
+        Check(quests,"pawnQuestRewards","QUEST_PAWN","QUEST_PAWN_DESC",-230)
+        Label(quests,self:T("QUEST_SCALE"),0,-337,580,"GameFontNormal")
+        local selection = Label(quests,"",0,-372,580)
+        local function RefreshScale()
+            local selected = questsModule:GetSelectedScale()
+            local text = self:T("QUEST_SCALE_AUTO")
+            if selected then
+                text = selected
+                for _,scale in ipairs(questsModule:GetScales()) do
+                    if scale.name == selected then text = scale.label; break end
+                end
+            end
+            selection:SetText(text)
+        end
+        local function CycleScale(direction)
+            local scales, selected, index = questsModule:GetScales(), questsModule:GetSelectedScale(), 0
+            for i,scale in ipairs(scales) do if scale.name==selected then index=i; break end end
+            index = (index + direction) % (#scales + 1)
+            questsModule:SetSelectedScale(index > 0 and scales[index].name or nil)
+            RefreshScale()
+        end
+        Button(quests,"<",0,-408,46,function() CycleScale(-1) end)
+        Button(quests,">",56,-408,46,function() CycleScale(1) end)
+        Label(quests,self:T("QUEST_SCALE_DESC"),0,-460,580)
+        refresh[#refresh+1] = RefreshScale
+        self.questOptionsUI={checks=checks,refresh=RefreshScale}
+    end
     local vendor = Page("vendor")
     Label(vendor, self:T("VENDOR_INTRO"), 0, 0, 580)
     Check(vendor, "autoSell", "SELL", nil, -28)
@@ -212,7 +245,7 @@ function PT:CreateOptions()
     Label(about,self.version,0,-470,560)
     local navigation={}
     self.optionNavigation=navigation
-    local navigationOrder={"general","vendor","tooltips","phase","maps","about"}
+    local navigationOrder={"general","quests","vendor","tooltips","phase","maps","about"}
     local function ArrangeNavigation()
         local index = 0
         for _,key in ipairs(navigationOrder) do
@@ -232,7 +265,7 @@ function PT:CreateOptions()
         for _, fn in ipairs(refresh) do fn() end
         for name,box in pairs(checks) do box:SetChecked(self.db[name]) end
     end
-    for i,entry in ipairs({{"general","NAV_GENERAL"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
+    for i,entry in ipairs({{"general","NAV_GENERAL"},{"quests","NAV_QUESTS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
         {"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
         local key=entry[1]
         if pages[key] then

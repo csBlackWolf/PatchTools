@@ -1,3 +1,11 @@
+# PatchTools 0.9.0-alpha.1 — 2026-10-24
+
+- Add optional automatic quest acceptance and turn-in, disabled by default. Hold Shift for manual dialogue; other gossip options are untouched. Quest automation pauses in combat.
+- Keep multiple reward choices manual unless optional Pawn integration finds exactly one upgrade for the chosen active class scale. Configure the scale per character; automatic mode requires exactly one active scale. Missing, ambiguous or unavailable Pawn data keeps manual selection.
+- Include the fox icon asset and addon-list metadata in the local package, also supplying the icon used by PatchToolsMaps.
+
+Validation: automated quest-event, Pawn-reward, character-selection and existing regression tests. Local alpha only; in-game quest and icon confirmation pending. Forever gameplay testing remains unavailable while the Beta is closed.
+
 # PatchTools 0.8.0 — 2026-10-23
 
 - Support Classic Era 1.15.9 alongside Forever in one addon package.

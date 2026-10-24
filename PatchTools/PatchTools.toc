@@ -19,4 +19,5 @@ Loot.lua
 DeleteConfirmation.lua
 Minimap.lua
 Phasing.lua
+Quests.lua
 Options.lua

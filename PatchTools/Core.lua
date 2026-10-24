@@ -2,6 +2,7 @@ local addon, PT = ...
 _G.PatchTools = PT
 PT.version = "@project-version@"
 PT.defaults = {
+    autoQuestAccept = false, autoQuestTurnIn = false, pawnQuestRewards = false,
     autoSell = true, autoRepair = true, extendedZoom = true,
     ghostColor = false, messages = true, cooldownNumbers = false,
     autoLoot = false, fastLoot = false, minimapIcon = true, minimapAngle = 225,
