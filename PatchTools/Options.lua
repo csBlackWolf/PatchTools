@@ -262,6 +262,14 @@ function PT:CreateOptions()
     ideas:SetScript("OnTextChanged",function(b) if b:GetText()~=issuesURL then b:SetText(issuesURL) end end)
     ideas:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     Label(about,self.version,0,-470,560)
+    Label(about,"Twitch · zenlynxley",0,-504,560,"GameFontNormal")
+    local twitch=CreateFrame("EditBox",nil,about,"InputBoxTemplate")
+    twitch:SetPoint("TOPLEFT",8,-526); twitch:SetSize(540,28); twitch:SetAutoFocus(false)
+    local twitchURL="https://www.twitch.tv/zenlynxley"
+    twitch:SetText(twitchURL)
+    twitch:SetScript("OnEditFocusGained",function(b) b:HighlightText() end)
+    twitch:SetScript("OnTextChanged",function(b) if b:GetText()~=twitchURL then b:SetText(twitchURL) end end)
+    twitch:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local navigation={}
     self.optionNavigation=navigation
     local navigationOrder={"general","quests","vendor","tooltips","phase","maps","about"}

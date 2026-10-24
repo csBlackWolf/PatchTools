@@ -1,3 +1,9 @@
+# PatchTools 0.9.0-alpha.4 — 2026-10-25
+
+- Add a selectable, copyable link to Zen's Twitch channel, https://www.twitch.tv/zenlynxley, below the existing About information.
+
+Validation: existing syntax, locale and regression checks. Local test build only.
+
 # PatchTools 0.9.0-alpha.3 — 2026-10-25
 
 - Scale the complete settings window and its contents by dragging the bottom-right corner. Save the chosen scale, keep the top-left corner stable and limit the range to readable sizes that fit the screen.
