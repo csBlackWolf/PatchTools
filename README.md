@@ -4,7 +4,7 @@ Quality-of-life tools for **World of Warcraft: Forever and Classic Era**, with b
 
 Made by **Patch & Zen**.
 
-Supports Classic Era and Forever in one package. World refresh warnings are Forever-only and are hidden in Era. The extra profession bag option is also Forever-only; Era bank bags are never included in automatic sales. The separate PatchToolsMaps addon supports both versions.
+Supports Classic Era and Forever in one package. World refresh warnings are Forever-only and are hidden in Era. The extra profession bag option is also Forever-only.
 
 ## Featured: warnings before possible phase changes
 
