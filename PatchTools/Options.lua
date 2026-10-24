@@ -8,10 +8,22 @@ local function Label(parent, text, x, y, width, font)
     return label
 end
 local function Button(parent, text, x, y, width, callback)
-    local button = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
+    local button = CreateFrame("Button", nil, parent, "BackdropTemplate")
     button:SetPoint("TOPLEFT", x, y)
     button:SetSize(width, 26)
+    button:SetBackdrop({bgFile="Interface\\Buttons\\WHITE8X8",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",
+        edgeSize=8,insets={left=2,right=2,top=2,bottom=2}})
+    button:SetBackdropColor(.075,.06,.045,1)
+    button:SetBackdropBorderColor(.48,.37,.23,1)
+    local caption=button:CreateFontString(nil,"OVERLAY","GameFontNormal")
+    caption:SetPoint("CENTER"); button:SetFontString(caption)
+    button:SetNormalFontObject("GameFontNormal")
+    button:SetDisabledFontObject("GameFontDisable")
+    local highlight=button:CreateTexture(nil,"HIGHLIGHT")
+    highlight:SetAllPoints(); highlight:SetColorTexture(.48,.37,.23,.18)
     button:SetText(text)
+    button:SetScript("OnDisable",function(b) b:SetBackdropBorderColor(.8,.62,.32,1) end)
+    button:SetScript("OnEnable",function(b) b:SetBackdropBorderColor(.48,.37,.23,1) end)
     button:SetScript("OnClick", callback)
     return button
 end
@@ -33,7 +45,7 @@ local function Dropdown(parent, name, x, y, width, entries, selected, choose)
     return dropdown
 end
 function PT:CreateOptions()
-    local frame = CreateFrame("Frame", "PatchToolsOptions", UIParent, "BasicFrameTemplateWithInset")
+    local frame = CreateFrame("Frame", "PatchToolsOptions", UIParent, "BackdropTemplate")
     frame:SetSize(820, 650)
     frame:SetPoint("CENTER")
     frame:SetFrameStrata("DIALOG")
@@ -43,12 +55,18 @@ function PT:CreateOptions()
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
-    frame.TitleText:SetText("PatchTools " .. self.version .. " — " .. (self.gameLabel or "WoW Forever"))
+    frame:SetBackdrop({bgFile="Interface\\Buttons\\WHITE8X8",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",
+        edgeSize=10,insets={left=2,right=2,top=2,bottom=2}})
+    frame.TitleText=Label(frame,"PatchTools " .. self.version .. " — " .. (self.gameLabel or "WoW Forever"),12,-10,750,"GameFontNormal")
+    local close=CreateFrame("Button",nil,frame,"UIPanelCloseButton")
+    close:SetPoint("TOPRIGHT",-1,-1); close:SetSize(30,30)
+    close:SetScript("OnClick",function() frame:Hide() end)
     frame:Hide()
     self.options = frame
+    if self.ApplyOptionsAppearance then self:ApplyOptionsAppearance() end
     tinsert(UISpecialFrames, "PatchToolsOptions")
     local accent = frame:CreateTexture(nil, "ARTWORK")
-    accent:SetColorTexture(.18, .65, .8, .65)
+    accent:SetColorTexture(.48, .37, .23, .65)
     accent:SetPoint("TOPLEFT", 184, -42)
     accent:SetSize(2, 562)
     Label(frame, "PATCHTOOLS", 22, -48, 150, "GameFontNormalLarge")
@@ -80,6 +98,31 @@ function PT:CreateOptions()
         {"fastLoot","FASTLOOT","FASTLOOT_DESC"},{"minimapIcon","MINIMAP","MINIMAP_DESC"},
         {"messages","MESSAGES","MESSAGES_DESC"},{"simpleDelete","SIMPLE_DELETE","SIMPLE_DELETE_DESC"}}) do
         Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*64)
+    end
+    if self.ApplyOptionsAppearance then
+        local display=Page("display")
+        Label(display,self:T("DISPLAY_INTRO"),0,0,580)
+        local opacityText=Label(display,"",0,-64,580,"GameFontNormal")
+        local slider=CreateFrame("Slider","PatchToolsOptionsOpacitySlider",display,"OptionsSliderTemplate")
+        slider:SetPoint("TOPLEFT",4,-100); slider:SetWidth(350)
+        slider:SetMinMaxValues(0,80); slider:SetValueStep(1); slider:SetObeyStepOnDrag(true)
+        PatchToolsOptionsOpacitySliderLow:SetText("0%"); PatchToolsOptionsOpacitySliderHigh:SetText("80%")
+        local updating=false
+        local function RefreshOpacity()
+            updating=true
+            self:ApplyOptionsAppearance()
+            local value=math.floor(self.db.optionsTransparency*100+.5)
+            slider:SetValue(value); opacityText:SetText(self:T("OPTIONS_TRANSPARENCY",value))
+            updating=false
+        end
+        slider:SetScript("OnValueChanged",function(_,value)
+            if updating then return end
+            self:SetOption("optionsTransparency",math.floor(value+.5)/100); RefreshOpacity()
+        end)
+        Label(display,self:T("OPTIONS_TRANSPARENCY_HINT"),0,-152,580)
+        Label(display,self:T("OPTIONS_SCALE_HINT"),0,-222,580)
+        refresh[#refresh+1]=RefreshOpacity
+        self.appearanceUI={slider=slider,refresh=RefreshOpacity}
     end
     local questsModule = self.modules.Quests
     if questsModule then
@@ -272,7 +315,7 @@ function PT:CreateOptions()
     twitch:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local navigation={}
     self.optionNavigation=navigation
-    local navigationOrder={"general","quests","vendor","tooltips","phase","maps","about"}
+    local navigationOrder={"general","display","quests","vendor","tooltips","phase","maps","about"}
     local function ArrangeNavigation()
         local index = 0
         for _,key in ipairs(navigationOrder) do
@@ -292,7 +335,7 @@ function PT:CreateOptions()
         for _, fn in ipairs(refresh) do fn() end
         for name,box in pairs(checks) do box:SetChecked(self.db[name]) end
     end
-    for i,entry in ipairs({{"general","NAV_GENERAL"},{"quests","NAV_QUESTS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
+    for i,entry in ipairs({{"general","NAV_GENERAL"},{"display","NAV_DISPLAY"},{"quests","NAV_QUESTS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
         {"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
         local key=entry[1]
         if pages[key] then

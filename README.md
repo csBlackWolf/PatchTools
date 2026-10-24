@@ -32,7 +32,7 @@ Avoid being surprised by an announced world refresh. PatchTools can warn you whe
 
 Drag the bottom-right corner to scale the settings window and its contents. The size is saved. Use `/patchtools reset` to restore the default size and center the window.
 
-Settings are grouped into General, Quests, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
+Settings are grouped into General, Appearance, Quests, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
 
 Choose the features you want in the settings. Junk selling, whitelist selling, automatic repairs and extended camera zoom start turned on for new settings. The whitelist starts empty. Tooltip additions and world refresh warnings start turned off. Your settings are kept when you update.
 
@@ -147,3 +147,5 @@ Community project. Not affiliated with or endorsed by Blizzard Entertainment.
 ---
 
 For contributors: [developer information and release instructions](https://github.com/csBlackWolf/PatchTools/blob/main/RELEASING.md).
+
+The settings window uses the companion map frame's dark bronze style. Background transparency is adjustable in Appearance; labels and controls remain readable. Map transparency is configured separately in the Map section and shares the native map setting where available.

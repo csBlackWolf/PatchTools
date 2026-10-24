@@ -3,6 +3,7 @@ _G.PatchTools = PT
 PT.version = "@project-version@"
 PT.defaults = {
     optionsScale = 1,
+    optionsTransparency = 0,
     autoQuestAccept = false, autoQuestTurnIn = false, pawnQuestRewards = false,
     autoSell = true, autoRepair = true, extendedZoom = true,
     ghostColor = false, messages = true, cooldownNumbers = false,
@@ -90,6 +91,7 @@ end
 function PT:SetOption(key, value)
     if self.defaults[key] == nil then return end
     self.db[key] = value
+    if key == "optionsTransparency" and self.ApplyOptionsAppearance then self:ApplyOptionsAppearance() end
     if key:match("^phase") and self.modules.Phasing then self.modules.Phasing:SettingsChanged() end
     if key == "extendedZoom" then
         self:ApplyZoom(not value)

@@ -1,6 +1,17 @@
 local _, PT = ...
 local WIDTH, HEIGHT = 820, 650
 
+function PT:ApplyOptionsAppearance()
+    local value=tonumber(self.db.optionsTransparency) or 0
+    if value~=value or math.abs(value)==math.huge then value=0 end
+    value=math.max(0,math.min(.8,value))
+    self.db.optionsTransparency=value
+    if self.options then
+        self.options:SetBackdropColor(.055,.045,.035,1-value)
+        self.options:SetBackdropBorderColor(.48,.37,.23,1)
+    end
+end
+
 function PT:SetOptionsWindowScale(value, left, top)
     local frame = self.options
     if not frame then return end

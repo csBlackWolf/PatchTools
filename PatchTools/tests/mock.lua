@@ -23,6 +23,7 @@ local function Widget()
     end
     function methods:CreateFontString() return Widget() end
     function methods:SetText(text) self.text=text end
+    function methods:SetBackdropColor(r,g,b,a) self.backdropColor={r,g,b,a} end
     function methods:GetText() return self.text end
     function methods:SetChecked(value) self.checked=value end
     function methods:GetChecked() return self.checked end
@@ -389,3 +390,11 @@ pt.ResetOptionsWindow=function(self) resets=resets+1; resetWindow(self) end
 SlashCmdList.PATCHTOOLS("reset")
 assert(resets==1 and pt.options:IsShown(),'chat reset must recover and open the settings window')
 pt.ResetOptionsWindow=resetWindow
+
+assert(pt.optionPages.display and pt.appearanceUI)
+pt.appearanceUI.slider:SetValue(55)
+assert(pt.db.optionsTransparency==.55 and math.abs(pt.options.backdropColor[4]-.45)<.000001)
+pt:SetOption("optionsTransparency",math.huge); assert(pt.db.optionsTransparency==0)
+pt:SetOption("optionsTransparency",.4); pt:CreateOptions()
+assert(pt.db.optionsTransparency==.4 and pt.options.backdropColor[4]==.6)
+print("PASS: settings background transparency applies live, survives window creation, bounds invalid values and keeps control opacity independent.")

@@ -1,3 +1,11 @@
+# PatchTools 0.9.0-alpha.5 — 2026-10-25
+
+- Match the companion map's dark bronze frame style in the settings window, including the navigation buttons.
+- Add Appearance settings with a saved background-transparency slider. Text and controls remain opaque; the map has a separate transparency control.
+- Retain settings scaling, chat recovery and existing quest behavior.
+
+Validation: automated appearance-slider, saved/invalid transparency and existing Era/Forever regression checks in English, German and English fallback. In-game appearance confirmation pending.
+
 # PatchTools 0.9.0-alpha.4 — 2026-10-25
 
 - Add a selectable, copyable link to Zen's Twitch channel, https://www.twitch.tv/zenlynxley, below the existing About information.

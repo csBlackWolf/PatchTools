@@ -3,7 +3,7 @@ local _, PT = ...
 -- Versioned, deliberately small interface for independently installed addons.
 PT.extensionAPI = 1
 PT.extraOptionsPages = {}
-local reserved = {general=true, quests=true, vendor=true, tooltips=true, phase=true, about=true}
+local reserved = {general=true, display=true, quests=true, vendor=true, tooltips=true, phase=true, about=true}
 
 function PT:RegisterOptionsPage(id, title, build)
     if type(id) ~= "string" or not id:match("^[%w_]+$") or reserved[id]
@@ -11,7 +11,7 @@ function PT:RegisterOptionsPage(id, title, build)
     for _, entry in ipairs(self.extraOptionsPages) do
         if entry.id == id then return false end
     end
-    -- Seven standard entries include the Maps placeholder; two other pages fit.
+    -- Eight standard entries include the Maps placeholder; two other pages fit.
     local additional=0
     for _,entry in ipairs(self.extraOptionsPages) do if entry.id~="maps" then additional=additional+1 end end
     if id~="maps" and additional>=2 then return false end
