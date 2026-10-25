@@ -1,3 +1,7 @@
+# PatchTools 0.9.0-alpha.13 — 2026-10-25
+
+- Restore the short Standard label in the decoration layer dropdown. Keep the separate Dialog choice and all saved settings.
+
 # PatchTools 0.9.0-alpha.12 — 2026-10-25
 
 - Add the missing Dialog display layer for side figures. Keep all five explicit strata plus the independent Default (unchanged) option, which retains the original parent layer.
