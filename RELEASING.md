@@ -76,3 +76,21 @@ Never commit tokens or put them in screenshots, logs, issue reports or release n
 ## Required idea review before a build push
 
 Follow [the build planning rules](AGENTS.md). Review current GitHub ideas and the [shared board](https://github.com/users/csBlackWolf/projects/9), report accepted/planned items with counts, titles and links, and highlight the next-release items. List deferred ideas separately. Wait for confirmation before pushing a build or release, so another idea can still be included. This is a planning checkpoint, not automatic implementation of feature requests.
+
+## Optional confirmation shortcuts (development alpha.14)
+
+`LootConfirmations.lua` handles CONFIRM_LOOT_ROLL, LOOT_BIND_CONFIRM and
+EQUIP_BIND_CONFIRM independently of fast loot. Defaults: boeRollConfirm="off",
+confirmLootBind=false, confirmEquipBind=false. A roll must already have been
+chosen. For rolls, cached item bind type must be OnEquip (2), with no BoP flag;
+unknown data and other roll types remain manual. The general loot/equip options
+intentionally allow binding after explicit opt-in.
+
+The event listener waits one frame for UIParent to finish populating the popup,
+then validates the option, Shift/combat state, popup type, native data and roll
+choice again. It invokes the matching native OnAccept and hides that dialog.
+No popup definitions or UIParent handlers are replaced. Refund/trade warnings
+and disenchant are never automatically accepted. In-game testing must cover
+Greed/Need on BoE and BoP, Shift bypass, loot binding and equipment binding.
+Reference: Blizzard UI source mirror, classic_era branch, UIParent/Vanilla/UIParent.lua,
+StaticPopup_Game/Classic/GameDialogDefs.lua and ItemConstantsDocumentation.lua.

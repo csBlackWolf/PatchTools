@@ -9,6 +9,7 @@ PT.defaults = {
     autoSell = true, autoRepair = true, extendedZoom = true,
     ghostColor = false, messages = true, cooldownNumbers = false,
     autoLoot = false, fastLoot = false, minimapIcon = true, minimapAngle = 225,
+    boeRollConfirm = "off", confirmLootBind = false, confirmEquipBind = false,
     phaseInitial = false, phaseSoon = false, phaseSound = true, phaseLead = 60,
     phaseDuration = 10, phaseChat = true,
     simpleDelete = false, sellWhitelist = true, sellProfessionBag = true, tooltipIDs = false, tooltipPrices = false,
@@ -165,7 +166,7 @@ SlashCmdList.PATCHTOOLS = function(message)
         local version, build, _, interface = GetBuildInfo()
         PT:Print("v" .. PT.version .. "; Client " .. version .. " / " .. build .. "; Interface " .. interface)
         PT:Print("Client locale: " .. PT.clientLocale .. "; UI language: " .. PT.locale)
-        for _, key in ipairs({"autoSell", "autoRepair", "extendedZoom", "ghostColor", "cooldownNumbers", "autoLoot", "fastLoot", "minimapIcon", "simpleDelete", "phaseInitial", "phaseSoon", "phaseSound", "phaseLead", "phaseDuration", "phaseChat"}) do
+        for _, key in ipairs({"autoSell", "autoRepair", "extendedZoom", "ghostColor", "cooldownNumbers", "autoLoot", "fastLoot", "minimapIcon", "boeRollConfirm", "confirmLootBind", "confirmEquipBind", "simpleDelete", "phaseInitial", "phaseSoon", "phaseSound", "phaseLead", "phaseDuration", "phaseChat"}) do
             PT:Print(key .. ": " .. tostring(PT.db[key]))
         end
         PT:Print("Zoom-CVar: " .. tostring(ReadCVar("cameraDistanceMaxZoomFactor")))

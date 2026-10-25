@@ -116,9 +116,33 @@ function PT:CreateOptions()
     for i, entry in ipairs({{"extendedZoom","ZOOM","ZOOM_DESC"},{"ghostColor","GHOST","GHOST_DESC"},
         {"cooldownNumbers","COOLDOWN","COOLDOWN_DESC"},{"autoLoot","AUTOLOOT","AUTOLOOT_DESC"},
         {"fastLoot","FASTLOOT","FASTLOOT_DESC"},{"minimapIcon","MINIMAP","MINIMAP_DESC"},
-        {"messages","MESSAGES","MESSAGES_DESC"},{"simpleDelete","SIMPLE_DELETE","SIMPLE_DELETE_DESC"}}) do
+        {"messages","MESSAGES","MESSAGES_DESC"}}) do
         Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*56)
     end
+    local confirmations = Page("confirmations")
+    Label(confirmations, self:T("CONFIRMATIONS_INTRO"), 0, 0, 580)
+    Label(confirmations, self:T("BOE_ROLL_CONFIRM"), 0, -64, 580, "GameFontNormal")
+    local rollChoices = {
+        {value="off", label=self:T("BOE_ROLL_OFF")},
+        {value="greed", label=self:T("BOE_ROLL_GREED")},
+        {value="all", label=self:T("BOE_ROLL_ALL")},
+    }
+    local rollDropdown = Dropdown(confirmations,"PatchToolsBoeRollDropdown",0,-96,490,
+        function() return rollChoices end,
+        function() return self.db.boeRollConfirm end,
+        function(value) self:SetOption("boeRollConfirm",value) end)
+    refresh[#refresh+1] = function()
+        local selected = rollChoices[1].label
+        for _, entry in ipairs(rollChoices) do
+            if entry.value == self.db.boeRollConfirm then selected = entry.label end
+        end
+        UIDropDownMenu_SetText(rollDropdown,selected)
+    end
+    Label(confirmations, self:T("BOE_ROLL_DESC"), 0, -137, 570)
+    Check(confirmations,"confirmLootBind","LOOT_BIND_CONFIRM","LOOT_BIND_CONFIRM_DESC",-224)
+    Check(confirmations,"confirmEquipBind","EQUIP_BIND_CONFIRM","EQUIP_BIND_CONFIRM_DESC",-328)
+    Check(confirmations,"simpleDelete","SIMPLE_DELETE","SIMPLE_DELETE_DESC",-432)
+    self.boeRollDropdown = rollDropdown
     local appearance
     if self.ApplyOptionsAppearance or self.modules.ActionBars then
         appearance = Page("appearance")
@@ -379,7 +403,7 @@ function PT:CreateOptions()
     twitch:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local navigation={}
     self.optionNavigation=navigation
-    local navigationOrder={"general","appearance","quests","vendor","tooltips","phase","maps","about"}
+    local navigationOrder={"general","appearance","quests","confirmations","vendor","tooltips","phase","maps","about"}
     local function ArrangeNavigation()
         local index = 0
         for _,key in ipairs(navigationOrder) do
@@ -399,7 +423,7 @@ function PT:CreateOptions()
         for _, fn in ipairs(refresh) do fn() end
         for name,box in pairs(checks) do box:SetChecked(self.db[name]) end
     end
-    for i,entry in ipairs({{"general","NAV_GENERAL"},{"appearance","NAV_APPEARANCE"},{"quests","NAV_QUESTS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
+    for i,entry in ipairs({{"general","NAV_GENERAL"},{"appearance","NAV_APPEARANCE"},{"quests","NAV_QUESTS"},{"confirmations","NAV_CONFIRMATIONS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
         {"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
         local key=entry[1]
         if pages[key] then

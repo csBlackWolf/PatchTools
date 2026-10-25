@@ -16,6 +16,7 @@ ItemRules.lua
 Vendor.lua
 Tooltips.lua
 Loot.lua
+LootConfirmations.lua
 DeleteConfirmation.lua
 Minimap.lua
 Phasing.lua

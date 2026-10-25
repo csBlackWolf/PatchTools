@@ -142,3 +142,10 @@ Community project. Not affiliated with or endorsed by Blizzard Entertainment.
 ---
 
 For contributors: [developer information and release instructions](https://github.com/csBlackWolf/PatchTools/blob/main/RELEASING.md).
+
+Development preview 0.9.0-alpha.14 (2026-10-25):
+New Confirmations / Bestätigungen category. BoE roll confirmation: off (default),
+Greed only, or Need and Greed. Separate opt-in binding confirmations for looting
+and equipping. These can bind items immediately. Shift and combat keep warnings
+manual; refund, temporary loot-trading and disenchant warnings are not skipped.
+The existing simpler deletion option is now in this category.

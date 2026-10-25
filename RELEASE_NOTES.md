@@ -1,3 +1,17 @@
+# PatchTools 0.9.0-alpha.14 — development preview — 2026-10-25
+
+Work on `alpha/loot-confirmations`, based on the existing quest/map alpha.
+The previous `alpha/quest-automation` branch remains separate for stabilization.
+This preview has not yet been published as a GitHub or CurseForge release.
+
+- Add a Confirmations category for optional confirmation shortcuts, including the existing simpler deletion setting.
+- BoE roll confirmations: choose manual (default), Greed only, or Need and Greed. No automatic roll selection; only positively identified BoE items are eligible.
+- Independently opt in to skipping binding confirmations when looting or equipping. These actions may bind an item immediately.
+- All new options start disabled. Holding Shift keeps confirmation manual. Combat, disenchant rolls, refund and temporary loot-trading warnings remain manual.
+- Preserve native dialog actions and recheck the matching dialog after the event. Missing item data or unavailable APIs leave the warning unchanged.
+
+Validation: simulated API tests for Era and Forever, settings/localization checks and native Classic Era UI source review. In-game visual and loot/equip confirmation testing is pending. Public alpha builds may contain bugs.
+
 # PatchTools 0.9.0-alpha.13 — 2026-10-25
 
 **Public alpha test: this version is likely to contain bugs. Please report problems and feedback on GitHub. Use the stable releases if you prefer the established feature set.**

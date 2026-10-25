@@ -88,7 +88,7 @@ function RepairAllItems(guild) assert(guild==false); repaired=repaired+1; wallet
 function GetTime() return 100 end
 function GetEvictionTimeRemaining() return nil end
 local pt={}
-for _,file in ipairs({"Client.lua","Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Quests.lua","ActionBars.lua","OptionsWindow.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
+for _,file in ipairs({"Client.lua","Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","LootConfirmations.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Quests.lua","ActionBars.lua","OptionsWindow.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
 assert(pt.locale==(GetLocale()=="deDE" and "deDE" or "enUS"))
 for key, text in pairs(pt.locales.enUS) do
     assert(type(pt.locales.deDE[key])=="string", "Missing German translation: "..key)
@@ -436,3 +436,14 @@ print("PASS: ornament layer dropdown and hidden Maps page without the module.")
 layers[6].func(); assert(pt.db.barDecorationLayer=="dialog")
 pt:CreateOptions(); layers=OpenDropdown(pt.barDecorationUI.layer)
 assert(layers[6].checked)
+
+assert(pt.optionPages.confirmations and pt.optionNavigation.confirmations)
+assert(pt.db.boeRollConfirm=="off" and not pt.db.confirmLootBind and not pt.db.confirmEquipBind)
+local rollChoices=OpenDropdown(pt.boeRollDropdown)
+assert(#rollChoices==3 and rollChoices[1].checked)
+rollChoices[2].func(); assert(pt.db.boeRollConfirm=="greed")
+pt:CreateOptions(); rollChoices=OpenDropdown(pt.boeRollDropdown)
+assert(rollChoices[2].checked)
+rollChoices[3].func(); assert(pt.db.boeRollConfirm=="all")
+print("PASS: confirmations category, defaults off and saved BoE roll dropdown selection.")
+dofile("tests/loot_confirmations.lua")

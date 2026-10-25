@@ -23,6 +23,7 @@ Avoid being surprised by an announced world refresh. PatchTools can warn you whe
 - **Normal colours as a ghost:** keep the world in colour while you are dead.
 - **Cooldown numbers:** see how long your abilities need to recharge.
 - **Auto-loot on login:** keep automatic looting enabled for your characters.
+- **Optional confirmations (development alpha):** skip BoE roll warnings for Greed only or for Need and Greed, and independently skip binding warnings when looting or equipping. All start disabled. Shift keeps confirmation manual; combat, disenchant, refund and temporary loot-trading warnings stay manual.
 - **Simpler item deletion:** optionally replace typing DELETE with a Yes/No confirmation outside combat. The item name and quest warning remain visible. Disabled by default.
 - **Optional quest automation (alpha):** accept and turn in quests, with Shift for manual dialogue. Multiple rewards remain manual unless Pawn finds exactly one upgrade for your selected active class scale. All quest options start disabled.
 - **Main bar appearance (alpha):** choose no side figures, Blizzard figures or compact seated silver dragons independently of the dark bronze PatchTools background. Earlier settings migrate to the new dropdown. Cosmetic changes defer during combat. Action buttons and page controls stay native. Choose the side figures' display layer next to the decoration selector: Standard, Background, Low, Normal, High or Dialog.
@@ -33,7 +34,7 @@ Avoid being surprised by an announced world refresh. PatchTools can warn you whe
 
 Drag the bottom-right corner to scale the settings window and its contents. The size is saved. Use `/patchtools reset` to restore the default size and center the window.
 
-Settings are grouped into General, Appearance, Quests, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. The Map section appears only when PatchToolsMaps is installed, enabled and loaded.
+Settings are grouped into General, Appearance, Quests, Confirmations, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. The Map section appears only when PatchToolsMaps is installed, enabled and loaded.
 
 Choose the features you want in the settings. Junk selling, whitelist selling, automatic repairs and extended camera zoom start turned on for new settings. The whitelist starts empty. Tooltip additions and world refresh warnings start turned off. Your settings are kept when you update.
 
