@@ -1,6 +1,14 @@
 # PatchTools 0.9.0-alpha.13 — 2026-10-25
 
-- Restore the short Standard label in the decoration layer dropdown. Keep the separate Dialog choice and all saved settings.
+Alpha preview for Classic Era and Forever. **Use together with PatchToolsMaps 0.3.0-alpha.13 for all new map controls.** Stable PatchTools 0.8.0 and PatchToolsMaps 0.2.1 remain available and unchanged.
+
+- Optional quest acceptance and turn-in, with Shift for manual dialogue and optional Pawn reward selection for one chosen scale. Quest automation starts disabled.
+- A compact dark bronze settings window with saved scale and background transparency; recover its position and scale with `/patchtools reset`.
+- An Appearance category for menu and main-bar styling. Choose no side figures, Blizzard figures or seated silver dragons; a small workshop easter egg unlocks silver foxes.
+- Independent display layers for side figures: Standard, Background, Low, Normal, High and Dialog. Native action buttons and page controls stay unchanged; cosmetic changes wait until combat ends.
+- Updated addon-list icon and credits. The optional Map section appears only with the enabled companion module.
+
+Validation: automated Era/Forever tests in English, German and English fallback; local Classic Era gameplay and visual testing. Forever gameplay retest is unavailable while Beta is closed. This is a prerelease; feedback is welcome.
 
 # PatchTools 0.9.0-alpha.12 — 2026-10-25
 
