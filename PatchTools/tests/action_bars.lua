@@ -9,6 +9,10 @@ local function Widget(alpha)
     function w:SetPoint(...) end
     function w:SetHeight(...) end
     function w:SetWidth(...) end
+    function w:SetTexture(value) self.texture=value end
+    function w:SetSize(w,h) self.size={w,h} end
+    function w:SetTexCoord(...) self.coords={...} end
+    function w:ClearAllPoints() end
     function w:SetShown(value) assert(not combat); self.shown=value end
     function w:IsShown() return self.shown end
     function w:CreateTexture() local t=Widget(); self.textures[#self.textures+1]=t; return t end
@@ -28,8 +32,8 @@ MainMenuBar=Widget(); MainMenuBarArtFrame=Widget()
 MainMenuBarLeftEndCap=Widget(.75); MainMenuBarRightEndCap=Widget()
 for i=0,3 do _G["MainMenuBarTexture"..i]=Widget(.8) end
 MainMenuBarTextureExtender=Widget()
-MainActionBar=Widget(); MainActionBar.EndCaps={LeftEndCap=Widget(),RightEndCap=Widget()}
-local pageControl={}; MainActionBar.ActionBarPageNumber=pageControl
+MainActionBar=Widget(); MainActionBar.EndCaps=Widget(); MainActionBar.EndCaps.LeftEndCap=Widget(); MainActionBar.EndCaps.RightEndCap=Widget()
+local pageControl=Widget(); MainActionBar.ActionBarPageNumber=pageControl
 bars:Apply()
 assert(MainMenuBarLeftEndCap.alpha==.75 and #MainMenuBarArtFrame.textures==0)
 pt.db.hideBarEndCaps=true; bars:Apply()
@@ -52,6 +56,23 @@ assert(not bars.pending and MainMenuBarLeftEndCap.alpha==.75)
 assert(MainMenuBarTexture0.alpha==.8 and not MainMenuBarArtFrame.textures[1].shown)
 -- The old layout without MainActionBar also supports the separate options.
 MainActionBar=nil; pt.db.modernActionBar=true; bars:Apply()
-assert(MainMenuBarTexture0.alpha==0 and MainMenuBarLeftEndCap.alpha==.75)
+assert(MainMenuBarTexture0.alpha==0 and MainMenuBarLeftEndCap.alpha==0)
+local dragons=bars.dragons[MainMenuBarArtFrame]
+assert(dragons and dragons[1].shown and dragons[2].shown)
+assert(dragons[1].size[1]==44 and dragons[2].coords[1]==1)
+pt.db.hideBarEndCaps=true; bars:Apply()
+assert(not dragons[1].shown and MainMenuBarLeftEndCap.alpha==0)
+pt.db.modernActionBar=false; bars:Apply()
+assert(not dragons[1].shown and MainMenuBarLeftEndCap.alpha==0)
+pt.db.hideBarEndCaps=false; bars:Apply()
+assert(not dragons[1].shown and MainMenuBarLeftEndCap.alpha==.75)
+-- Recreate the compact layout and verify it gets the same pair.
+MainActionBar=Widget(); MainActionBar.EndCaps=Widget()
+pt.db.modernActionBar=true; bars:Apply()
+assert(bars.dragons[MainActionBar.EndCaps][1].shown)
+combat=true; pt.db.hideBarEndCaps=true; bars:Apply()
+assert(bars.dragons[MainActionBar.EndCaps][1].shown)
+combat=false; frames[1].OnEvent(nil,"PLAYER_REGEN_ENABLED")
+assert(not bars.dragons[MainActionBar.EndCaps][1].shown)
 pt.db.modernActionBar=false; bars:Apply(); assert(MainMenuBarTexture0.alpha==.8)
 print("PASS: action bar variants, independent options, restoration and combat deferral.")

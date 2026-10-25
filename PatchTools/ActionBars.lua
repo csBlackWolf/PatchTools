@@ -1,5 +1,5 @@
 local _, PT = ...
-local Bars = {hidden = {}, panels = {}, hooked = {}}
+local Bars = {hidden = {}, panels = {}, hooked = {}, dragons = {}}
 PT:RegisterModule("ActionBars", Bars)
 
 -- Only decoration textures are touched. Secure buttons, bar containers, page
@@ -47,6 +47,29 @@ function Bars:Panel(parent, compact, shown)
     for _,texture in ipairs(panel or {}) do texture:SetShown(shown) end
 end
 
+function Bars:Dragons(parent, shown, rightAnchor)
+    if not parent then return end
+    local pair = self.dragons[parent]
+    if not pair and shown then
+        pair = {}
+        for i=1,2 do
+            local dragon = parent:CreateTexture(nil,"OVERLAY",nil,6)
+            dragon:SetTexture("Interface\\AddOns\\PatchTools\\Media\\SilverDragon")
+            dragon:SetSize(44,66)
+            if i==2 then dragon:SetTexCoord(1,0,0,1) end
+            pair[i] = dragon
+        end
+        self.dragons[parent] = pair
+    end
+    if pair then
+        pair[1]:ClearAllPoints()
+        pair[1]:SetPoint("BOTTOMRIGHT",parent,"BOTTOMLEFT",7,-3)
+        pair[2]:ClearAllPoints()
+        pair[2]:SetPoint("BOTTOMLEFT",rightAnchor or parent,"BOTTOMRIGHT",-7,-3)
+        for _,dragon in ipairs(pair) do dragon:SetShown(shown) end
+    end
+end
+
 function Bars:Apply()
     if InCombatLockdown and InCombatLockdown() then self.pending = true; return end
     if not self.pt or not self.pt.db then return end
@@ -61,11 +84,12 @@ function Bars:Apply()
         end
     end
     -- Era uses both legacy end caps and compact end caps after editing the bar.
-    self:Mask(_G.MainMenuBarLeftEndCap,db.hideBarEndCaps)
-    self:Mask(_G.MainMenuBarRightEndCap,db.hideBarEndCaps)
+    local maskCaps = db.hideBarEndCaps or db.modernActionBar
+    self:Mask(_G.MainMenuBarLeftEndCap,maskCaps)
+    self:Mask(_G.MainMenuBarRightEndCap,maskCaps)
     if bar and bar.EndCaps then
-        self:Mask(bar.EndCaps.LeftEndCap,db.hideBarEndCaps)
-        self:Mask(bar.EndCaps.RightEndCap,db.hideBarEndCaps)
+        self:Mask(bar.EndCaps.LeftEndCap,maskCaps)
+        self:Mask(bar.EndCaps.RightEndCap,maskCaps)
     end
     for _,name in ipairs({"MainMenuBarTexture0","MainMenuBarTexture1","MainMenuBarTexture2",
         "MainMenuBarTexture3","MainMenuBarTextureExtender"}) do
@@ -74,6 +98,14 @@ function Bars:Apply()
     self:Panel(art,false,db.modernActionBar)
     local legacyVisible = _G.MainMenuBar and _G.MainMenuBar:IsShown()
     self:Panel(bar,true,bar and db.modernActionBar and not legacyVisible and not bar.hideBarArt)
+    local showDragons = db.modernActionBar and not db.hideBarEndCaps
+    self:Dragons(art,showDragons)
+    if bar and bar.EndCaps then
+        -- Native EndCaps owns compact-bar visibility, including combat/layout
+        -- transitions. Leave space for Blizzard's page arrows on the right.
+        local page = bar.ActionBarPageNumber
+        self:Dragons(bar.EndCaps,showDragons,page and page:IsShown() and page or bar.EndCaps)
+    end
 end
 
 function Bars:Initialize(pt)

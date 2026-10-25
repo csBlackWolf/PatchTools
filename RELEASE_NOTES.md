@@ -1,3 +1,11 @@
+# PatchTools 0.9.0-alpha.8 — 2026-10-25
+
+- Replace Blizzard's side figures with a compact mirrored silver dragon pair when the PatchTools main bar style is enabled and side decorations are visible.
+- Use an original transparent sprite inspired by the rare elite dragon. Keep the plain style when decorations are hidden and restore the native figures when the style is disabled.
+- Preserve combat deferral and Blizzard's compact end-cap visibility, with room for page controls.
+
+Validation: option combinations, mirrored sprite, compact/legacy layouts, restoration and combat deferral; in-game appearance confirmation pending.
+
 # PatchTools 0.9.0-alpha.7 — 2026-10-25
 
 - Add separate opt-in controls under Action bars for hiding the gryphon / Horde figures and using the dark bronze PatchTools background.
