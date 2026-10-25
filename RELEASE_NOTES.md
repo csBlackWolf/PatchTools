@@ -1,3 +1,11 @@
+# PatchTools 0.9.0-alpha.9 — 2026-10-25
+
+- Group menu transparency, scaling guidance and action bar options under Appearance; remove the separate Action bars page.
+- Replace the narrow curled dragon ornament with a compact seated dragon statue with legs and folded wings, mirrored at the bar ends.
+- Preserve saved options, combat deferral and the plain bar when side decorations are hidden.
+
+Validation: existing locale/UI/action bar regression tests; in-game proportions and layout confirmation pending.
+
 # PatchTools 0.9.0-alpha.8 — 2026-10-25
 
 - Replace Blizzard's side figures with a compact mirrored silver dragon pair when the PatchTools main bar style is enabled and side decorations are visible.

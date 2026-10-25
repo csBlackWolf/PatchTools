@@ -3,7 +3,7 @@ local _, PT = ...
 -- Versioned, deliberately small interface for independently installed addons.
 PT.extensionAPI = 1
 PT.extraOptionsPages = {}
-local reserved = {general=true, quests=true, vendor=true, tooltips=true, actionbars=true, phase=true, about=true}
+local reserved = {general=true, quests=true, vendor=true, tooltips=true, appearance=true, actionbars=true, phase=true, about=true}
 
 function PT:RegisterOptionsPage(id, title, build)
     if type(id) ~= "string" or not id:match("^[%w_]+$") or reserved[id]

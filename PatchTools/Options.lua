@@ -99,10 +99,15 @@ function PT:CreateOptions()
         {"messages","MESSAGES","MESSAGES_DESC"},{"simpleDelete","SIMPLE_DELETE","SIMPLE_DELETE_DESC"}}) do
         Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*56)
     end
+    local appearance
+    if self.ApplyOptionsAppearance or self.modules.ActionBars then
+        appearance = Page("appearance")
+        Label(appearance,self:T("APPEARANCE_INTRO"),0,0,580)
+    end
     if self.ApplyOptionsAppearance then
-        local opacityText=Label(general,"",0,-504,580,"GameFontNormal")
-        local slider=CreateFrame("Slider","PatchToolsOptionsOpacitySlider",general,"OptionsSliderTemplate")
-        slider:SetPoint("TOPLEFT",4,-533); slider:SetWidth(350)
+        local opacityText=Label(appearance,"",0,-52,580,"GameFontNormal")
+        local slider=CreateFrame("Slider","PatchToolsOptionsOpacitySlider",appearance,"OptionsSliderTemplate")
+        slider:SetPoint("TOPLEFT",4,-81); slider:SetWidth(350)
         slider:SetMinMaxValues(0,80); slider:SetValueStep(1); slider:SetObeyStepOnDrag(true)
         PatchToolsOptionsOpacitySliderLow:SetText("0%"); PatchToolsOptionsOpacitySliderHigh:SetText("80%")
         local updating=false
@@ -124,6 +129,9 @@ function PT:CreateOptions()
         slider:SetScript("OnLeave",function() GameTooltip:Hide() end)
         refresh[#refresh+1]=RefreshOpacity
         self.appearanceUI={slider=slider,refresh=RefreshOpacity}
+    end
+    if appearance then
+        Label(appearance,self:T("APPEARANCE_SCALE_HINT"),0,-132,580)
     end
     local questsModule = self.modules.Quests
     if questsModule then
@@ -161,11 +169,11 @@ function PT:CreateOptions()
         self.questOptionsUI={checks=checks,refresh=RefreshScale,scale=selection}
     end
     if self.modules.ActionBars then
-        local bars = Page("actionbars")
-        Label(bars,self:T("BARS_INTRO"),0,0,580)
-        Check(bars,"hideBarEndCaps","BARS_ENDCAPS","BARS_ENDCAPS_DESC",-70)
-        Check(bars,"modernActionBar","BARS_STYLE","BARS_STYLE_DESC",-175)
-        Label(bars,self:T("BARS_NOTE"),0,-290,580)
+        local bars = appearance
+        Label(bars,self:T("NAV_ACTIONBARS"),0,-208,580,"GameFontNormal")
+        Check(bars,"hideBarEndCaps","BARS_ENDCAPS","BARS_ENDCAPS_DESC",-238)
+        Check(bars,"modernActionBar","BARS_STYLE","BARS_STYLE_DESC",-343)
+        Label(bars,self:T("BARS_NOTE"),0,-465,580)
     end
     local vendor = Page("vendor")
     Label(vendor, self:T("VENDOR_INTRO"), 0, 0, 580)
@@ -323,7 +331,7 @@ function PT:CreateOptions()
     twitch:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local navigation={}
     self.optionNavigation=navigation
-    local navigationOrder={"general","quests","vendor","tooltips","actionbars","phase","maps","about"}
+    local navigationOrder={"general","appearance","quests","vendor","tooltips","phase","maps","about"}
     local function ArrangeNavigation()
         local index = 0
         for _,key in ipairs(navigationOrder) do
@@ -343,8 +351,8 @@ function PT:CreateOptions()
         for _, fn in ipairs(refresh) do fn() end
         for name,box in pairs(checks) do box:SetChecked(self.db[name]) end
     end
-    for i,entry in ipairs({{"general","NAV_GENERAL"},{"quests","NAV_QUESTS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
-        {"actionbars","NAV_ACTIONBARS"},{"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
+    for i,entry in ipairs({{"general","NAV_GENERAL"},{"appearance","NAV_APPEARANCE"},{"quests","NAV_QUESTS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
+        {"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
         local key=entry[1]
         if pages[key] then
             navigation[key]=Button(frame,self:T(entry[2]),20,-135-(i-1)*45,150,function() self:SelectOptionsPage(key) end)

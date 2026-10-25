@@ -391,7 +391,7 @@ SlashCmdList.PATCHTOOLS("reset")
 assert(resets==1 and pt.options:IsShown(),'chat reset must recover and open the settings window')
 pt.ResetOptionsWindow=resetWindow
 
-assert(not pt.optionPages.display and pt.appearanceUI and pt.appearanceUI.slider:GetParent()==pt.optionPages.general)
+assert(pt.optionPages.appearance and not pt.optionPages.actionbars and pt.appearanceUI.slider:GetParent()==pt.optionPages.appearance)
 pt.appearanceUI.slider:SetValue(55)
 assert(pt.db.optionsTransparency==.55 and math.abs(pt.options.backdropColor[4]-.45)<.000001)
 pt:SetOption("optionsTransparency",math.huge); assert(pt.db.optionsTransparency==0)

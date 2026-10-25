@@ -59,7 +59,7 @@ MainActionBar=nil; pt.db.modernActionBar=true; bars:Apply()
 assert(MainMenuBarTexture0.alpha==0 and MainMenuBarLeftEndCap.alpha==0)
 local dragons=bars.dragons[MainMenuBarArtFrame]
 assert(dragons and dragons[1].shown and dragons[2].shown)
-assert(dragons[1].size[1]==44 and dragons[2].coords[1]==1)
+assert(dragons[1].size[1]==76 and dragons[2].coords[1]==1)
 pt.db.hideBarEndCaps=true; bars:Apply()
 assert(not dragons[1].shown and MainMenuBarLeftEndCap.alpha==0)
 pt.db.modernActionBar=false; bars:Apply()

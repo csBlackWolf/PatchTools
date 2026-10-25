@@ -54,8 +54,8 @@ function Bars:Dragons(parent, shown, rightAnchor)
         pair = {}
         for i=1,2 do
             local dragon = parent:CreateTexture(nil,"OVERLAY",nil,6)
-            dragon:SetTexture("Interface\\AddOns\\PatchTools\\Media\\SilverDragon")
-            dragon:SetSize(44,66)
+            dragon:SetTexture("Interface\\AddOns\\PatchTools\\Media\\SilverDragonSeated")
+            dragon:SetSize(76,76)
             if i==2 then dragon:SetTexCoord(1,0,0,1) end
             pair[i] = dragon
         end
@@ -63,9 +63,9 @@ function Bars:Dragons(parent, shown, rightAnchor)
     end
     if pair then
         pair[1]:ClearAllPoints()
-        pair[1]:SetPoint("BOTTOMRIGHT",parent,"BOTTOMLEFT",7,-3)
+        pair[1]:SetPoint("BOTTOMRIGHT",parent,"BOTTOMLEFT",10,-2)
         pair[2]:ClearAllPoints()
-        pair[2]:SetPoint("BOTTOMLEFT",rightAnchor or parent,"BOTTOMRIGHT",-7,-3)
+        pair[2]:SetPoint("BOTTOMLEFT",rightAnchor or parent,"BOTTOMRIGHT",-10,-2)
         for _,dragon in ipairs(pair) do dragon:SetShown(shown) end
     end
 end
