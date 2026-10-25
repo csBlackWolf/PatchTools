@@ -22,7 +22,7 @@ The quest alpha adds optional quest acceptance/turn-in. Hold Shift for manual di
 
 Appearance options include settings-window scaling and background transparency, a dark main-bar style, side-decoration choices and display-layer selection. Changes involving protected layout wait until combat ends. `/patchtools reset` restores the settings window. The fox in the settings is an optional little discovery.
 
-The separate loot-confirmations development branch adds independent opt-in shortcuts for BoE roll warnings, loot binding and equipment binding. These are not part of the earlier quest alpha. Shift keeps a confirmation manual; combat, disenchant, refund and temporary loot-trading warnings remain manual.
+The combined alpha.14 test build adds independent opt-in shortcuts for BoE roll warnings, loot binding and equipment binding alongside quest automation. These are not part of the earlier public quest alpha. Shift keeps a confirmation manual; combat, disenchant, refund and temporary loot-trading warnings remain manual.
 
 ### Optional modules
 
@@ -50,7 +50,7 @@ Die Quest-Alpha bietet optionale automatische Annahme und Abgabe. Mit Shift bedi
 
 Unter Darstellung findest du Skalierung und Hintergrundtransparenz des Menüs, den dunklen Hauptleistenstil sowie Seitenverzierungen und ihre Anzeigeebene. Geschützte Änderungen warten bis nach dem Kampf. `/patchtools reset` setzt das Einstellungsfenster zurück. Der kleine Fuchs im Menü ist eine optionale Entdeckung.
 
-Der getrennte Entwicklungszweig für Beutebestätigungen bietet zusätzliche einzeln aktivierbare Abkürzungen für BoE-Würfelwarnungen, Bindung beim Plündern und Anlegen. Diese gehören noch nicht zur vorherigen Quest-Alpha. Shift, Kampf, Entzaubern sowie Rückerstattungs- und Beutehandelswarnungen bleiben manuell.
+Der kombinierte Alpha.14-Testbuild bietet neben der Questautomatik zusätzliche einzeln aktivierbare Abkürzungen für BoE-Würfelwarnungen, Bindung beim Plündern und Anlegen. Diese gehören noch nicht zur vorherigen öffentlichen Quest-Alpha. Shift, Kampf, Entzaubern sowie Rückerstattungs- und Beutehandelswarnungen bleiben manuell.
 
 ### Zusatzmodule
 

@@ -1,7 +1,7 @@
-# PatchTools 0.9.0-alpha.14 — development preview — 2026-10-25
+# PatchTools 0.9.0-alpha.14 — combined test build — 2026-10-26
 
-Work on `alpha/loot-confirmations`, based on the existing quest/map alpha.
-The previous `alpha/quest-automation` branch remains separate for stabilization.
+Quest automation, appearance options and the new confirmation shortcuts are now
+combined on `alpha/quest-automation` for testing together.
 This preview has not yet been published as a GitHub or CurseForge release.
 
 - Add a Confirmations category for optional confirmation shortcuts, including the existing simpler deletion setting.
