@@ -2,6 +2,9 @@ package-as: PatchTools
 enable-nolib-creation: no
 
 ignore:
+  - CHANGELOG.md
+  - DEVELOPMENT.md
+  - GUIDE.md
   - AGENTS.md
   - .github
   - README.md
