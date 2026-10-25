@@ -72,6 +72,26 @@ function PT:CreateOptions()
     Label(frame, "PATCHTOOLS", 22, -48, 150, "GameFontNormalLarge")
     Label(frame, self:T("BUILD_LABEL"), 22, -82, 148)
     Label(frame, "Patch & Zen", 22, -596, 150)
+    local RefreshDecoration
+    if self.modules.ActionBars then
+        local fox=CreateFrame("Button",nil,frame)
+        fox:SetPoint("BOTTOMLEFT",22,12); fox:SetSize(28,28)
+        fox:SetNormalTexture("Interface\\AddOns\\PatchTools\\Media\\SilverFox")
+        fox:SetAlpha(.7)
+        fox:SetScript("OnEnter",function(b)
+            b:SetAlpha(1); GameTooltip:SetOwner(b,"ANCHOR_TOP")
+            GameTooltip:SetText("Patch",1,.82,0); GameTooltip:Show()
+        end)
+        fox:SetScript("OnLeave",function(b) b:SetAlpha(.7); GameTooltip:Hide() end)
+        fox:SetScript("OnClick",function()
+            local first=not self.db.silverFoxUnlocked
+            self:SetOption("silverFoxUnlocked",true)
+            self:SetOption("barDecoration","fox")
+            if RefreshDecoration then RefreshDecoration() end
+            if first then self:Print(self:T("FOX_UNLOCKED")) end
+        end)
+        self.foxSecretButton=fox
+    end
     local pages, checks, refresh = {}, {}, {}
     self.optionPages = pages
     local function Page(key)
@@ -171,7 +191,27 @@ function PT:CreateOptions()
     if self.modules.ActionBars then
         local bars = appearance
         Label(bars,self:T("NAV_ACTIONBARS"),0,-208,580,"GameFontNormal")
-        Check(bars,"hideBarEndCaps","BARS_ENDCAPS","BARS_ENDCAPS_DESC",-238)
+        Label(bars,self:T("BARS_DECORATION"),0,-246,580,"GameFontNormal")
+        local decoration
+        local function Entries()
+            local list={{value="none",label=self:T("BARS_NONE")},
+                {value="native",label=self:T("BARS_NATIVE")},
+                {value="dragon",label=self:T("BARS_DRAGON")}}
+            if self.db.silverFoxUnlocked then list[#list+1]={value="fox",label=self:T("BARS_FOX")} end
+            return list
+        end
+        RefreshDecoration=function()
+            local selected=self.modules.ActionBars:GetDecoration(self.db)
+            for _,entry in ipairs(Entries()) do
+                if entry.value==selected then UIDropDownMenu_SetText(decoration,entry.label); break end
+            end
+        end
+        decoration=Dropdown(bars,"PatchToolsBarDecorationDropdown",0,-271,430,Entries,
+            function() return self.modules.ActionBars:GetDecoration(self.db) end,function(value)
+                self:SetOption("barDecoration",value); RefreshDecoration()
+            end)
+        refresh[#refresh+1]=RefreshDecoration
+        self.barDecorationUI={dropdown=decoration,refresh=RefreshDecoration}
         Check(bars,"modernActionBar","BARS_STYLE","BARS_STYLE_DESC",-343)
         Label(bars,self:T("BARS_NOTE"),0,-465,580)
     end

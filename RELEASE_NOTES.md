@@ -1,3 +1,11 @@
+# PatchTools 0.9.0-alpha.10 — 2026-10-25
+
+- Replace the side-decoration checkbox with a dropdown: None, Blizzard figures and Silver dragons, independent of the main bar background style. Preserve earlier checkbox/style combinations on upgrade.
+- Add a small fox in the settings window's lower-left corner. Clicking it permanently unlocks and selects Silver foxes in the dropdown. Reuse the same transparent fox sprite for both the secret button and the mirrored side figures.
+- Preserve native page controls, visibility and combat deferral.
+
+Validation: dropdown discovery and persistence, migration, all ornament choices, texture switching and combat deferral plus Era/Forever regressions. In-game appearance confirmation pending.
+
 # PatchTools 0.9.0-alpha.9 — 2026-10-25
 
 - Group menu transparency, scaling guidance and action bar options under Appearance; remove the separate Action bars page.

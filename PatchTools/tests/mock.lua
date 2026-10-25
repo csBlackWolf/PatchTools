@@ -398,3 +398,26 @@ pt:SetOption("optionsTransparency",math.huge); assert(pt.db.optionsTransparency=
 pt:SetOption("optionsTransparency",.4); pt:CreateOptions()
 assert(pt.db.optionsTransparency==.4 and pt.options.backdropColor[4]==.6)
 print("PASS: settings background transparency applies live, survives window creation, bounds invalid values and keeps control opacity independent.")
+
+-- The secret expands the real dropdown only after explicit discovery.
+pt.db.silverFoxUnlocked=false; pt.db.barDecoration="dragon"; pt:CreateOptions()
+local entries=OpenDropdown(pt.barDecorationUI.dropdown)
+assert(#entries==3 and entries[3].value=="dragon")
+pt.foxSecretButton.scripts.OnClick()
+assert(pt.db.silverFoxUnlocked and pt.db.barDecoration=="fox")
+entries=OpenDropdown(pt.barDecorationUI.dropdown)
+assert(#entries==4 and entries[4].value=="fox" and entries[4].checked)
+entries[1].func(); assert(pt.db.barDecoration=="none")
+pt:CreateOptions(); entries=OpenDropdown(pt.barDecorationUI.dropdown)
+assert(#entries==4 and entries[1].checked)
+-- Migrate each earlier checkbox combination without reinstalling native hooks.
+local previousModules=pt.modules; pt.modules={}
+for _,case in ipairs({{hideBarEndCaps=true,modernActionBar=true,expected="none"},
+    {hideBarEndCaps=false,modernActionBar=true,expected="dragon"},
+    {hideBarEndCaps=false,modernActionBar=false,expected="native"},
+    {hideBarEndCaps=true,modernActionBar=true,barDecoration="fox",silverFoxUnlocked=true,expected="fox"}}) do
+    PatchToolsDB=case; Event("ADDON_LOADED","PatchTools")
+    assert(pt.db.barDecoration==case.expected)
+end
+pt.modules=previousModules
+print("PASS: hidden fox discovery, saved unlock, dropdown selection and legacy decoration migration.")

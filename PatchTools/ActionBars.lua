@@ -2,6 +2,17 @@ local _, PT = ...
 local Bars = {hidden = {}, panels = {}, hooked = {}, dragons = {}}
 PT:RegisterModule("ActionBars", Bars)
 
+function Bars:GetDecoration(db)
+    db = db or self.pt.db
+    local choice = db.barDecoration
+    if choice == nil then -- Older saved settings and earlier module clients.
+        return db.hideBarEndCaps and "none" or db.modernActionBar and "dragon" or "native"
+    end
+    if choice == "none" or choice == "dragon" or choice == "native" then return choice end
+    if choice == "fox" and db.silverFoxUnlocked == true then return choice end
+    return "native"
+end
+
 -- Only decoration textures are touched. Secure buttons, bar containers, page
 -- controls, anchors and Blizzard's visibility logic remain owned by Blizzard.
 function Bars:Mask(texture, wanted)
@@ -47,14 +58,13 @@ function Bars:Panel(parent, compact, shown)
     for _,texture in ipairs(panel or {}) do texture:SetShown(shown) end
 end
 
-function Bars:Dragons(parent, shown, rightAnchor)
+function Bars:Dragons(parent, shown, rightAnchor, decoration)
     if not parent then return end
     local pair = self.dragons[parent]
     if not pair and shown then
         pair = {}
         for i=1,2 do
             local dragon = parent:CreateTexture(nil,"OVERLAY",nil,6)
-            dragon:SetTexture("Interface\\AddOns\\PatchTools\\Media\\SilverDragonSeated")
             dragon:SetSize(76,76)
             if i==2 then dragon:SetTexCoord(1,0,0,1) end
             pair[i] = dragon
@@ -62,6 +72,10 @@ function Bars:Dragons(parent, shown, rightAnchor)
         self.dragons[parent] = pair
     end
     if pair then
+        local asset = decoration == "fox" and "SilverFox" or "SilverDragonSeated"
+        for _,texture in ipairs(pair) do
+            texture:SetTexture("Interface\\AddOns\\PatchTools\\Media\\"..asset)
+        end
         pair[1]:ClearAllPoints()
         pair[1]:SetPoint("BOTTOMRIGHT",parent,"BOTTOMLEFT",10,-2)
         pair[2]:ClearAllPoints()
@@ -84,7 +98,8 @@ function Bars:Apply()
         end
     end
     -- Era uses both legacy end caps and compact end caps after editing the bar.
-    local maskCaps = db.hideBarEndCaps or db.modernActionBar
+    local decoration = self:GetDecoration(db)
+    local maskCaps = decoration ~= "native"
     self:Mask(_G.MainMenuBarLeftEndCap,maskCaps)
     self:Mask(_G.MainMenuBarRightEndCap,maskCaps)
     if bar and bar.EndCaps then
@@ -98,13 +113,13 @@ function Bars:Apply()
     self:Panel(art,false,db.modernActionBar)
     local legacyVisible = _G.MainMenuBar and _G.MainMenuBar:IsShown()
     self:Panel(bar,true,bar and db.modernActionBar and not legacyVisible and not bar.hideBarArt)
-    local showDragons = db.modernActionBar and not db.hideBarEndCaps
-    self:Dragons(art,showDragons)
+    local showDragons = decoration == "dragon" or decoration == "fox"
+    self:Dragons(art,showDragons,nil,decoration)
     if bar and bar.EndCaps then
         -- Native EndCaps owns compact-bar visibility, including combat/layout
         -- transitions. Leave space for Blizzard's page arrows on the right.
         local page = bar.ActionBarPageNumber
-        self:Dragons(bar.EndCaps,showDragons,page and page:IsShown() and page or bar.EndCaps)
+        self:Dragons(bar.EndCaps,showDragons,page and page:IsShown() and page or bar.EndCaps,decoration)
     end
 end
 
