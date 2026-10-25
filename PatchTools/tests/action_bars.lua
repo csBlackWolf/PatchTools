@@ -3,6 +3,19 @@ function InCombatLockdown() return combat end
 local frames = {}
 local function Widget(alpha)
     local w = {alpha=alpha or 1,shown=true,hooks={},textures={}}
+    function w:GetParent() return self.parent end
+    function w:SetParent(parent) assert(not combat); self.parent=parent end
+    function w:SetAllPoints(region) self.allPoints=region end
+    function w:GetFrameLevel() return self.level or 2 end
+    function w:GetFrameStrata() return self.strata or "MEDIUM" end
+    function w:SetFrameLevel(level) assert(not combat); self.level=level end
+    function w:SetFrameStrata(strata) assert(not combat); self.strata=strata end
+    function w:EnableMouse(value) self.mouse=value end
+    function w:GetTexture() return self.texture or "native-art" end
+    function w:GetTexCoord() return 0,1,0,1 end
+    function w:GetVertexColor() return 1,1,1,1 end
+    function w:SetVertexColor(...) end
+    function w:Hide() self:SetShown(false) end
     function w:GetAlpha() return self.alpha end
     function w:SetAlpha(value) assert(not combat); self.alpha=value end
     function w:SetColorTexture(...) self.color={...} end
@@ -15,13 +28,13 @@ local function Widget(alpha)
     function w:ClearAllPoints() end
     function w:SetShown(value) assert(not combat); self.shown=value end
     function w:IsShown() return self.shown end
-    function w:CreateTexture() local t=Widget(); self.textures[#self.textures+1]=t; return t end
+    function w:CreateTexture() local t=Widget(); t.parent=self; self.textures[#self.textures+1]=t; return t end
     function w:HookScript(event,fn) self.hooks[event]=fn end
     function w:RegisterEvent(event) end
     function w:SetScript(event,fn) self[event]=fn end
     return w
 end
-function CreateFrame() local f=Widget(); frames[#frames+1]=f; return f end
+function CreateFrame(kind,name,parent) local f=Widget(); f.parent=parent; frames[#frames+1]=f; return f end
 local pt={db={hideBarEndCaps=false,modernActionBar=false},modules={}}
 function pt:RegisterModule(key,value) self.modules[key]=value end
 assert(loadfile("ActionBars.lua"))("PatchTools",pt)
@@ -30,6 +43,7 @@ local bars=pt.modules.ActionBars
 bars:Initialize(pt)
 MainMenuBar=Widget(); MainMenuBarArtFrame=Widget()
 MainMenuBarLeftEndCap=Widget(.75); MainMenuBarRightEndCap=Widget()
+MainMenuBarLeftEndCap.parent=MainMenuBarArtFrame; MainMenuBarRightEndCap.parent=MainMenuBarArtFrame
 for i=0,3 do _G["MainMenuBarTexture"..i]=Widget(.8) end
 MainMenuBarTextureExtender=Widget()
 MainActionBar=Widget(); MainActionBar.EndCaps=Widget(); MainActionBar.EndCaps.LeftEndCap=Widget(); MainActionBar.EndCaps.RightEndCap=Widget()
@@ -92,3 +106,22 @@ assert(not dragons[1].shown)
 combat=false; frames[1].OnEvent(nil,"PLAYER_REGEN_ENABLED")
 assert(dragons[1].shown and dragons[1].texture:match("SilverFox$"))
 print("PASS: explicit ornament choices, locked fox fallback, texture switching and combat deferral.")
+
+-- Native layers use copies only while overridden; secure parents stay intact.
+pt.db.barDecoration="native"; pt.db.barDecorationLayer="low"; bars:Apply()
+local copy=bars.nativeCopies[MainMenuBarLeftEndCap]
+assert(copy.shown and copy.parent.strata=="LOW" and copy.alpha==.75)
+assert(copy.allPoints==MainMenuBarLeftEndCap and MainMenuBarLeftEndCap.parent==MainMenuBarArtFrame)
+assert(MainMenuBarLeftEndCap.alpha==0 and MainMenuBarArtFrame:GetFrameStrata()=="MEDIUM")
+pt.db.barDecorationLayer="default"; bars:Apply()
+assert(not copy.shown and MainMenuBarLeftEndCap.alpha==.75)
+pt.db.barDecoration="fox"; pt.db.barDecorationLayer="high"; bars:Apply()
+assert(dragons[1].parent.strata=="HIGH" and dragons[1].parent.level==100)
+assert(not dragons[1].parent.mouse)
+combat=true; pt.db.barDecorationLayer="background"; bars:Apply()
+assert(dragons[1].parent.strata=="HIGH")
+combat=false; frames[1].OnEvent(nil,"PLAYER_REGEN_ENABLED")
+assert(dragons[1].parent.strata=="BACKGROUND")
+pt.db.barDecorationLayer="invalid"; bars:Apply()
+assert(dragons[1].parent==MainMenuBarArtFrame)
+print("PASS: native/custom decoration strata, native restoration, mouse passthrough and combat deferral.")

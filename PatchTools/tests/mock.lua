@@ -218,7 +218,7 @@ if era then
     assert(pt.options.TitleText.text:find("Classic Era",1,true))
     pt:SetOption("phaseSoon",true); pt:SetOption("phaseSoon",false)
     assert(pt:SelectOptionsPage("phase") == false)
-    assert(pt.optionNavigation.maps and pt.optionNavigation.about)
+    assert(not pt.optionNavigation.maps and pt.optionNavigation.about)
     print("PASS: Era client identity, hidden phasing page/navigation and no phasing events or alert frame.")
 else
     assert(pt.isForever and pt.hasProfessionBag and pt.supportsPhasing)
@@ -421,3 +421,14 @@ for _,case in ipairs({{hideBarEndCaps=true,modernActionBar=true,expected="none"}
 end
 pt.modules=previousModules
 print("PASS: hidden fox discovery, saved unlock, dropdown selection and legacy decoration migration.")
+
+-- Only a loaded Maps extension can add map controls to the navigation.
+pt:CreateOptions()
+assert(not pt.optionPages.maps and not pt.optionNavigation.maps)
+assert(pt:SelectOptionsPage("maps")==false)
+local layers=OpenDropdown(pt.barDecorationUI.layer)
+assert(#layers==5 and layers[1].checked)
+layers[5].func(); assert(pt.db.barDecorationLayer=="high")
+pt:CreateOptions(); layers=OpenDropdown(pt.barDecorationUI.layer)
+assert(layers[5].checked)
+print("PASS: ornament layer dropdown and hidden Maps page without the module.")

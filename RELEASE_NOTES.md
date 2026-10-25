@@ -1,3 +1,11 @@
+# PatchTools 0.9.0-alpha.11 — 2026-10-25
+
+- Add a display-layer dropdown beside the side-decoration selector: Standard, Background, Low, Normal and High. Apply it to Blizzard figures, dragons and unlocked foxes without moving or re-layering secure action bars or their controls.
+- Use visual copies for native figures when another layer is selected; restore originals on Standard. Cosmetic changes remain deferred during combat.
+- Keep the existing General / Appearance / Quests / Vendor / Tooltips organization. Show the separate Map section only after an enabled PatchToolsMaps module registers it; remove the absent-module placeholder.
+
+Validation: native/custom layering, restoration, combat deferral, saved dropdown selection and absent/late-loaded Maps navigation plus existing Era/Forever regressions. In-game overlap and layout confirmation pending.
+
 # PatchTools 0.9.0-alpha.10 — 2026-10-25
 
 - Replace the side-decoration checkbox with a dropdown: None, Blizzard figures and Silver dragons, independent of the main bar background style. Preserve earlier checkbox/style combinations on upgrade.

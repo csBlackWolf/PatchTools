@@ -1,5 +1,5 @@
 local _, PT = ...
-local Bars = {hidden = {}, panels = {}, hooked = {}, dragons = {}}
+local Bars = {hidden = {}, panels = {}, hooked = {}, dragons = {}, layerFrames = {}, nativeCopies = {}}
 PT:RegisterModule("ActionBars", Bars)
 
 function Bars:GetDecoration(db)
@@ -11,6 +11,47 @@ function Bars:GetDecoration(db)
     if choice == "none" or choice == "dragon" or choice == "native" then return choice end
     if choice == "fox" and db.silverFoxUnlocked == true then return choice end
     return "native"
+end
+
+local strata = {background="BACKGROUND",low="LOW",medium="MEDIUM",high="HIGH"}
+function Bars:GetDecorationLayer(db)
+    local value = (db or self.pt.db).barDecorationLayer
+    return strata[value] and value or "default"
+end
+
+function Bars:LayerParent(parent)
+    local layer = self:GetDecorationLayer()
+    if layer == "default" then return parent end
+    local frame = self.layerFrames[parent]
+    if not frame then
+        frame = CreateFrame("Frame",nil,parent)
+        frame:SetAllPoints(parent); frame:EnableMouse(false)
+        self.layerFrames[parent] = frame
+    end
+    frame:SetFrameStrata(strata[layer])
+    frame:SetFrameLevel(layer == "high" and 100 or layer == "medium" and parent:GetFrameLevel() or 0)
+    return frame
+end
+
+-- A visual copy lets native figures use another strata without moving secure
+-- Blizzard frames or changing their anchors. Default restores the original.
+function Bars:NativeCap(source, shown)
+    if not source then return end
+    local copy = self.nativeCopies[source]
+    if shown then
+        local parent = self:LayerParent(source:GetParent())
+        if not copy then
+            copy = parent:CreateTexture(nil,"OVERLAY",nil,6)
+            copy:SetAllPoints(source)
+            self.nativeCopies[source] = copy
+        end
+        copy:SetParent(parent)
+        copy:SetTexture(source:GetTexture())
+        copy:SetTexCoord(source:GetTexCoord())
+        if source.GetVertexColor then copy:SetVertexColor(source:GetVertexColor()) end
+        copy:SetAlpha(self.hidden[source] or 1)
+        copy:SetShown(source:IsShown())
+    elseif copy then copy:Hide() end
 end
 
 -- Only decoration textures are touched. Secure buttons, bar containers, page
@@ -61,10 +102,11 @@ end
 function Bars:Dragons(parent, shown, rightAnchor, decoration)
     if not parent then return end
     local pair = self.dragons[parent]
+    local layerParent = (shown or pair) and self:LayerParent(parent)
     if not pair and shown then
         pair = {}
         for i=1,2 do
-            local dragon = parent:CreateTexture(nil,"OVERLAY",nil,6)
+            local dragon = layerParent:CreateTexture(nil,"OVERLAY",nil,6)
             dragon:SetSize(76,76)
             if i==2 then dragon:SetTexCoord(1,0,0,1) end
             pair[i] = dragon
@@ -74,6 +116,7 @@ function Bars:Dragons(parent, shown, rightAnchor, decoration)
     if pair then
         local asset = decoration == "fox" and "SilverFox" or "SilverDragonSeated"
         for _,texture in ipairs(pair) do
+            texture:SetParent(layerParent)
             texture:SetTexture("Interface\\AddOns\\PatchTools\\Media\\"..asset)
         end
         pair[1]:ClearAllPoints()
@@ -99,12 +142,17 @@ function Bars:Apply()
     end
     -- Era uses both legacy end caps and compact end caps after editing the bar.
     local decoration = self:GetDecoration(db)
-    local maskCaps = decoration ~= "native"
-    self:Mask(_G.MainMenuBarLeftEndCap,maskCaps)
-    self:Mask(_G.MainMenuBarRightEndCap,maskCaps)
+    local nativeOverride = decoration == "native" and self:GetDecorationLayer(db) ~= "default"
+    local maskCaps = decoration ~= "native" or nativeOverride
+    local function Cap(texture)
+        self:Mask(texture,maskCaps)
+        self:NativeCap(texture,nativeOverride)
+    end
+    Cap(_G.MainMenuBarLeftEndCap)
+    Cap(_G.MainMenuBarRightEndCap)
     if bar and bar.EndCaps then
-        self:Mask(bar.EndCaps.LeftEndCap,maskCaps)
-        self:Mask(bar.EndCaps.RightEndCap,maskCaps)
+        Cap(bar.EndCaps.LeftEndCap)
+        Cap(bar.EndCaps.RightEndCap)
     end
     for _,name in ipairs({"MainMenuBarTexture0","MainMenuBarTexture1","MainMenuBarTexture2",
         "MainMenuBarTexture3","MainMenuBarTextureExtender"}) do

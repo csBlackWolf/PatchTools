@@ -25,15 +25,15 @@ Avoid being surprised by an announced world refresh. PatchTools can warn you whe
 - **Auto-loot on login:** keep automatic looting enabled for your characters.
 - **Simpler item deletion:** optionally replace typing DELETE with a Yes/No confirmation outside combat. The item name and quest warning remain visible. Disabled by default.
 - **Optional quest automation (alpha):** accept and turn in quests, with Shift for manual dialogue. Multiple rewards remain manual unless Pawn finds exactly one upgrade for your selected active class scale. All quest options start disabled.
-- **Main bar appearance (alpha):** choose no side figures, Blizzard figures or compact seated silver dragons independently of the dark bronze PatchTools background. Earlier settings migrate to the new dropdown. Cosmetic changes defer during combat. Action buttons and page controls stay native.
+- **Main bar appearance (alpha):** choose no side figures, Blizzard figures or compact seated silver dragons independently of the dark bronze PatchTools background. Earlier settings migrate to the new dropdown. Cosmetic changes defer during combat. Action buttons and page controls stay native. Choose the side figures' display layer next to the decoration selector: Standard, Background, Low, Normal or High.
 - **Faster looting:** collect available loot sooner when auto-loot is active.
 - **World refresh warnings:** get a warning when a phase change is announced, and another before it may happen. Choose the warning time, sound, message duration and chat output.
-- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing and reveal options. Map zoom, movement and resizing are available outside combat.
+- **Optional map tools:** install [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) separately for moving, resizing, zoom and reveal options. Its Map section appears only while the companion is enabled and loaded. Map zoom, movement and resizing are available outside combat.
 - **Minimap button:** open your settings with a click, move the button or hide it.
 
 Drag the bottom-right corner to scale the settings window and its contents. The size is saved. Use `/patchtools reset` to restore the default size and center the window.
 
-Settings are grouped into General, Appearance, Quests, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. Without PatchToolsMaps, the Map section explains its features and links to the separate download.
+Settings are grouped into General, Appearance, Quests, Vendor, Tooltips, Map and About PatchTools, with World Refresh on Forever. The Map section appears only when PatchToolsMaps is installed, enabled and loaded.
 
 Choose the features you want in the settings. Junk selling, whitelist selling, automatic repairs and extended camera zoom start turned on for new settings. The whitelist starts empty. Tooltip additions and world refresh warnings start turned off. Your settings are kept when you update.
 
@@ -62,7 +62,7 @@ If you are unsure which folder to use, open the game's options in Battle.net and
 
 ## Controls and languages
 
-- **Optional map tools:** find [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) in the Map section. Install it separately for moving, resizing and reveal options. Normal map zoom remains available; the additional zoom step is temporarily disabled.
+- **Optional map tools:** install and enable [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) to show its Map section. Enhanced zoom, window movement and resizing are available outside combat.
 - **Minimap button:** click to open settings; drag to move it.
 - **`/patchtools`** or **`/ptools`:** open settings.
 - **`/patchtools status`:** show information that can help with a bug report.

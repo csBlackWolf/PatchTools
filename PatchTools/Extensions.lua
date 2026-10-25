@@ -11,7 +11,7 @@ function PT:RegisterOptionsPage(id, title, build)
     for _, entry in ipairs(self.extraOptionsPages) do
         if entry.id == id then return false end
     end
-    -- Eight standard entries include the Maps placeholder; two other pages fit.
+    -- Up to eight built-in entries include the optional Maps page; two others fit.
     local additional=0
     for _,entry in ipairs(self.extraOptionsPages) do if entry.id~="maps" then additional=additional+1 end end
     if id~="maps" and additional>=2 then return false end

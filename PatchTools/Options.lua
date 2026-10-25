@@ -191,7 +191,7 @@ function PT:CreateOptions()
     if self.modules.ActionBars then
         local bars = appearance
         Label(bars,self:T("NAV_ACTIONBARS"),0,-208,580,"GameFontNormal")
-        Label(bars,self:T("BARS_DECORATION"),0,-246,580,"GameFontNormal")
+        Label(bars,self:T("BARS_DECORATION"),0,-246,270,"GameFontNormal")
         local decoration
         local function Entries()
             local list={{value="none",label=self:T("BARS_NONE")},
@@ -206,12 +206,33 @@ function PT:CreateOptions()
                 if entry.value==selected then UIDropDownMenu_SetText(decoration,entry.label); break end
             end
         end
-        decoration=Dropdown(bars,"PatchToolsBarDecorationDropdown",0,-271,430,Entries,
+        decoration=Dropdown(bars,"PatchToolsBarDecorationDropdown",0,-271,260,Entries,
             function() return self.modules.ActionBars:GetDecoration(self.db) end,function(value)
                 self:SetOption("barDecoration",value); RefreshDecoration()
             end)
         refresh[#refresh+1]=RefreshDecoration
-        self.barDecorationUI={dropdown=decoration,refresh=RefreshDecoration}
+        Label(bars,self:T("BARS_LAYER"),302,-246,260,"GameFontNormal")
+        local layer
+        local layers={{value="default",key="BARS_LAYER_DEFAULT"},{value="background",key="BARS_LAYER_BACKGROUND"},
+            {value="low",key="BARS_LAYER_LOW"},{value="medium",key="BARS_LAYER_MEDIUM"},{value="high",key="BARS_LAYER_HIGH"}}
+        local function LayerEntries()
+            local entries={}
+            for _,entry in ipairs(layers) do entries[#entries+1]={value=entry.value,label=self:T(entry.key)} end
+            return entries
+        end
+        local function RefreshLayer()
+            local selected=self.modules.ActionBars:GetDecorationLayer(self.db)
+            for _,entry in ipairs(layers) do
+                if entry.value==selected then UIDropDownMenu_SetText(layer,self:T(entry.key)); break end
+            end
+        end
+        layer=Dropdown(bars,"PatchToolsBarLayerDropdown",302,-271,245,LayerEntries,
+            function() return self.modules.ActionBars:GetDecorationLayer(self.db) end,function(value)
+                self:SetOption("barDecorationLayer",value); RefreshLayer()
+            end)
+        refresh[#refresh+1]=RefreshLayer
+        Label(bars,self:T("BARS_LAYER_HINT"),0,-312,580)
+        self.barDecorationUI={dropdown=decoration,refresh=RefreshDecoration,layer=layer}
         Check(bars,"modernActionBar","BARS_STYLE","BARS_STYLE_DESC",-343)
         Label(bars,self:T("BARS_NOTE"),0,-465,580)
     end
@@ -329,19 +350,6 @@ function PT:CreateOptions()
         end)
         Label(phase,self:T("PHASE_READY"),0,-472,580)
     end
-    local maps = Page("maps")
-    self.mapsPlaceholder=maps
-    Label(maps,"PatchToolsMaps",0,-8,560,"GameFontNormalHuge")
-    Label(maps,self:T("MAPS_INSTALL"),0,-66,560)
-    Label(maps,self:T("MAPS_FEATURES"),0,-150,560)
-    Label(maps,self:T("MAPS_VISUAL"),0,-302,560)
-    local mapsLink=CreateFrame("EditBox",nil,maps,"InputBoxTemplate")
-    mapsLink:SetPoint("TOPLEFT",8,-372); mapsLink:SetSize(540,28); mapsLink:SetAutoFocus(false)
-    local mapsURL="https://www.curseforge.com/wow/addons/patchtoolsmaps"
-    mapsLink:SetText(mapsURL)
-    mapsLink:SetScript("OnEditFocusGained",function(b) b:HighlightText() end)
-    mapsLink:SetScript("OnTextChanged",function(b) if b:GetText()~=mapsURL then b:SetText(mapsURL) end end)
-    mapsLink:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local about = Page("about")
     Label(about,"PatchTools",0,-8,560,"GameFontNormalHuge")
     Label(about,self:T("ABOUT_TEXT"),0,-62,560)
@@ -416,7 +424,9 @@ function PT:CreateOptions()
         else
             navigation[entry.id] = Button(frame,entry.title,20,0,150,
                 function() self:SelectOptionsPage(entry.id) end)
-            table.insert(navigationOrder,#navigationOrder,entry.id)
+            local known=false
+            for _,key in ipairs(navigationOrder) do if key==entry.id then known=true; break end end
+            if not known then table.insert(navigationOrder,#navigationOrder,entry.id) end
         end
         ArrangeNavigation()
         if selected then self:SelectOptionsPage(entry.id) end
