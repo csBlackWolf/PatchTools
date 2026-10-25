@@ -1,5 +1,7 @@
 # PatchTools 0.9.0-alpha.13 — 2026-10-25
 
+**Public alpha test: this version is likely to contain bugs. Please report problems and feedback on GitHub. Use the stable releases if you prefer the established feature set.**
+
 Alpha preview for Classic Era and Forever. **Use together with PatchToolsMaps 0.3.0-alpha.13 for all new map controls.** Stable PatchTools 0.8.0 and PatchToolsMaps 0.2.1 remain available and unchanged.
 
 - Optional quest acceptance and turn-in, with Shift for manual dialogue and optional Pawn reward selection for one chosen scale. Quest automation starts disabled.
