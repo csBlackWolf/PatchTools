@@ -214,7 +214,7 @@ function PT:CreateOptions()
         Label(bars,self:T("BARS_LAYER"),302,-246,260,"GameFontNormal")
         local layer
         local layers={{value="default",key="BARS_LAYER_DEFAULT"},{value="background",key="BARS_LAYER_BACKGROUND"},
-            {value="low",key="BARS_LAYER_LOW"},{value="medium",key="BARS_LAYER_MEDIUM"},{value="high",key="BARS_LAYER_HIGH"}}
+            {value="low",key="BARS_LAYER_LOW"},{value="medium",key="BARS_LAYER_MEDIUM"},{value="high",key="BARS_LAYER_HIGH"},{value="dialog",key="BARS_LAYER_DIALOG"}}
         local function LayerEntries()
             local entries={}
             for _,entry in ipairs(layers) do entries[#entries+1]={value=entry.value,label=self:T(entry.key)} end

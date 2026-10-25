@@ -1,3 +1,10 @@
+# PatchTools 0.9.0-alpha.12 — 2026-10-25
+
+- Add the missing Dialog display layer for side figures. Keep all five explicit strata plus the independent Default (unchanged) option, which retains the original parent layer.
+- Preserve saved layer choices and native restoration.
+
+Validation: Dialog rendering for custom/native figures, dropdown persistence and existing Era/Forever regressions. In-game overlap confirmation pending.
+
 # PatchTools 0.9.0-alpha.11 — 2026-10-25
 
 - Add a display-layer dropdown beside the side-decoration selector: Standard, Background, Low, Normal and High. Apply it to Blizzard figures, dragons and unlocked foxes without moving or re-layering secure action bars or their controls.

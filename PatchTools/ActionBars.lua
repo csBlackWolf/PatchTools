@@ -13,7 +13,7 @@ function Bars:GetDecoration(db)
     return "native"
 end
 
-local strata = {background="BACKGROUND",low="LOW",medium="MEDIUM",high="HIGH"}
+local strata = {background="BACKGROUND",low="LOW",medium="MEDIUM",high="HIGH",dialog="DIALOG"}
 function Bars:GetDecorationLayer(db)
     local value = (db or self.pt.db).barDecorationLayer
     return strata[value] and value or "default"
@@ -29,7 +29,7 @@ function Bars:LayerParent(parent)
         self.layerFrames[parent] = frame
     end
     frame:SetFrameStrata(strata[layer])
-    frame:SetFrameLevel(layer == "high" and 100 or layer == "medium" and parent:GetFrameLevel() or 0)
+    frame:SetFrameLevel((layer == "high" or layer == "dialog") and 100 or layer == "medium" and parent:GetFrameLevel() or 0)
     return frame
 end
 
