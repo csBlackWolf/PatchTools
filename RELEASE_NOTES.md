@@ -1,3 +1,11 @@
+# PatchTools 0.9.0-alpha.7 — 2026-10-25
+
+- Add separate opt-in controls under Action bars for hiding the gryphon / Horde figures and using the dark bronze PatchTools background.
+- Cover the legacy main bar and Era's compact figures after editing its layout. Keep buttons, page controls, experience bars and visibility under Blizzard's control.
+- Restore original texture opacity when disabled; defer cosmetic changes during combat.
+
+Validation: automated decoration restoration, layout variants and combat deferral plus existing regression checks. In-game appearance and combat confirmation pending; Forever gameplay unavailable while Beta is closed.
+
 # PatchTools 0.9.0-alpha.6 — 2026-10-25
 
 - Move the settings-background transparency slider into General, removing the otherwise sparse Appearance category. Keep its explanation in the slider tooltip.

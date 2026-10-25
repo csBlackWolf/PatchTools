@@ -160,6 +160,13 @@ function PT:CreateOptions()
         refresh[#refresh+1] = RefreshScale
         self.questOptionsUI={checks=checks,refresh=RefreshScale,scale=selection}
     end
+    if self.modules.ActionBars then
+        local bars = Page("actionbars")
+        Label(bars,self:T("BARS_INTRO"),0,0,580)
+        Check(bars,"hideBarEndCaps","BARS_ENDCAPS","BARS_ENDCAPS_DESC",-70)
+        Check(bars,"modernActionBar","BARS_STYLE","BARS_STYLE_DESC",-175)
+        Label(bars,self:T("BARS_NOTE"),0,-290,580)
+    end
     local vendor = Page("vendor")
     Label(vendor, self:T("VENDOR_INTRO"), 0, 0, 580)
     Check(vendor, "autoSell", "SELL", nil, -28)
@@ -316,7 +323,7 @@ function PT:CreateOptions()
     twitch:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local navigation={}
     self.optionNavigation=navigation
-    local navigationOrder={"general","quests","vendor","tooltips","phase","maps","about"}
+    local navigationOrder={"general","quests","vendor","tooltips","actionbars","phase","maps","about"}
     local function ArrangeNavigation()
         local index = 0
         for _,key in ipairs(navigationOrder) do
@@ -337,7 +344,7 @@ function PT:CreateOptions()
         for name,box in pairs(checks) do box:SetChecked(self.db[name]) end
     end
     for i,entry in ipairs({{"general","NAV_GENERAL"},{"quests","NAV_QUESTS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
-        {"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
+        {"actionbars","NAV_ACTIONBARS"},{"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
         local key=entry[1]
         if pages[key] then
             navigation[key]=Button(frame,self:T(entry[2]),20,-135-(i-1)*45,150,function() self:SelectOptionsPage(key) end)
