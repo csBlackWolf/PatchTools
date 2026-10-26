@@ -70,6 +70,12 @@ synchronization; they are never recreated.
 
 ## Central issue intake
 
+Issue titles receive `[PT]`, `[PTM]` or `[PTB]` from the **Addon / Modul** selection.
+The prefix workflow runs after creation, editing and reopening. Changing the form
+answer replaces the existing addon prefix while keeping the rest of the title.
+Missing or ambiguous selections leave the title unchanged. Existing tickets from
+before the shared forms retain their original body and were marked `[PT]` during setup.
+
 PatchTools, PatchToolsMaps and PatchToolsBags share the issue tracker in
 `csBlackWolf/PatchTools`. Bug, idea and translation forms require an **Addon / Modul**
 selection. The selection is included in the issue body; type/status labels keep

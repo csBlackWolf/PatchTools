@@ -1,0 +1,24 @@
+name: Issue addon prefix
+on:
+  issues:
+    types: [opened, edited, reopened]
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: issue-addon-prefix-${{ github.event.issue.number }}
+  cancel-in-progress: false
+jobs:
+  prefix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Check addon prefix handling
+        run: python -m unittest discover -s .github/scripts -p 'test_issue_addon_prefix.py'
+      - name: Match title prefix to addon selection
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python .github/scripts/issue_addon_prefix.py
