@@ -18,7 +18,7 @@ Extended camera distance, normal colors as a ghost, cooldown numbers and auto-lo
 
 ### Alpha options
 
-The quest alpha adds optional quest acceptance/turn-in. Hold Shift for manual dialogue. With Pawn enabled, choose the active class scale to use for rewards; other scales can stay visible in Pawn. Automatic reward choice requires exactly one upgrade for that scale. Missing or ambiguous data leaves the choice to you. Quest automation starts off.
+The quest alpha adds optional quest acceptance/turn-in. Hold Shift for manual dialogue. With Pawn enabled, choose the active class scale to use for rewards; other scales can stay visible in Pawn. Automatic reward choice uses the largest percentage improvement for that scale; equal improvements remain manual. Missing or ambiguous data leaves the choice to you. Quest automation starts off.
 
 Appearance options include settings-window scaling and background transparency, a dark main-bar style, side-decoration choices and display-layer selection. Changes involving protected layout wait until combat ends. `/patchtools reset` restores the settings window. The fox in the settings is an optional little discovery.
 
@@ -46,7 +46,7 @@ Erweiterte Kameradistanz, Farben als Geist, Abklingzeiten und automatisches Plü
 
 ### Alpha-Optionen
 
-Die Quest-Alpha bietet optionale automatische Annahme und Abgabe. Mit Shift bedienst du den Dialog selbst. Für Pawn wählst du eine aktive Wertung deiner Klasse; weitere Wertungen dürfen in Pawn sichtbar bleiben. Nur bei genau einer Verbesserung für die gewählte Wertung wird eine Belohnung automatisch gewählt. Fehlende oder mehrdeutige Daten lassen die Auswahl bei dir. Die Questautomatik beginnt ausgeschaltet.
+Die Quest-Alpha bietet optionale automatische Annahme und Abgabe. Mit Shift bedienst du den Dialog selbst. Für Pawn wählst du eine aktive Wertung deiner Klasse; weitere Wertungen dürfen in Pawn sichtbar bleiben. Automatisch gewählt wird die größte prozentuale Verbesserung für die gewählte Wertung; bei Gleichstand wählst du selbst. Fehlende oder mehrdeutige Daten lassen die Auswahl bei dir. Die Questautomatik beginnt ausgeschaltet.
 
 Unter Darstellung findest du Skalierung und Hintergrundtransparenz des Menüs, den dunklen Hauptleistenstil sowie Seitenverzierungen und ihre Anzeigeebene. Geschützte Änderungen warten bis nach dem Kampf. `/patchtools reset` setzt das Einstellungsfenster zurück. Der kleine Fuchs im Menü ist eine optionale Entdeckung.
 

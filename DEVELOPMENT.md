@@ -28,7 +28,7 @@ Warning lead is 1–600 seconds (default 60); display duration is 1–60 seconds
 
 `alpha/quest-automation` now combines the quest/appearance alpha with the confirmation work from `alpha/loot-confirmations`. The combined alpha.14 build is awaiting an in-game check before publication. Stable `main` remains separate. Keep alpha controls opt-in where they automate dialogue or accept warnings.
 
-Quest reward selection must use the selected active class scale and require exactly one Pawn upgrade. Keep missing data, ambiguous rewards and Shift bypass manual. Cosmetic main-bar changes must respect combat restrictions and preserve native action buttons/page controls.
+Quest reward selection must use the selected active class scale and require a unique largest percentage improvement reported by Pawn. Keep missing data, ambiguous rewards and Shift bypass manual. Cosmetic main-bar changes must respect combat restrictions and preserve native action buttons/page controls.
 
 In the loot-confirmations branch, `LootConfirmations.lua` treats `CONFIRM_LOOT_ROLL`, `LOOT_BIND_CONFIRM` and `EQUIP_BIND_CONFIRM` independently. Defaults are `boeRollConfirm="off"`, `confirmLootBind=false` and `confirmEquipBind=false`. For rolls, require a previously selected roll and cached OnEquip bind type (2), with no BoP flag. Unknown items and unsupported roll types stay manual.
 

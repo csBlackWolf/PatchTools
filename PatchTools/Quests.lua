@@ -49,7 +49,7 @@ function Quests:ChooseReward(count)
         or not PawnCanItemHaveStats or not GetQuestItemLink then return end
     local scale = self:ResolveScale()
     if not scale then return end
-    local candidate
+    local candidate, best, tied = nil, 0, false
     for index = 1, count do
         local link = GetQuestItemLink("choice", index)
         if not link then return end -- Wait for all rewards, including competing choices.
@@ -60,18 +60,25 @@ function Quests:ChooseReward(count)
         if PawnCanItemHaveStats(link) then
             local ok, item = pcall(PawnGetItemData, link)
             if not ok or not item or not item.Link or not item.Stats then return end
-            local success, upgrades, _, _, _, needsEnhancements = pcall(PawnIsItemAnUpgrade, item, true)
+            local success, upgrades, _, _, _, needsEnhancements = pcall(PawnIsItemAnUpgrade, item)
             if not success or needsEnhancements then return end
             for _, upgrade in ipairs(upgrades or {}) do
-                if upgrade[1] == scale and type(upgrade[3]) == "number"
-                    and upgrade[3] > 0 and upgrade[3] < math.huge then
-                    if candidate and candidate ~= index then return end
-                    candidate = index
+                local name = upgrade.ScaleName or upgrade[1]
+                local gain = upgrade.PercentUpgrade or upgrade[3]
+                if name == scale then
+                    if type(gain) ~= "number" or gain ~= gain or math.abs(gain) == math.huge then return end
+                    if gain > 0 then
+                        if gain > best + 0.00000001 then
+                            candidate, best, tied = index, gain, false
+                        elseif math.abs(gain - best) <= 0.00000001 and candidate ~= index then
+                            tied = true
+                        end
+                    end
                 end
             end
         end
     end
-    return candidate
+    if not tied then return candidate end
 end
 
 function Quests:RunOnce(stage, id, fn, ...)

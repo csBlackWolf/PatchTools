@@ -1,3 +1,9 @@
+# PatchTools 0.9.0-alpha.14-local.1 — local test — 2026-10-26
+
+- Read Pawn's named upgrade fields and select the largest percentage improvement for the chosen scale when several rewards are upgrades.
+- Keep equal improvements, incomplete item data and unavailable Pawn results manual.
+- Update the quest option explanation. This test build is not a public release.
+
 # PatchTools 0.9.0-alpha.14 — combined test build — 2026-10-26
 
 Quest automation, appearance options and the new confirmation shortcuts are now

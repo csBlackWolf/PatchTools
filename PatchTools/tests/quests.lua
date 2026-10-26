@@ -59,16 +59,25 @@ local pending,tooHigh,fail,missingStats,enhancements
 C_Item={GetItemInfo=function(link) if link==pending then return end; return link,nil,nil,nil,link==tooHigh and 61 or 1 end}
 function PawnCanItemHaveStats(link) return link~="three" end
 function PawnGetItemData(link) return {Link=link,Stats=not missingStats and {} or nil} end
-local upgrades={one={{"BM","Beast Mastery",.2}},two={{"MM","Marksmanship",.4}}}
+local upgrades={one={{ScaleName="BM",PercentUpgrade=.2}},two={{ScaleName="MM",PercentUpgrade=.4}}}
 function PawnIsItemAnUpgrade(item,noRescan)
-    assert(noRescan==true)
+    assert(noRescan==nil,"allow Pawn to populate missing best-item data")
     if fail then error("Pawn unavailable") end
     return upgrades[item.Link],nil,nil,nil,enhancements
 end
 Reset(); Q:Handle("QUEST_COMPLETE"); assert(actions[1]=="reward1")
 Q:Handle("QUEST_ITEM_UPDATE"); assert(#actions==1,"reward only once")
-upgrades.two={{"BM","Beast Mastery",.1}}
-Reset(); Q:Handle("QUEST_COMPLETE"); assert(#actions==0,"two upgrades require manual selection even if one scores higher")
+upgrades.two={{ScaleName="BM",PercentUpgrade=.1}}
+Reset(); Q:Handle("QUEST_COMPLETE"); assert(actions[1]=="reward1","choose the largest improvement among upgrades")
+upgrades.one={{ScaleName="BM",PercentUpgrade=.4}}; upgrades.two={{ScaleName="BM",PercentUpgrade=.25}}
+Reset(); Q:Handle("QUEST_COMPLETE"); assert(actions[1]=="reward1","starter boots 40% beat bracers 25%")
+upgrades.two={{ScaleName="BM",PercentUpgrade=.4}}
+Reset(); Q:Handle("QUEST_COMPLETE"); assert(#actions==0,"equal upgrades remain manual")
+upgrades.two={{ScaleName="BM",PercentUpgrade=.6}}
+Reset(); Q:Handle("QUEST_COMPLETE"); assert(actions[1]=="reward2","higher later choice wins")
+upgrades.one={{ScaleName="BM",PercentUpgrade=0/0}}
+Reset(); Q:Handle("QUEST_COMPLETE"); assert(#actions==0,"invalid selected-scale result must not choose")
+upgrades.one={{ScaleName="BM",PercentUpgrade=.2}}
 upgrades.two=nil; links[2]=nil
 Reset(); Q:Handle("QUEST_COMPLETE"); assert(#actions==0,"missing reward link must not guess")
 links[2]="two"; pending="two"; Q:Handle("QUEST_ITEM_UPDATE"); assert(#actions==0)
@@ -81,4 +90,4 @@ for _,case in ipairs({"level","stats","enhancements","pawn-error","not-ready"}) 
     PawnPlayerFullName=case~="not-ready" and "Hunter-Test" or nil
     Q:Handle("QUEST_COMPLETE"); assert(#actions==0,case.." must remain manual")
 end
-print("PASS: per-character Pawn scale, unique upgrade only, complete item data, API failure and pending-item recovery.")
+print("PASS: Pawn named result fields, largest percentage upgrade, ties, invalid data, per-character scale and pending recovery.")
