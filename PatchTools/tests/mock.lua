@@ -446,4 +446,27 @@ pt:CreateOptions(); rollChoices=OpenDropdown(pt.boeRollDropdown)
 assert(rollChoices[2].checked)
 rollChoices[3].func(); assert(pt.db.boeRollConfirm=="all")
 print("PASS: confirmations category, defaults off and saved BoE roll dropdown selection.")
+-- Simulate separate character SavedVariables files against one account table.
+local account=PatchToolsDB
+local modules=pt.modules; pt.modules={}
+local width,height=UIParent.GetWidth,UIParent.GetHeight
+UIParent.GetWidth=function() return 1200 end
+UIParent.GetHeight=function() return 900 end
+account.optionsScale=.85; account.optionsTransparency=.37
+PatchToolsCharacterDB=nil; Event("ADDON_LOADED","PatchTools")
+local first=pt.windowDB
+assert(first.optionsScale==.85 and first~=account,'import legacy scale into the first character')
+first.optionsScale=.7; first.x=.2; first.y=.8
+PatchToolsCharacterDB=nil; Event("ADDON_LOADED","PatchTools")
+assert(pt.windowDB~=first and pt.windowDB.optionsScale==.85 and pt.windowDB.x==nil)
+pt.windowDB.optionsScale=1.1
+PatchToolsCharacterDB=first; Event("ADDON_LOADED","PatchTools")
+assert(pt.windowDB.optionsScale==.7 and pt.windowDB.x==.2 and pt.db==account)
+pt:ResetOptionsWindow(); Event("ADDON_LOADED","PatchTools")
+assert(pt.windowDB.optionsScale==1 and pt.windowDB.x==nil,'reset does not reimport old geometry')
+assert(account.optionsScale==.85 and account.optionsTransparency==.37)
+print('PASS: settings character migration, isolation, restored selection, reset and shared transparency.')
+pt.modules=modules
+UIParent.GetWidth,UIParent.GetHeight=width,height
+
 dofile("tests/loot_confirmations.lua")

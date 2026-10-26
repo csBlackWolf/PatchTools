@@ -1,6 +1,15 @@
 local _, PT = ...
 local WIDTH, HEIGHT = 820, 650
 
+function PT:SaveOptionsPosition()
+    local frame = self.options
+    local left, top = frame:GetLeft(), frame:GetTop()
+    if not left or not top then return end
+    local ratio = frame:GetEffectiveScale() / UIParent:GetEffectiveScale()
+    self.windowDB.x = left * ratio / UIParent:GetWidth()
+    self.windowDB.y = top * ratio / UIParent:GetHeight()
+end
+
 function PT:ApplyOptionsAppearance()
     local value=tonumber(self.db.optionsTransparency) or 0
     if value~=value or math.abs(value)==math.huge then value=0 end
@@ -21,12 +30,13 @@ function PT:SetOptionsWindowScale(value, left, top)
         (UIParent:GetWidth() - 24) / WIDTH, (UIParent:GetHeight() - 24) / HEIGHT))
     value = math.max(.6, math.min(maximum, value))
     frame:SetScale(value)
-    self.db.optionsScale = value
+    self.windowDB.optionsScale = value
     if left and top then
         -- Keep the top-left corner fixed in UIParent coordinates while scaling.
         local ratio = frame:GetEffectiveScale() / UIParent:GetEffectiveScale()
         frame:ClearAllPoints()
         frame:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", left / ratio, top / ratio)
+        self:SaveOptionsPosition()
     end
 end
 
@@ -37,10 +47,20 @@ function PT:ResetOptionsWindow()
     self:SetOptionsWindowScale(1)
     self.options:ClearAllPoints()
     self.options:SetPoint("CENTER")
+    self.windowDB.x, self.windowDB.y = nil, nil
 end
 
 function PT:InstallOptionsScaling(frame)
-    self:SetOptionsWindowScale(self.db.optionsScale)
+    self:SetOptionsWindowScale(self.windowDB.optionsScale)
+    local x, y = self.windowDB.x, self.windowDB.y
+    if type(x) == "number" and type(y) == "number"
+        and x == x and y == y and math.abs(x) < math.huge and math.abs(y) < math.huge then
+        local ratio = frame:GetEffectiveScale() / UIParent:GetEffectiveScale()
+        frame:ClearAllPoints()
+        frame:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT",
+            x * UIParent:GetWidth() / ratio, y * UIParent:GetHeight() / ratio)
+    end
+    frame:HookScript("OnDragStop", function() self:SaveOptionsPosition() end)
     local grip = CreateFrame("Button", nil, frame)
     self.optionsScaleGrip = grip
     grip:SetPoint("BOTTOMRIGHT", -3, 3)
@@ -60,7 +80,7 @@ function PT:InstallOptionsScaling(frame)
         local ratio = frame:GetEffectiveScale() / parentScale
         local left, top = frame:GetLeft() * ratio, frame:GetTop() * ratio
         local x, y = GetCursorPosition()
-        local startScale = self.db.optionsScale
+        local startScale = self.windowDB.optionsScale
         grip:SetScript("OnUpdate", function()
             if IsMouseButtonDown and not IsMouseButtonDown("LeftButton") then Stop(); return end
             local cx, cy = GetCursorPosition()

@@ -2,7 +2,6 @@ local addon, PT = ...
 _G.PatchTools = PT
 PT.version = "@project-version@"
 PT.defaults = {
-    optionsScale = 1,
     optionsTransparency = 0,
     barDecoration = "native", barDecorationLayer = "default", silverFoxUnlocked = false, modernActionBar = false,
     autoQuestAccept = false, autoQuestTurnIn = false, pawnQuestRewards = false,
@@ -125,6 +124,10 @@ events:SetScript("OnEvent", function(_, event, name)
         if name ~= addon then return end
         if type(PatchToolsDB) ~= "table" then PatchToolsDB = {} end
         PT.db = PatchToolsDB
+        if type(PatchToolsCharacterDB) ~= "table" then
+            PatchToolsCharacterDB = {optionsScale = PT.db.optionsScale}
+        end
+        PT.windowDB = PatchToolsCharacterDB
         -- Preserve the previous checkbox/style combination when moving to a
         -- separate decoration selector. Never overwrite an existing choice.
         if type(PT.db.barDecoration) ~= "string" then

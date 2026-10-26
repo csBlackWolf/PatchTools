@@ -45,3 +45,5 @@ Run `python PatchTools/tests/run_tests.py` from the repository root. The runner 
 [RELEASING.md](RELEASING.md) covers branches, packaging and CurseForge publication. Keep the README as the short player presentation, [GUIDE.md](GUIDE.md) for practical detail and this file for implementation. Use direct descriptions of changes and decisions in guides, notes and commit messages.
 
 [MIT license](LICENSE). This is a community project, not affiliated with Blizzard Entertainment.
+
+Settings-window scale and position use `PatchToolsCharacterDB` (`SavedVariablesPerCharacter`). Transparency stays in the account-wide `PatchToolsDB`. On first load for a character, import the old account scale once; later loads and resets use only that character’s window settings. Position uses normalized UIParent coordinates.

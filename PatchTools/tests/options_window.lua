@@ -29,7 +29,7 @@ function CreateFrame() return Frame() end
 GameTooltip=Frame()
 local closed=0
 function CloseDropDownMenus() closed=closed+1 end
-local PT={options=Frame(),db={optionsScale=.75}}
+local PT={options=Frame(),db={optionsTransparency=.4},windowDB={optionsScale=.75}}
 function PT:T(key) return key end
 assert(loadfile("OptionsWindow.lua"))("PatchTools",PT)
 local saved=0
@@ -44,18 +44,28 @@ grip.scripts.OnUpdate()
 assert(math.abs(PT.options.scale-.95)<.000001)
 assert(math.abs(PT.options.left-200)<.000001 and math.abs(PT.options.top-850)<.000001,
     'top-left position must stay fixed at non-default UI scale')
-assert(PT.db.optionsScale==PT.options.scale)
+assert(PT.windowDB.optionsScale==PT.options.scale)
 grip.scripts.OnMouseUp(); assert(grip.scripts.OnUpdate==nil)
-PT:SetOptionsWindowScale(100); assert(PT.db.optionsScale<1.5,'cap to screen dimensions')
-PT:SetOptionsWindowScale(-100); assert(PT.db.optionsScale==.6)
-for _,value in ipairs({0/0,math.huge,"bad"}) do PT:SetOptionsWindowScale(value); assert(PT.db.optionsScale==1) end
+PT:SetOptionsWindowScale(100); assert(PT.windowDB.optionsScale<1.5,'cap to screen dimensions')
+PT:SetOptionsWindowScale(-100); assert(PT.windowDB.optionsScale==.6)
+for _,value in ipairs({0/0,math.huge,"bad"}) do PT:SetOptionsWindowScale(value); assert(PT.windowDB.optionsScale==1) end
 grip.scripts.OnMouseDown(grip,"LeftButton"); mouse=false; grip.scripts.OnUpdate()
 assert(grip.scripts.OnUpdate==nil,'release outside the grip stops scaling')
 mouse=true; grip.scripts.OnMouseDown(grip,"LeftButton")
 PT.options.scripts.OnHide()
 assert(saved==1 and grip.scripts.OnUpdate==nil,'keep original hide/save handler and stop scaling')
 PT:SetOptionsWindowScale(.7); grip.scripts.OnMouseDown(grip,"RightButton")
-assert(PT.db.optionsScale==.7,'right-click does not reset the window')
+assert(PT.windowDB.optionsScale==.7,'right-click does not reset the window')
 PT:ResetOptionsWindow()
-assert(PT.options.scale==1 and PT.db.optionsScale==1 and PT.options.left==300)
+assert(PT.options.scale==1 and PT.windowDB.optionsScale==1 and PT.options.left==300)
+assert(PT.windowDB.x==nil and PT.windowDB.y==nil)
+PT.options.left,PT.options.top=180,630
+PT.options.scripts.OnDragStop()
+assert(PT.windowDB.x==.15 and PT.windowDB.y==.7,'drag saves position in UIParent coordinates')
+PT:SetOptionsWindowScale(.8)
+PT.options.left,PT.options.top=0,0
+PT:InstallOptionsScaling(PT.options)
+assert(math.abs(PT.options.left-180)<.000001 and math.abs(PT.options.top-630)<.000001,
+    'position restores independently of window scale')
+assert(PT.db.optionsTransparency==.4 and PT.db.optionsScale==nil,'transparency stays global')
 print("PASS: settings scale persistence, proportional dragging, UI scale coordinates, screen bounds, invalid values, release/hide cleanup and reset.")
