@@ -1,8 +1,19 @@
 name: Feature idea / Funktionswunsch
-description: Share an idea for PatchTools. Deutsch und Englisch sind willkommen.
+description: Ideas for PatchTools, Maps and Bags. Deutsch und Englisch sind willkommen.
 title: "[Idea]: "
 labels: ["status: new", "enhancement"]
 body:
+  - type: dropdown
+    id: addon
+    attributes:
+      label: Addon / Modul
+      description: "Which addon is this about? / Um welches Addon geht es?"
+      options:
+        - PatchTools
+        - PatchToolsMaps
+        - PatchToolsBags
+    validations:
+      required: true
   - type: markdown
     attributes:
       value: |

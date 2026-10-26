@@ -3,6 +3,17 @@ description: Report incorrect wording or propose a translation.
 title: "[Translation]: "
 labels: ["status: new", "translation"]
 body:
+  - type: dropdown
+    id: addon
+    attributes:
+      label: Addon / Modul
+      description: "Which addon is this about? / Um welches Addon geht es?"
+      options:
+        - PatchTools
+        - PatchToolsMaps
+        - PatchToolsBags
+    validations:
+      required: true
   - type: input
     id: language
     attributes:
@@ -13,7 +24,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: PatchTools version
+      label: Addon version / Addon-Version
     validations:
       required: true
   - type: textarea

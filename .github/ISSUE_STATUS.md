@@ -25,16 +25,16 @@ Shared planning board: [PatchTools development](https://github.com/users/csBlack
 
 Planned means accepted without a release promise. In Progress means active work. Deferred means accepted but postponed. Reviewed and Next release have been removed.
 
-The board is the source of truth. Native Projects workflows add new issues from both repositories. The `Project status, labels and assignees` workflow reads board #9 about every 15 minutes (GitHub may delay scheduled runs) and mirrors its Status into the corresponding issue label. Drag-and-drop changes are therefore not immediate. A maintainer can also use Run workflow in Actions. Labels such as bug and enhancement are preserved. Editing a status label does not move the board card; the next sync restores the board's status.
+The board is the source of truth. The native Projects workflow adds new issues from PatchTools. Maps and Bags use the same central issue tracker; their own issue areas are disabled. Each form asks which addon is affected. The `Project status, labels and assignees` workflow reads board #9 about every 15 minutes (GitHub may delay scheduled runs) and mirrors its Status into the corresponding issue label. Drag-and-drop changes are therefore not immediate. A maintainer can also use Run workflow in Actions. Labels such as bug and enhancement are preserved. Editing a status label does not move the board card; the next sync restores the board's status.
 
 `Done` maps to `status: done` for completed work, or `status: wontfix` for a direct New-to-Done rejection; `Deferred` maps to `status: deferred`. Archived cards, drafts, unrelated repositories and unknown statuses are skipped. Closing an issue does not by itself prove it shipped.
 
-Authentication: `PROJECT_READ_TOKEN` is a read-only Projects token, stored as an Actions secret in each repository, expiring 2027-01-22. It is used only for reading the shared board. The built-in repository `GITHUB_TOKEN`, restricted to contents:read and issues:write, updates labels only in its own repository. Renew the read token and update both secrets before expiry. Never put its value in source files, logs or screenshots.
+Authentication: `PROJECT_READ_TOKEN` is a read-only Projects token, stored as an Actions secret for the existing synchronization, expiring 2027-01-22. It is used only for reading the shared board. The built-in repository `GITHUB_TOKEN`, restricted to contents:read and issues:write, updates labels only in its own repository. Renew the read token and update the active synchronization secret before expiry. Never put its value in source files, logs or screenshots.
 
 
 ## Automatic ownership after reviewing a new issue
 
-The existing board synchronization (about every 15 minutes) assigns an unassigned issue to the human who moves it from **New** to another recognized status on the shared board. Drag-and-drop and changes in the issue's Projects sidebar are supported through the same status-history event.
+The existing board synchronization (about every 15 minutes) assigns an unassigned issue to the maintainer who moves it from **New** to another recognized status on the shared board. Drag-and-drop and changes in the issue's Projects sidebar are supported through the same status-history event.
 
 Existing assignees are preserved. Bot/automated changes, other boards, historical transitions before this automation was enabled and later manual assignment/unassignment are ignored. The person must be assignable in the repository. This is scheduled synchronization, not an instant webhook.
 
@@ -67,3 +67,16 @@ New reports receive `status: new` plus a separate type label automatically:
 Type labels remain unchanged when a card moves between board statuses.
 Retired status labels and the former unprefixed `wontfix` are cleaned up by
 synchronization; they are never recreated.
+
+## Central issue intake
+
+PatchTools, PatchToolsMaps and PatchToolsBags share the issue tracker in
+`csBlackWolf/PatchTools`. Bug, idea and translation forms require an **Addon / Modul**
+selection. The selection is included in the issue body; type/status labels keep
+their existing meaning. All three repositories link to project #9, and new central
+issues are added automatically. The project defaults to the PatchTools repository.
+
+The module repositories have Issues disabled to prevent parallel ticket queues.
+Their README and user-guide links lead to the central forms. If a module tracker
+is enabled again, its contact link still leads to PatchTools; maintainers can
+transfer any misplaced issues without recreating them.
