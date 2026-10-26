@@ -1,22 +1,15 @@
-# PatchTools 0.9.0-alpha.14-local.1 — local test — 2026-10-26
+# PatchTools 0.9.0-alpha.14 — 2026-10-26
 
-- Read Pawn's named upgrade fields and select the largest percentage improvement for the chosen scale when several rewards are upgrades.
-- Keep equal improvements, incomplete item data and unavailable Pawn results manual.
-- Update the quest option explanation. This test build is not a public release.
+Public alpha test: bugs are possible. Please report problems on GitHub. The stable release remains available.
 
-# PatchTools 0.9.0-alpha.14 — combined test build — 2026-10-26
+- Combine the quest and appearance alpha with the new optional confirmation shortcuts.
+- Add a Confirmations category with separate options for BoE roll, loot-binding and equip-binding confirmations. These shortcuts start disabled; hold Shift to keep confirmations manual.
+- Improve Pawn quest reward selection: choose the largest improvement for the selected specialization when several rewards are upgrades. Ties and missing information remain manual.
+- Remember the settings window's position and size separately for each character. Background transparency remains shared.
 
-Quest automation, appearance options and the new confirmation shortcuts are now
-combined on `alpha/quest-automation` for testing together.
-This preview has not yet been published as a GitHub or CurseForge release.
+Use PatchToolsMaps 0.3.0-alpha.14 and PatchToolsBags 0.1.2-alpha.1 for the matching companion versions.
 
-- Add a Confirmations category for optional confirmation shortcuts, including the existing simpler deletion setting.
-- BoE roll confirmations: choose manual (default), Greed only, or Need and Greed. No automatic roll selection; only positively identified BoE items are eligible.
-- Independently opt in to skipping binding confirmations when looting or equipping. These actions may bind an item immediately.
-- All new options start disabled. Holding Shift keeps confirmation manual. Combat, disenchant rolls, refund and temporary loot-trading warnings remain manual.
-- Preserve native dialog actions and recheck the matching dialog after the event. Missing item data or unavailable APIs leave the warning unchanged.
-
-Validation: simulated API tests for Era and Forever, settings/localization checks and native Classic Era UI source review. In-game visual and loot/equip confirmation testing is pending. Public alpha builds may contain bugs.
+Tested locally in Classic Era, with automated checks for Classic Era and Forever. Forever gameplay and the new per-character layouts still need further in-game testing.
 
 # PatchTools 0.9.0-alpha.13 — 2026-10-25
 
