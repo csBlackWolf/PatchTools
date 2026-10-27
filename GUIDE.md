@@ -61,3 +61,7 @@ Installiere PatchToolsMaps und PatchToolsBags bei Bedarf neben dem Hauptaddon. D
 Use `/patchtools status` for report details. Include your WoW edition/build, addon versions and reproduction steps; remove private chat/account data from screenshots. English and German are welcome.
 
 [Report a bug / Fehler melden](https://github.com/csBlackWolf/PatchTools/issues/new/choose) · [Developer guide](DEVELOPMENT.md) · [Release notes](RELEASE_NOTES.md) · [Overview / Übersicht](README.md)
+
+Use `/patchtools debug` (also `/ptmaps debug` or `/ptbags debug`) to copy the client details and addon list into a bug report. The report distinguishes loaded, enabled but not loaded, and disabled addons, with versions. Nothing is sent automatically.
+
+Mit `/patchtools debug` (auch `/ptmaps debug` oder `/ptbags debug`) kannst du Spielinformationen und die Addon-Liste für einen Fehlerbericht kopieren. Der Bericht unterscheidet geladene, aktivierte, aber noch nicht geladene sowie deaktivierte Addons und nennt ihre Versionen. Es wird nichts automatisch versendet.

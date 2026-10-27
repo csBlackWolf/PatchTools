@@ -162,7 +162,10 @@ SLASH_PATCHTOOLS1 = "/patchtools"
 SLASH_PATCHTOOLS2 = "/ptools"
 SlashCmdList.PATCHTOOLS = function(message)
     if not PT.db then return end
-    if message == "reset" then
+    message = (message or ""):match("^%s*(.-)%s*$"):lower()
+    if message == "debug" then
+        PT:OpenDebugReport()
+    elseif message == "reset" then
         PT:ResetOptionsWindow()
         PT:OpenOptions()
     elseif message == "status" then

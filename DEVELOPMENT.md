@@ -47,3 +47,7 @@ Run `python PatchTools/tests/run_tests.py` from the repository root. The runner 
 [MIT license](LICENSE). This is a community project, not affiliated with Blizzard Entertainment.
 
 Settings-window scale and position use `PatchToolsCharacterDB` (`SavedVariablesPerCharacter`). Transparency stays in the account-wide `PatchToolsDB`. On first load for a character, import the old account scale once; later loads and resets use only that character’s window settings. Position uses normalized UIParent coordinates.
+
+## Diagnostic report
+
+`Diagnostics.lua` builds a fresh snapshot on `/patchtools debug`, displayed in a scrollable copy window. Use the C_AddOns API with legacy global fallbacks. Report folder names, versions and actual load states separately from enabled state, since load-on-demand modules may be enabled but unloaded. Do not include character names, realm names, chat or saved variables. The module aliases forward to the base report and ask for a base update if the API is missing.

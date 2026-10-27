@@ -280,6 +280,10 @@ en.EQUIP_BIND_CONFIRM = "Skip binding confirmation when equipping"
 de.EQUIP_BIND_CONFIRM = "Bindungsbestätigung beim Anlegen überspringen"
 en.EQUIP_BIND_CONFIRM_DESC = "Equipping can permanently bind an item and prevent trading. Refund and temporary loot-trading warnings remain manual."
 de.EQUIP_BIND_CONFIRM_DESC = "Anlegen kann ein Item dauerhaft binden und den Handel verhindern. Warnungen zum Verlust von Rückerstattung oder Beutehandel bleiben manuell."
+en.DEBUG_TITLE = "PatchTools · Diagnostic report"
+de.DEBUG_TITLE = "PatchTools · Diagnosebericht"
+en.DEBUG_COPY = "Copy with Ctrl+C and paste into your bug report. Includes addon names, versions and load states. Nothing is sent automatically."
+de.DEBUG_COPY = "Mit Strg+C kopieren und im Fehlerbericht einfügen. Enthält Addon-Namen, Versionen und Ladestatus. Es wird nichts automatisch versendet."
 PT.locale = PT.clientLocale == "deDE" and "deDE" or "enUS"
 PT.locales = {enUS = en, deDE = de}
 function PT:T(key, ...)

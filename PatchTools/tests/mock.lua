@@ -88,7 +88,7 @@ function RepairAllItems(guild) assert(guild==false); repaired=repaired+1; wallet
 function GetTime() return 100 end
 function GetEvictionTimeRemaining() return nil end
 local pt={}
-for _,file in ipairs({"Client.lua","Locales.lua","Core.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","LootConfirmations.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Quests.lua","ActionBars.lua","OptionsWindow.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
+for _,file in ipairs({"Client.lua","Locales.lua","Core.lua","Diagnostics.lua","Extensions.lua","ItemRules.lua","Vendor.lua","Tooltips.lua","Loot.lua","LootConfirmations.lua","DeleteConfirmation.lua","Minimap.lua","Phasing.lua","Quests.lua","ActionBars.lua","OptionsWindow.lua","Options.lua"}) do assert(loadfile(file))("PatchTools",pt) end
 assert(pt.locale==(GetLocale()=="deDE" and "deDE" or "enUS"))
 for key, text in pairs(pt.locales.enUS) do
     assert(type(pt.locales.deDE[key])=="string", "Missing German translation: "..key)
@@ -468,5 +468,7 @@ assert(account.optionsScale==.85 and account.optionsTransparency==.37)
 print('PASS: settings character migration, isolation, restored selection, reset and shared transparency.')
 pt.modules=modules
 UIParent.GetWidth,UIParent.GetHeight=width,height
+
+dofile("tests/diagnostics.lua")
 
 dofile("tests/loot_confirmations.lua")

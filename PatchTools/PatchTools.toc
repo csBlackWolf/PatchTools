@@ -12,6 +12,7 @@
 Client.lua
 Locales.lua
 Core.lua
+Diagnostics.lua
 Extensions.lua
 ItemRules.lua
 Vendor.lua

@@ -1,3 +1,9 @@
+# PatchTools 0.9.0-alpha.15 — 2026-10-27
+
+- Add `/patchtools debug`: a copyable diagnostic report with game build, language, UI scale, addon versions and load states.
+- Separate loaded, enabled but not loaded, and disabled addons to help investigate addon combinations. Nothing is submitted automatically.
+- Retain the tested quest reward selection, appearance options and confirmation shortcuts.
+
 # PatchTools 0.9.0-alpha.14 — 2026-10-26
 
 Public alpha test: bugs are possible. Please report problems on GitHub. The stable release remains available.
