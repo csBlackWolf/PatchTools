@@ -8,15 +8,44 @@ local function Label(parent, text, x, y, width, font)
     return label
 end
 local function Button(parent, text, x, y, width, callback)
-    local button = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
+    local button = CreateFrame("Button", nil, parent, "BackdropTemplate")
     button:SetPoint("TOPLEFT", x, y)
     button:SetSize(width, 26)
+    button:SetBackdrop({bgFile="Interface\\Buttons\\WHITE8X8",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",
+        edgeSize=8,insets={left=2,right=2,top=2,bottom=2}})
+    button:SetBackdropColor(.075,.06,.045,1)
+    button:SetBackdropBorderColor(.48,.37,.23,1)
+    local caption=button:CreateFontString(nil,"OVERLAY","GameFontNormal")
+    caption:SetPoint("CENTER"); button:SetFontString(caption)
+    button:SetNormalFontObject("GameFontNormal")
+    button:SetDisabledFontObject("GameFontDisable")
+    local highlight=button:CreateTexture(nil,"HIGHLIGHT")
+    highlight:SetAllPoints(); highlight:SetColorTexture(.48,.37,.23,.18)
     button:SetText(text)
+    button:SetScript("OnDisable",function(b) b:SetBackdropBorderColor(.8,.62,.32,1) end)
+    button:SetScript("OnEnable",function(b) b:SetBackdropBorderColor(.48,.37,.23,1) end)
     button:SetScript("OnClick", callback)
     return button
 end
+local function Dropdown(parent, name, x, y, width, entries, selected, choose)
+    local dropdown = CreateFrame("Frame", name, parent, "UIDropDownMenuTemplate")
+    dropdown:SetPoint("TOPLEFT", x - 16, y)
+    UIDropDownMenu_SetWidth(dropdown, width)
+    UIDropDownMenu_Initialize(dropdown, function(_, level)
+        for _, entry in ipairs(entries()) do
+            local value = entry.value
+            local info = UIDropDownMenu_CreateInfo()
+            info.text, info.value = entry.label, value
+            info.checked = selected() == value
+            info.disabled = entry.disabled
+            info.func = function() choose(value) end
+            UIDropDownMenu_AddButton(info, level)
+        end
+    end)
+    return dropdown
+end
 function PT:CreateOptions()
-    local frame = CreateFrame("Frame", "PatchToolsOptions", UIParent, "BasicFrameTemplateWithInset")
+    local frame = CreateFrame("Frame", "PatchToolsOptions", UIParent, "BackdropTemplate")
     frame:SetSize(820, 650)
     frame:SetPoint("CENTER")
     frame:SetFrameStrata("DIALOG")
@@ -26,17 +55,43 @@ function PT:CreateOptions()
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
-    frame.TitleText:SetText("PatchTools " .. self.version .. " — " .. (self.gameLabel or "WoW Forever"))
+    frame:SetBackdrop({bgFile="Interface\\Buttons\\WHITE8X8",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",
+        edgeSize=10,insets={left=2,right=2,top=2,bottom=2}})
+    frame.TitleText=Label(frame,"PatchTools " .. self.version .. " — " .. (self.gameLabel or "WoW Forever"),12,-10,750,"GameFontNormal")
+    local close=CreateFrame("Button",nil,frame,"UIPanelCloseButton")
+    close:SetPoint("TOPRIGHT",-1,-1); close:SetSize(30,30)
+    close:SetScript("OnClick",function() frame:Hide() end)
     frame:Hide()
     self.options = frame
+    if self.ApplyOptionsAppearance then self:ApplyOptionsAppearance() end
     tinsert(UISpecialFrames, "PatchToolsOptions")
     local accent = frame:CreateTexture(nil, "ARTWORK")
-    accent:SetColorTexture(.18, .65, .8, .65)
+    accent:SetColorTexture(.48, .37, .23, .65)
     accent:SetPoint("TOPLEFT", 184, -42)
     accent:SetSize(2, 562)
     Label(frame, "PATCHTOOLS", 22, -48, 150, "GameFontNormalLarge")
     Label(frame, self:T("BUILD_LABEL"), 22, -82, 148)
     Label(frame, "Patch & Zen", 22, -596, 150)
+    local RefreshDecoration
+    if self.modules.ActionBars then
+        local fox=CreateFrame("Button",nil,frame)
+        fox:SetPoint("BOTTOMLEFT",22,12); fox:SetSize(28,28)
+        fox:SetNormalTexture("Interface\\AddOns\\PatchTools\\Media\\SilverFox")
+        fox:SetAlpha(.7)
+        fox:SetScript("OnEnter",function(b)
+            b:SetAlpha(1); GameTooltip:SetOwner(b,"ANCHOR_TOP")
+            GameTooltip:SetText("Patch",1,.82,0); GameTooltip:Show()
+        end)
+        fox:SetScript("OnLeave",function(b) b:SetAlpha(.7); GameTooltip:Hide() end)
+        fox:SetScript("OnClick",function()
+            local first=not self.db.silverFoxUnlocked
+            self:SetOption("silverFoxUnlocked",true)
+            self:SetOption("barDecoration","fox")
+            if RefreshDecoration then RefreshDecoration() end
+            if first then self:Print(self:T("FOX_UNLOCKED")) end
+        end)
+        self.foxSecretButton=fox
+    end
     local pages, checks, refresh = {}, {}, {}
     self.optionPages = pages
     local function Page(key)
@@ -61,8 +116,149 @@ function PT:CreateOptions()
     for i, entry in ipairs({{"extendedZoom","ZOOM","ZOOM_DESC"},{"ghostColor","GHOST","GHOST_DESC"},
         {"cooldownNumbers","COOLDOWN","COOLDOWN_DESC"},{"autoLoot","AUTOLOOT","AUTOLOOT_DESC"},
         {"fastLoot","FASTLOOT","FASTLOOT_DESC"},{"minimapIcon","MINIMAP","MINIMAP_DESC"},
-        {"messages","MESSAGES","MESSAGES_DESC"},{"simpleDelete","SIMPLE_DELETE","SIMPLE_DELETE_DESC"}}) do
-        Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*64)
+        {"messages","MESSAGES","MESSAGES_DESC"}}) do
+        Check(general, entry[1], entry[2], entry[3], -35 - (i-1)*56)
+    end
+    local confirmations = Page("confirmations")
+    Label(confirmations, self:T("CONFIRMATIONS_INTRO"), 0, 0, 580)
+    Label(confirmations, self:T("BOE_ROLL_CONFIRM"), 0, -64, 580, "GameFontNormal")
+    local rollChoices = {
+        {value="off", label=self:T("BOE_ROLL_OFF")},
+        {value="greed", label=self:T("BOE_ROLL_GREED")},
+        {value="all", label=self:T("BOE_ROLL_ALL")},
+    }
+    local rollDropdown = Dropdown(confirmations,"PatchToolsBoeRollDropdown",0,-96,490,
+        function() return rollChoices end,
+        function() return self.db.boeRollConfirm end,
+        function(value) self:SetOption("boeRollConfirm",value) end)
+    refresh[#refresh+1] = function()
+        local selected = rollChoices[1].label
+        for _, entry in ipairs(rollChoices) do
+            if entry.value == self.db.boeRollConfirm then selected = entry.label end
+        end
+        UIDropDownMenu_SetText(rollDropdown,selected)
+    end
+    Label(confirmations, self:T("BOE_ROLL_DESC"), 0, -137, 570)
+    Check(confirmations,"confirmLootBind","LOOT_BIND_CONFIRM","LOOT_BIND_CONFIRM_DESC",-224)
+    Check(confirmations,"confirmEquipBind","EQUIP_BIND_CONFIRM","EQUIP_BIND_CONFIRM_DESC",-328)
+    Check(confirmations,"simpleDelete","SIMPLE_DELETE","SIMPLE_DELETE_DESC",-432)
+    self.boeRollDropdown = rollDropdown
+    local appearance
+    if self.ApplyOptionsAppearance or self.modules.ActionBars then
+        appearance = Page("appearance")
+        Label(appearance,self:T("APPEARANCE_INTRO"),0,0,580)
+    end
+    if self.ApplyOptionsAppearance then
+        local opacityText=Label(appearance,"",0,-52,580,"GameFontNormal")
+        local slider=CreateFrame("Slider","PatchToolsOptionsOpacitySlider",appearance,"OptionsSliderTemplate")
+        slider:SetPoint("TOPLEFT",4,-81); slider:SetWidth(350)
+        slider:SetMinMaxValues(0,80); slider:SetValueStep(1); slider:SetObeyStepOnDrag(true)
+        PatchToolsOptionsOpacitySliderLow:SetText("0%"); PatchToolsOptionsOpacitySliderHigh:SetText("80%")
+        local updating=false
+        local function RefreshOpacity()
+            updating=true
+            self:ApplyOptionsAppearance()
+            local value=math.floor(self.db.optionsTransparency*100+.5)
+            slider:SetValue(value); opacityText:SetText(self:T("OPTIONS_TRANSPARENCY",value))
+            updating=false
+        end
+        slider:SetScript("OnValueChanged",function(_,value)
+            if updating then return end
+            self:SetOption("optionsTransparency",math.floor(value+.5)/100); RefreshOpacity()
+        end)
+        slider:SetScript("OnEnter",function()
+            GameTooltip:SetOwner(slider,"ANCHOR_TOP")
+            GameTooltip:SetText(self:T("OPTIONS_TRANSPARENCY_HINT"),1,1,1,1,true); GameTooltip:Show()
+        end)
+        slider:SetScript("OnLeave",function() GameTooltip:Hide() end)
+        refresh[#refresh+1]=RefreshOpacity
+        self.appearanceUI={slider=slider,refresh=RefreshOpacity}
+    end
+    if appearance then
+        Label(appearance,self:T("APPEARANCE_SCALE_HINT"),0,-132,580)
+    end
+    local questsModule = self.modules.Quests
+    if questsModule then
+        local quests = Page("quests")
+        Label(quests,self:T("QUEST_INTRO"),0,0,580)
+        Check(quests,"autoQuestAccept","QUEST_ACCEPT","QUEST_ACCEPT_DESC",-60)
+        Check(quests,"autoQuestTurnIn","QUEST_TURNIN","QUEST_TURNIN_DESC",-145)
+        Check(quests,"pawnQuestRewards","QUEST_PAWN","QUEST_PAWN_DESC",-230)
+        Label(quests,self:T("QUEST_SCALE"),0,-337,580,"GameFontNormal")
+        local selection
+        local function RefreshScale()
+            local selected = questsModule:GetSelectedScale()
+            local text = self:T("QUEST_SCALE_AUTO")
+            if selected then
+                text = selected
+                for _,scale in ipairs(questsModule:GetScales()) do
+                    if scale.name == selected then text = scale.label; break end
+                end
+            end
+            UIDropDownMenu_SetText(selection,text)
+        end
+        selection = Dropdown(quests,"PatchToolsQuestScaleDropdown",0,-368,500,function()
+            local entries={{value="",label=self:T("QUEST_SCALE_AUTO")}}
+            for _,scale in ipairs(questsModule:GetScales()) do
+                entries[#entries+1]={value=scale.name,label=scale.label}
+            end
+            if #entries==1 then entries[#entries+1]={label=self:T("QUEST_SCALE_EMPTY"),disabled=true} end
+            return entries
+        end,function() return questsModule:GetSelectedScale() or "" end,function(value)
+            questsModule:SetSelectedScale(value~="" and value or nil)
+            RefreshScale()
+        end)
+        Label(quests,self:T("QUEST_SCALE_DESC"),0,-420,580)
+        refresh[#refresh+1] = RefreshScale
+        self.questOptionsUI={checks=checks,refresh=RefreshScale,scale=selection}
+    end
+    if self.modules.ActionBars then
+        local bars = appearance
+        Label(bars,self:T("NAV_ACTIONBARS"),0,-208,580,"GameFontNormal")
+        Label(bars,self:T("BARS_DECORATION"),0,-246,270,"GameFontNormal")
+        local decoration
+        local function Entries()
+            local list={{value="none",label=self:T("BARS_NONE")},
+                {value="native",label=self:T("BARS_NATIVE")},
+                {value="dragon",label=self:T("BARS_DRAGON")}}
+            if self.db.silverFoxUnlocked then list[#list+1]={value="fox",label=self:T("BARS_FOX")} end
+            return list
+        end
+        RefreshDecoration=function()
+            local selected=self.modules.ActionBars:GetDecoration(self.db)
+            for _,entry in ipairs(Entries()) do
+                if entry.value==selected then UIDropDownMenu_SetText(decoration,entry.label); break end
+            end
+        end
+        decoration=Dropdown(bars,"PatchToolsBarDecorationDropdown",0,-271,260,Entries,
+            function() return self.modules.ActionBars:GetDecoration(self.db) end,function(value)
+                self:SetOption("barDecoration",value); RefreshDecoration()
+            end)
+        refresh[#refresh+1]=RefreshDecoration
+        Label(bars,self:T("BARS_LAYER"),302,-246,260,"GameFontNormal")
+        local layer
+        local layers={{value="default",key="BARS_LAYER_DEFAULT"},{value="background",key="BARS_LAYER_BACKGROUND"},
+            {value="low",key="BARS_LAYER_LOW"},{value="medium",key="BARS_LAYER_MEDIUM"},{value="high",key="BARS_LAYER_HIGH"},{value="dialog",key="BARS_LAYER_DIALOG"}}
+        local function LayerEntries()
+            local entries={}
+            for _,entry in ipairs(layers) do entries[#entries+1]={value=entry.value,label=self:T(entry.key)} end
+            return entries
+        end
+        local function RefreshLayer()
+            local selected=self.modules.ActionBars:GetDecorationLayer(self.db)
+            for _,entry in ipairs(layers) do
+                if entry.value==selected then UIDropDownMenu_SetText(layer,self:T(entry.key)); break end
+            end
+        end
+        layer=Dropdown(bars,"PatchToolsBarLayerDropdown",302,-271,245,LayerEntries,
+            function() return self.modules.ActionBars:GetDecorationLayer(self.db) end,function(value)
+                self:SetOption("barDecorationLayer",value); RefreshLayer()
+            end)
+        refresh[#refresh+1]=RefreshLayer
+        Label(bars,self:T("BARS_LAYER_HINT"),0,-312,580)
+        self.barDecorationUI={dropdown=decoration,refresh=RefreshDecoration,layer=layer}
+        Check(bars,"modernActionBar","BARS_STYLE","BARS_STYLE_DESC",-343)
+        Label(bars,self:T("BARS_NOTE"),0,-465,580)
     end
     local vendor = Page("vendor")
     Label(vendor, self:T("VENDOR_INTRO"), 0, 0, 580)
@@ -178,19 +374,6 @@ function PT:CreateOptions()
         end)
         Label(phase,self:T("PHASE_READY"),0,-472,580)
     end
-    local maps = Page("maps")
-    self.mapsPlaceholder=maps
-    Label(maps,"PatchToolsMaps",0,-8,560,"GameFontNormalHuge")
-    Label(maps,self:T("MAPS_INSTALL"),0,-66,560)
-    Label(maps,self:T("MAPS_FEATURES"),0,-150,560)
-    Label(maps,self:T("MAPS_VISUAL"),0,-302,560)
-    local mapsLink=CreateFrame("EditBox",nil,maps,"InputBoxTemplate")
-    mapsLink:SetPoint("TOPLEFT",8,-372); mapsLink:SetSize(540,28); mapsLink:SetAutoFocus(false)
-    local mapsURL="https://www.curseforge.com/wow/addons/patchtoolsmaps"
-    mapsLink:SetText(mapsURL)
-    mapsLink:SetScript("OnEditFocusGained",function(b) b:HighlightText() end)
-    mapsLink:SetScript("OnTextChanged",function(b) if b:GetText()~=mapsURL then b:SetText(mapsURL) end end)
-    mapsLink:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local about = Page("about")
     Label(about,"PatchTools",0,-8,560,"GameFontNormalHuge")
     Label(about,self:T("ABOUT_TEXT"),0,-62,560)
@@ -210,9 +393,17 @@ function PT:CreateOptions()
     ideas:SetScript("OnTextChanged",function(b) if b:GetText()~=issuesURL then b:SetText(issuesURL) end end)
     ideas:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     Label(about,self.version,0,-470,560)
+    Label(about,"Twitch · zenlynxley",0,-504,560,"GameFontNormal")
+    local twitch=CreateFrame("EditBox",nil,about,"InputBoxTemplate")
+    twitch:SetPoint("TOPLEFT",8,-526); twitch:SetSize(540,28); twitch:SetAutoFocus(false)
+    local twitchURL="https://www.twitch.tv/zenlynxley"
+    twitch:SetText(twitchURL)
+    twitch:SetScript("OnEditFocusGained",function(b) b:HighlightText() end)
+    twitch:SetScript("OnTextChanged",function(b) if b:GetText()~=twitchURL then b:SetText(twitchURL) end end)
+    twitch:SetScript("OnEscapePressed",function(b) b:ClearFocus() end)
     local navigation={}
     self.optionNavigation=navigation
-    local navigationOrder={"general","vendor","tooltips","phase","maps","about"}
+    local navigationOrder={"general","appearance","quests","confirmations","vendor","tooltips","phase","maps","about"}
     local function ArrangeNavigation()
         local index = 0
         for _,key in ipairs(navigationOrder) do
@@ -232,7 +423,7 @@ function PT:CreateOptions()
         for _, fn in ipairs(refresh) do fn() end
         for name,box in pairs(checks) do box:SetChecked(self.db[name]) end
     end
-    for i,entry in ipairs({{"general","NAV_GENERAL"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
+    for i,entry in ipairs({{"general","NAV_GENERAL"},{"appearance","NAV_APPEARANCE"},{"quests","NAV_QUESTS"},{"confirmations","NAV_CONFIRMATIONS"},{"vendor","NAV_VENDOR"},{"tooltips","NAV_TOOLTIPS"},
         {"phase","NAV_PHASE"},{"maps","NAV_MAPS"},{"about","NAV_ABOUT"}}) do
         local key=entry[1]
         if pages[key] then
@@ -257,7 +448,9 @@ function PT:CreateOptions()
         else
             navigation[entry.id] = Button(frame,entry.title,20,0,150,
                 function() self:SelectOptionsPage(entry.id) end)
-            table.insert(navigationOrder,#navigationOrder,entry.id)
+            local known=false
+            for _,key in ipairs(navigationOrder) do if key==entry.id then known=true; break end end
+            if not known then table.insert(navigationOrder,#navigationOrder,entry.id) end
         end
         ArrangeNavigation()
         if selected then self:SelectOptionsPage(entry.id) end
@@ -276,6 +469,7 @@ function PT:CreateOptions()
         end
     end)
     self:SelectOptionsPage("general")
+    if self.InstallOptionsScaling then self:InstallOptionsScaling(frame) end
     if Settings and Settings.RegisterCanvasLayoutCategory and Settings.RegisterAddOnCategory then
         local panel=CreateFrame("Frame"); panel.name="PatchTools"
         Label(panel,self:T("CATEGORY"),16,-16,600,"GameFontNormalLarge")

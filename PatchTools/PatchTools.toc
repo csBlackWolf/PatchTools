@@ -8,15 +8,21 @@
 ## Version: @project-version@
 ## X-Curse-Project-ID: 1758728
 ## SavedVariables: PatchToolsDB
+## SavedVariablesPerCharacter: PatchToolsCharacterDB
 Client.lua
 Locales.lua
 Core.lua
+Diagnostics.lua
 Extensions.lua
 ItemRules.lua
 Vendor.lua
 Tooltips.lua
 Loot.lua
+LootConfirmations.lua
 DeleteConfirmation.lua
 Minimap.lua
 Phasing.lua
+Quests.lua
+ActionBars.lua
+OptionsWindow.lua
 Options.lua

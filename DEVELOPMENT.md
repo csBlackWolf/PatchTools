@@ -26,9 +26,9 @@ Warning lead is 1–600 seconds (default 60); display duration is 1–60 seconds
 
 ## Alpha development
 
-`alpha/quest-automation` holds the public quest/appearance alpha; `alpha/loot-confirmations` continues that work separately. Do not merge experimental behavior into `main` as part of a documentation update. Keep alpha controls opt-in where they automate dialogue or accept warnings.
+`alpha/quest-automation` now combines the quest/appearance alpha with the confirmation work from `alpha/loot-confirmations`. The combined alpha.14 build is awaiting an in-game check before publication. Stable `main` remains separate. Keep alpha controls opt-in where they automate dialogue or accept warnings.
 
-Quest reward selection must use the selected active class scale and require exactly one Pawn upgrade. Keep missing data, ambiguous rewards and Shift bypass manual. Cosmetic main-bar changes must respect combat restrictions and preserve native action buttons/page controls.
+Quest reward selection must use the selected active class scale and require a unique largest percentage improvement reported by Pawn. Keep missing data, ambiguous rewards and Shift bypass manual. Cosmetic main-bar changes must respect combat restrictions and preserve native action buttons/page controls.
 
 In the loot-confirmations branch, `LootConfirmations.lua` treats `CONFIRM_LOOT_ROLL`, `LOOT_BIND_CONFIRM` and `EQUIP_BIND_CONFIRM` independently. Defaults are `boeRollConfirm="off"`, `confirmLootBind=false` and `confirmEquipBind=false`. For rolls, require a previously selected roll and cached OnEquip bind type (2), with no BoP flag. Unknown items and unsupported roll types stay manual.
 
@@ -45,3 +45,9 @@ Run `python PatchTools/tests/run_tests.py` from the repository root. The runner 
 [RELEASING.md](RELEASING.md) covers branches, packaging and CurseForge publication. Keep the README as the short player presentation, [GUIDE.md](GUIDE.md) for practical detail and this file for implementation. Use direct descriptions of changes and decisions in guides, notes and commit messages.
 
 [MIT license](LICENSE). This is a community project, not affiliated with Blizzard Entertainment.
+
+Settings-window scale and position use `PatchToolsCharacterDB` (`SavedVariablesPerCharacter`). Transparency stays in the account-wide `PatchToolsDB`. On first load for a character, import the old account scale once; later loads and resets use only that character’s window settings. Position uses normalized UIParent coordinates.
+
+## Diagnostic report
+
+`Diagnostics.lua` builds a fresh snapshot on `/patchtools debug`, displayed in a scrollable copy window. Use the C_AddOns API with legacy global fallbacks. Report folder names, versions and actual load states separately from enabled state, since load-on-demand modules may be enabled but unloaded. Do not include character names, realm names, chat or saved variables. The module aliases forward to the base report and ask for a base update if the API is missing.

@@ -18,11 +18,11 @@ Extended camera distance, normal colors as a ghost, cooldown numbers and auto-lo
 
 ### Alpha options
 
-The quest alpha adds optional quest acceptance/turn-in. Hold Shift for manual dialogue. With Pawn enabled, choose the active class scale to use for rewards; other scales can stay visible in Pawn. Automatic reward choice requires exactly one upgrade for that scale. Missing or ambiguous data leaves the choice to you. Quest automation starts off.
+The quest alpha adds optional quest acceptance/turn-in. Hold Shift for manual dialogue. With Pawn enabled, choose the active class scale to use for rewards; other scales can stay visible in Pawn. Automatic reward choice uses the largest percentage improvement for that scale; equal improvements remain manual. Missing or ambiguous data leaves the choice to you. Quest automation starts off.
 
 Appearance options include settings-window scaling and background transparency, a dark main-bar style, side-decoration choices and display-layer selection. Changes involving protected layout wait until combat ends. `/patchtools reset` restores the settings window. The fox in the settings is an optional little discovery.
 
-The separate loot-confirmations development branch adds independent opt-in shortcuts for BoE roll warnings, loot binding and equipment binding. These are not part of the earlier quest alpha. Shift keeps a confirmation manual; combat, disenchant, refund and temporary loot-trading warnings remain manual.
+The combined alpha.14 test build adds independent opt-in shortcuts for BoE roll warnings, loot binding and equipment binding alongside quest automation. These are not part of the earlier public quest alpha. Shift keeps a confirmation manual; combat, disenchant, refund and temporary loot-trading warnings remain manual.
 
 ### Optional modules
 
@@ -46,11 +46,11 @@ Erweiterte Kameradistanz, Farben als Geist, Abklingzeiten und automatisches Plü
 
 ### Alpha-Optionen
 
-Die Quest-Alpha bietet optionale automatische Annahme und Abgabe. Mit Shift bedienst du den Dialog selbst. Für Pawn wählst du eine aktive Wertung deiner Klasse; weitere Wertungen dürfen in Pawn sichtbar bleiben. Nur bei genau einer Verbesserung für die gewählte Wertung wird eine Belohnung automatisch gewählt. Fehlende oder mehrdeutige Daten lassen die Auswahl bei dir. Die Questautomatik beginnt ausgeschaltet.
+Die Quest-Alpha bietet optionale automatische Annahme und Abgabe. Mit Shift bedienst du den Dialog selbst. Für Pawn wählst du eine aktive Wertung deiner Klasse; weitere Wertungen dürfen in Pawn sichtbar bleiben. Automatisch gewählt wird die größte prozentuale Verbesserung für die gewählte Wertung; bei Gleichstand wählst du selbst. Fehlende oder mehrdeutige Daten lassen die Auswahl bei dir. Die Questautomatik beginnt ausgeschaltet.
 
 Unter Darstellung findest du Skalierung und Hintergrundtransparenz des Menüs, den dunklen Hauptleistenstil sowie Seitenverzierungen und ihre Anzeigeebene. Geschützte Änderungen warten bis nach dem Kampf. `/patchtools reset` setzt das Einstellungsfenster zurück. Der kleine Fuchs im Menü ist eine optionale Entdeckung.
 
-Der getrennte Entwicklungszweig für Beutebestätigungen bietet zusätzliche einzeln aktivierbare Abkürzungen für BoE-Würfelwarnungen, Bindung beim Plündern und Anlegen. Diese gehören noch nicht zur vorherigen Quest-Alpha. Shift, Kampf, Entzaubern sowie Rückerstattungs- und Beutehandelswarnungen bleiben manuell.
+Der kombinierte Alpha.14-Testbuild bietet neben der Questautomatik zusätzliche einzeln aktivierbare Abkürzungen für BoE-Würfelwarnungen, Bindung beim Plündern und Anlegen. Diese gehören noch nicht zur vorherigen öffentlichen Quest-Alpha. Shift, Kampf, Entzaubern sowie Rückerstattungs- und Beutehandelswarnungen bleiben manuell.
 
 ### Zusatzmodule
 
@@ -61,3 +61,7 @@ Installiere PatchToolsMaps und PatchToolsBags bei Bedarf neben dem Hauptaddon. D
 Use `/patchtools status` for report details. Include your WoW edition/build, addon versions and reproduction steps; remove private chat/account data from screenshots. English and German are welcome.
 
 [Report a bug / Fehler melden](https://github.com/csBlackWolf/PatchTools/issues/new/choose) · [Developer guide](DEVELOPMENT.md) · [Release notes](RELEASE_NOTES.md) · [Overview / Übersicht](README.md)
+
+Use `/patchtools debug` (also `/ptmaps debug` or `/ptbags debug`) to copy the client details and addon list into a bug report. The report distinguishes loaded, enabled but not loaded, and disabled addons, with versions. Nothing is sent automatically.
+
+Mit `/patchtools debug` (auch `/ptmaps debug` oder `/ptbags debug`) kannst du Spielinformationen und die Addon-Liste für einen Fehlerbericht kopieren. Der Bericht unterscheidet geladene, aktivierte, aber noch nicht geladene sowie deaktivierte Addons und nennt ihre Versionen. Es wird nichts automatisch versendet.

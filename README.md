@@ -23,6 +23,7 @@ Choose the features you want. English and German are included.
 
 | Command | What it does |
 | --- | --- |
+| `/patchtools debug` | Open a copyable diagnostic report with addon versions and load states. |
 | `/patchtools` | Open the settings. |
 | `/patchtools status` | Show information useful for a bug report. |
 | `/patchtools reset` | Reset the settings window position and size (alpha). |
@@ -60,6 +61,7 @@ Aktiviere die Funktionen, die du möchtest. Deutsch und Englisch sind enthalten.
 
 | Befehl | Funktion |
 | --- | --- |
+| `/patchtools debug` | Kopierbaren Diagnosebericht mit Addon-Versionen und Ladestatus öffnen. |
 | `/patchtools` | Die Einstellungen öffnen. |
 | `/patchtools status` | Hilfreiche Informationen für einen Fehlerbericht anzeigen. |
 | `/patchtools reset` | Position und Größe des Einstellungsfensters zurücksetzen (Alpha). |

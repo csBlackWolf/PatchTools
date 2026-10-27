@@ -1,6 +1,6 @@
 # Publishing PatchTools
 
-CurseForge project: **1758728** (`patchtools`). Stable releases use `main`. Public quest/appearance alpha work lives on `alpha/quest-automation`; the next loot-confirmations work is separate on `alpha/loot-confirmations`. Publish only the branch and release type intended for that update.
+CurseForge project: **1758728** (`patchtools`). Stable releases use `main`. `alpha/quest-automation` combines the quest/appearance alpha and confirmation work for the alpha.14 release. The combined build received its initial local Classic Era check; further public alpha testing is welcome.
 
 ## Prepare the change
 

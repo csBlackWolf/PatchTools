@@ -2,9 +2,13 @@ local addon, PT = ...
 _G.PatchTools = PT
 PT.version = "@project-version@"
 PT.defaults = {
+    optionsTransparency = 0,
+    barDecoration = "native", barDecorationLayer = "default", silverFoxUnlocked = false, modernActionBar = false,
+    autoQuestAccept = false, autoQuestTurnIn = false, pawnQuestRewards = false,
     autoSell = true, autoRepair = true, extendedZoom = true,
     ghostColor = false, messages = true, cooldownNumbers = false,
     autoLoot = false, fastLoot = false, minimapIcon = true, minimapAngle = 225,
+    boeRollConfirm = "off", confirmLootBind = false, confirmEquipBind = false,
     phaseInitial = false, phaseSoon = false, phaseSound = true, phaseLead = 60,
     phaseDuration = 10, phaseChat = true,
     simpleDelete = false, sellWhitelist = true, sellProfessionBag = true, tooltipIDs = false, tooltipPrices = false,
@@ -88,6 +92,10 @@ end
 function PT:SetOption(key, value)
     if self.defaults[key] == nil then return end
     self.db[key] = value
+    if key == "optionsTransparency" and self.ApplyOptionsAppearance then self:ApplyOptionsAppearance() end
+    if (key == "barDecoration" or key == "barDecorationLayer" or key == "modernActionBar") and self.modules.ActionBars then
+        self.modules.ActionBars:Apply()
+    end
     if key:match("^phase") and self.modules.Phasing then self.modules.Phasing:SettingsChanged() end
     if key == "extendedZoom" then
         self:ApplyZoom(not value)
@@ -116,6 +124,16 @@ events:SetScript("OnEvent", function(_, event, name)
         if name ~= addon then return end
         if type(PatchToolsDB) ~= "table" then PatchToolsDB = {} end
         PT.db = PatchToolsDB
+        if type(PatchToolsCharacterDB) ~= "table" then
+            PatchToolsCharacterDB = {optionsScale = PT.db.optionsScale}
+        end
+        PT.windowDB = PatchToolsCharacterDB
+        -- Preserve the previous checkbox/style combination when moving to a
+        -- separate decoration selector. Never overwrite an existing choice.
+        if type(PT.db.barDecoration) ~= "string" then
+            PT.db.barDecoration = PT.db.hideBarEndCaps == true and "none"
+                or PT.db.modernActionBar == true and "dragon" or "native"
+        end
         for key, default in pairs(PT.defaults) do
             if type(PT.db[key]) ~= type(default) then PT.db[key] = default end
         end
@@ -144,11 +162,17 @@ SLASH_PATCHTOOLS1 = "/patchtools"
 SLASH_PATCHTOOLS2 = "/ptools"
 SlashCmdList.PATCHTOOLS = function(message)
     if not PT.db then return end
-    if message == "status" then
+    message = (message or ""):match("^%s*(.-)%s*$"):lower()
+    if message == "debug" then
+        PT:OpenDebugReport()
+    elseif message == "reset" then
+        PT:ResetOptionsWindow()
+        PT:OpenOptions()
+    elseif message == "status" then
         local version, build, _, interface = GetBuildInfo()
         PT:Print("v" .. PT.version .. "; Client " .. version .. " / " .. build .. "; Interface " .. interface)
         PT:Print("Client locale: " .. PT.clientLocale .. "; UI language: " .. PT.locale)
-        for _, key in ipairs({"autoSell", "autoRepair", "extendedZoom", "ghostColor", "cooldownNumbers", "autoLoot", "fastLoot", "minimapIcon", "simpleDelete", "phaseInitial", "phaseSoon", "phaseSound", "phaseLead", "phaseDuration", "phaseChat"}) do
+        for _, key in ipairs({"autoSell", "autoRepair", "extendedZoom", "ghostColor", "cooldownNumbers", "autoLoot", "fastLoot", "minimapIcon", "boeRollConfirm", "confirmLootBind", "confirmEquipBind", "simpleDelete", "phaseInitial", "phaseSoon", "phaseSound", "phaseLead", "phaseDuration", "phaseChat"}) do
             PT:Print(key .. ": " .. tostring(PT.db[key]))
         end
         PT:Print("Zoom-CVar: " .. tostring(ReadCVar("cameraDistanceMaxZoomFactor")))
