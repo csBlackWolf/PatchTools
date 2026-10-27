@@ -16,17 +16,17 @@ Optional tooltip additions show item IDs and vendor prices per item. The simpler
 
 Extended camera distance, normal colors as a ghost, cooldown numbers and auto-loot can be chosen independently. On Forever, world-refresh alerts warn about announced possible phase changes. Choose warning lead time, sound, message duration and chat output. Detection was observed in beta/stress testing; availability in the final client remains unconfirmed. Unannounced changes cannot be predicted.
 
-### Alpha options
+### Quests, appearance and confirmations
 
-The quest alpha adds optional quest acceptance/turn-in. Hold Shift for manual dialogue. With Pawn enabled, choose the active class scale to use for rewards; other scales can stay visible in Pawn. Automatic reward choice uses the largest percentage improvement for that scale; equal improvements remain manual. Missing or ambiguous data leaves the choice to you. Quest automation starts off.
+Quest automation offers optional quest acceptance/turn-in. Hold Shift for manual dialogue. With Pawn enabled, choose the active class scale to use for rewards; other scales can stay visible in Pawn. Automatic reward choice uses the largest percentage improvement for that scale; equal improvements remain manual. Missing or ambiguous data leaves the choice to you. Quest automation starts off.
 
 Appearance options include settings-window scaling and background transparency, a dark main-bar style, side-decoration choices and display-layer selection. Changes involving protected layout wait until combat ends. `/patchtools reset` restores the settings window. The fox in the settings is an optional little discovery.
 
-The combined alpha.14 test build adds independent opt-in shortcuts for BoE roll warnings, loot binding and equipment binding alongside quest automation. These are not part of the earlier public quest alpha. Shift keeps a confirmation manual; combat, disenchant, refund and temporary loot-trading warnings remain manual.
+PatchTools 0.9.0 includes independent opt-in shortcuts for BoE roll warnings, loot binding and equipment binding alongside quest automation. Shift keeps a confirmation manual; combat, disenchant, refund and temporary loot-trading warnings remain manual.
 
 ### Optional modules
 
-Install [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) or [PatchToolsBags](https://www.curseforge.com/wow/addons/patchtoolsbags) alongside the base. Each module supplies its own controls. Available options therefore depend on the installed module version. The current alpha shows Map installation information when Maps is absent; older versions may hide the page.
+Install [PatchToolsMaps](https://www.curseforge.com/wow/addons/patchtoolsmaps) or [PatchToolsBags](https://www.curseforge.com/wow/addons/patchtoolsbags) alongside the base. Each module supplies its own controls. Available options therefore depend on the installed module version. The Map page appears when the enabled Maps module supplies its settings.
 
 ## Deutsch
 
@@ -44,17 +44,17 @@ Tooltip-Optionen zeigen Item-IDs und Händlerpreise pro Stück. Die vereinfachte
 
 Erweiterte Kameradistanz, Farben als Geist, Abklingzeiten und automatisches Plündern lassen sich einzeln wählen. Auf Forever können Warnungen auf angekündigte mögliche Phasenwechsel hinweisen. Vorlauf, Ton, Anzeigedauer und Chatausgabe sind einstellbar. Die Erkennung wurde in Beta und Stresstest beobachtet; die Verfügbarkeit im endgültigen Client ist noch nicht bestätigt. Unangekündigte Wechsel lassen sich nicht vorhersagen.
 
-### Alpha-Optionen
+### Quests, Darstellung und Bestätigungen
 
-Die Quest-Alpha bietet optionale automatische Annahme und Abgabe. Mit Shift bedienst du den Dialog selbst. Für Pawn wählst du eine aktive Wertung deiner Klasse; weitere Wertungen dürfen in Pawn sichtbar bleiben. Automatisch gewählt wird die größte prozentuale Verbesserung für die gewählte Wertung; bei Gleichstand wählst du selbst. Fehlende oder mehrdeutige Daten lassen die Auswahl bei dir. Die Questautomatik beginnt ausgeschaltet.
+Die Questautomatik bietet optionale automatische Annahme und Abgabe. Mit Shift bedienst du den Dialog selbst. Für Pawn wählst du eine aktive Wertung deiner Klasse; weitere Wertungen dürfen in Pawn sichtbar bleiben. Automatisch gewählt wird die größte prozentuale Verbesserung für die gewählte Wertung; bei Gleichstand wählst du selbst. Fehlende oder mehrdeutige Daten lassen die Auswahl bei dir. Die Questautomatik beginnt ausgeschaltet.
 
 Unter Darstellung findest du Skalierung und Hintergrundtransparenz des Menüs, den dunklen Hauptleistenstil sowie Seitenverzierungen und ihre Anzeigeebene. Geschützte Änderungen warten bis nach dem Kampf. `/patchtools reset` setzt das Einstellungsfenster zurück. Der kleine Fuchs im Menü ist eine optionale Entdeckung.
 
-Der kombinierte Alpha.14-Testbuild bietet neben der Questautomatik zusätzliche einzeln aktivierbare Abkürzungen für BoE-Würfelwarnungen, Bindung beim Plündern und Anlegen. Diese gehören noch nicht zur vorherigen öffentlichen Quest-Alpha. Shift, Kampf, Entzaubern sowie Rückerstattungs- und Beutehandelswarnungen bleiben manuell.
+PatchTools 0.9.0 bietet neben der Questautomatik zusätzliche einzeln aktivierbare Abkürzungen für BoE-Würfelwarnungen, Bindung beim Plündern und Anlegen. Shift, Kampf, Entzaubern sowie Rückerstattungs- und Beutehandelswarnungen bleiben manuell.
 
 ### Zusatzmodule
 
-Installiere PatchToolsMaps und PatchToolsBags bei Bedarf neben dem Hauptaddon. Die Module liefern ihre eigenen Einstellungen; sichtbar sind die Funktionen der tatsächlich installierten Modulversion. Die aktuelle Alpha zeigt ohne Kartenmodul einen Installationshinweis. Ältere Versionen blenden die Kartenseite gegebenenfalls aus.
+Installiere PatchToolsMaps und PatchToolsBags bei Bedarf neben dem Hauptaddon. Die Module liefern ihre eigenen Einstellungen; sichtbar sind die Funktionen der tatsächlich installierten Modulversion. Die Kartenseite erscheint, wenn das aktivierte Kartenmodul seine Einstellungen bereitstellt.
 
 ## Help / Hilfe
 

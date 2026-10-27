@@ -1,6 +1,6 @@
 # Developing PatchTools
 
-PatchTools supports Classic Era and Forever, with version-specific features kept separate. World-refresh detection and the extra profession bag belong to Forever; do not expose them as Era features. The [user guide](GUIDE.md) describes controls, defaults and alpha availability.
+PatchTools supports Classic Era and Forever, with version-specific features kept separate. World-refresh detection and the extra profession bag belong to Forever; do not expose them as Era features. The [user guide](GUIDE.md) describes controls and defaults.
 
 ## Source and settings
 
@@ -24,15 +24,15 @@ The Forever client exposes `SHARD_TRANSFER_IMMINENT`, `SHARD_TRANSFER_CANCELLED`
 
 Warning lead is 1–600 seconds (default 60); display duration is 1–60 seconds (default 10). Alerts start off. Sound uses the Master channel and optional chat output uses normal history. `PT:FormatTime(seconds)` produces localized countdown text. Observations from Forever beta build 70532 do not establish support in a future client or prediction of unannounced changes.
 
-## Alpha development
+## Quest, appearance and confirmation features
 
-`alpha/quest-automation` now combines the quest/appearance alpha with the confirmation work from `alpha/loot-confirmations`. The combined alpha.14 build is awaiting an in-game check before publication. Stable `main` remains separate. Keep alpha controls opt-in where they automate dialogue or accept warnings.
+The tested quest/appearance and confirmation branches are merged into `main` for 0.9.0. Keep controls opt-in where they automate dialogue or accept warnings.
 
 Quest reward selection must use the selected active class scale and require a unique largest percentage improvement reported by Pawn. Keep missing data, ambiguous rewards and Shift bypass manual. Cosmetic main-bar changes must respect combat restrictions and preserve native action buttons/page controls.
 
-In the loot-confirmations branch, `LootConfirmations.lua` treats `CONFIRM_LOOT_ROLL`, `LOOT_BIND_CONFIRM` and `EQUIP_BIND_CONFIRM` independently. Defaults are `boeRollConfirm="off"`, `confirmLootBind=false` and `confirmEquipBind=false`. For rolls, require a previously selected roll and cached OnEquip bind type (2), with no BoP flag. Unknown items and unsupported roll types stay manual.
+In 0.9.0, `LootConfirmations.lua` treats `CONFIRM_LOOT_ROLL`, `LOOT_BIND_CONFIRM` and `EQUIP_BIND_CONFIRM` independently. Defaults are `boeRollConfirm="off"`, `confirmLootBind=false` and `confirmEquipBind=false`. For rolls, require a previously selected roll and cached OnEquip bind type (2), with no BoP flag. Unknown items and unsupported roll types stay manual.
 
-Wait one frame for UIParent to populate the dialog, then revalidate settings, Shift/combat state, popup type, native data and roll choice before using the matching native acceptance handler. Do not replace popup definitions or UIParent handlers. Refund, temporary trade and disenchant warnings stay manual. These files/features are branch-specific; consult the branch TOC before assuming their presence.
+Wait one frame for UIParent to populate the dialog, then revalidate settings, Shift/combat state, popup type, native data and roll choice before using the matching native acceptance handler. Do not replace popup definitions or UIParent handlers. Refund, temporary trade and disenchant warnings stay manual. Consult the installed version and TOC before assuming a feature is available.
 
 ## UI integration
 

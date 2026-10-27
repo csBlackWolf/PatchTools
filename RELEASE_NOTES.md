@@ -1,3 +1,18 @@
+# PatchTools 0.9.0 — 2026-10-27
+
+The tested alpha features are now part of the regular release.
+
+- Optional quest acceptance and turn-in, with Pawn reward selection for your chosen specialization. Quest automation starts off; hold Shift for manual dialogue.
+- Choose the largest Pawn improvement when several quest rewards are upgrades. Ties and missing data remain manual.
+- A compact, scalable settings window with adjustable background transparency and position/size saved per character.
+- Main-bar styling, selectable side decorations and independent display layers.
+- Optional shortcuts for BoE roll, loot-binding and equip-binding confirmations, disabled by default.
+- `/patchtools debug` opens a copyable report with game information, addon versions and load states for support requests.
+
+Matching modules: PatchToolsMaps 0.3.0 and PatchToolsBags 0.1.2. Existing saved preferences are preserved.
+
+Validation: Classic Era gameplay testing by the maintainer and testers, plus automated Era/Forever checks. Live Forever testing remains pending.
+
 # PatchTools 0.9.0-alpha.15 — 2026-10-27
 
 - Add `/patchtools debug`: a copyable diagnostic report with game build, language, UI scale, addon versions and load states.
